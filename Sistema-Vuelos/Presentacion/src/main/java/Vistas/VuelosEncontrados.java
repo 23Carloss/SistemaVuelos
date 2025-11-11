@@ -31,6 +31,9 @@ public class VuelosEncontrados extends javax.swing.JPanel {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
 
+        setMaximumSize(new java.awt.Dimension(900, 600));
+        setMinimumSize(new java.awt.Dimension(900, 600));
+        setPreferredSize(new java.awt.Dimension(900, 600));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tablaVuelos.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N

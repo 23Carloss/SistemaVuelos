@@ -26,10 +26,10 @@ public class MenuUsuario extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        buscarVuelo = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        reservaciones = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
@@ -37,8 +37,13 @@ public class MenuUsuario extends javax.swing.JPanel {
         setMinimumSize(new java.awt.Dimension(900, 600));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP\\OneDrive\\Documents\\ITSON\\Clases5Semestre\\DIseño de software 2.0\\Repositorio Vuelo\\Imagenes\\salida-del-avion (1).png")); // NOI18N
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 230, 140, 140));
+        buscarVuelo.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP\\OneDrive\\Documents\\ITSON\\Clases5Semestre\\DIseño de software 2.0\\Repositorio Vuelo\\Imagenes\\salida-del-avion (1).png")); // NOI18N
+        buscarVuelo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                buscarVueloMouseClicked(evt);
+            }
+        });
+        add(buscarVuelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 230, 140, 140));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel2.setText("Mis Reservaciones");
@@ -48,8 +53,13 @@ public class MenuUsuario extends javax.swing.JPanel {
         jLabel4.setText("Buscar Vuelos");
         add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, -1, -1));
 
-        jLabel5.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP\\OneDrive\\Documents\\ITSON\\Clases5Semestre\\DIseño de software 2.0\\Repositorio Vuelo\\Imagenes\\plano-alt.png")); // NOI18N
-        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 230, -1, -1));
+        reservaciones.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP\\OneDrive\\Documents\\ITSON\\Clases5Semestre\\DIseño de software 2.0\\Repositorio Vuelo\\Imagenes\\plano-alt.png")); // NOI18N
+        reservaciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                reservacionesMouseClicked(evt);
+            }
+        });
+        add(reservaciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 230, -1, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\HP\\OneDrive\\Documents\\ITSON\\Clases5Semestre\\DIseño de software 2.0\\Repositorio Vuelo\\Imagenes\\logo.png")); // NOI18N
         add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 160, 140));
@@ -59,13 +69,23 @@ public class MenuUsuario extends javax.swing.JPanel {
         add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
+    private void buscarVueloMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buscarVueloMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_buscarVueloMouseClicked
+
+    private void reservacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reservacionesMouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_reservacionesMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel buscarVuelo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel reservaciones;
     // End of variables declaration//GEN-END:variables
 }

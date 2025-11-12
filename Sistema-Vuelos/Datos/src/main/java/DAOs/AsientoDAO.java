@@ -2,19 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+package DAOs;
 
-package Entity;
-
-import java.util.List;
+import CRUD.CRUD;
+import POJOs.Asiento;
 
 /**
  *
- * @author $Luis Carlos Manjarrez Gonzalez
+ * @author Jesus Gammael Soto Escalante 248336
  */
-public class Usuario {
-    private long id;
-    private String nombre, apellidoP, apellidoM;
-    private List<Reservacion> reservaciones;
+public class AsientoDAO extends CRUD<Asiento> {
     
+    public AsientoDAO() {
+        super("Asientos", Asiento.class);
+    }
     
 }

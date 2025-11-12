@@ -5,26 +5,24 @@
 
 package DAOs;
 
-import Entity.Usuario;
+import CRUD.CRUD;
+import POJOs.Usuario;
 import Exception.PersistenciaExcetion;
 
 /**
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
-public class UsusarioDAO {
+public class UsuarioDAO extends CRUD<Usuario> {
 
-    public UsusarioDAO() {
+    public UsuarioDAO() {
+        super("Usuarios", Usuario.class);
     }
+
+    
     
 //    private EntityManager
     
-    public void agregarUsuario(Usuario usuario) throws PersistenciaExcetion{
-        try{
-            
-        }catch(Exception e){
-            throw new PersistenciaExcetion("Error al agregar ususario");
-        }
-    }
+    
 
 }

@@ -3,19 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package Entity;
+package DTOs;
 
 /**
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
-public class Asiento {
+public class AsientoDTO {
     private long id;
     private boolean disponibilidad;
     private int numero;
     private int fila;
 
-    public Asiento() {
+    public AsientoDTO() {
     }
 
     public boolean isDisponibilidad() {

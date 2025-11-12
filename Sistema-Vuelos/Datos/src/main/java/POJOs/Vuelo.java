@@ -3,17 +3,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package Entity;
+package POJOs;
 
+import CRUD.ObjetoMongo;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 /**
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
-public class Vuelo {
-    private long id;
+public class Vuelo implements ObjetoMongo{
+    
+    private ObjectId id;
     private String origen, destino;
     private LocalDateTime fechaSalida;
     private int duracion;
@@ -22,13 +26,7 @@ public class Vuelo {
     public Vuelo() {
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
+    
 
     public String getOrigen() {
         return origen;
@@ -73,6 +71,21 @@ public class Vuelo {
     @Override
     public String toString() {
         return "Vuelo{" + "id=" + id + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + '}';
+    }
+
+    @Override
+    public ObjectId getObjectID() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void setObjectID(ObjectId objectID) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Bson toUpdateOperations() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     

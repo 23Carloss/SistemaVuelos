@@ -5,12 +5,14 @@
 
 package Entity;
 
+import org.bson.types.ObjectId;
+
 /**
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
 public class Asiento {
-    private long id;
+    private ObjectId id;
     private boolean disponibilidad;
     private int numero;
     private int fila;
@@ -42,11 +44,11 @@ public class Asiento {
         this.fila = fila;
     }
 
-    public long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 
@@ -54,5 +56,7 @@ public class Asiento {
     public String toString() {
         return "Asiento{" + "id=" + id + ", disponibilidad=" + disponibilidad + ", numero=" + numero + ", fila=" + fila + '}';
     }
+
+     
     
 }

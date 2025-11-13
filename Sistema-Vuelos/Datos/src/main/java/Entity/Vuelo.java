@@ -7,13 +7,14 @@ package Entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
 public class Vuelo {
-    private long id;
+    private ObjectId _id;
     private String origen, destino;
     private LocalDateTime fechaSalida;
     private int duracion;
@@ -22,14 +23,7 @@ public class Vuelo {
     public Vuelo() {
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
+    
     public String getOrigen() {
         return origen;
     }
@@ -70,10 +64,19 @@ public class Vuelo {
         this.listaAsientos = listaAsientos;
     }
 
+    public ObjectId getId() {
+        return _id;
+    }
+
+    public void setId(ObjectId _id) {
+        this._id = _id;
+    }
+
     @Override
     public String toString() {
-        return "Vuelo{" + "id=" + id + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + '}';
+        return "Vuelo{" + "_id=" + _id + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + '}';
     }
+
     
     
 

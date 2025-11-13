@@ -7,6 +7,7 @@ package Entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public class Reservacion {
     
-    private long id;
+    private ObjectId id;
     private long Usuario;
     private LocalDateTime fechaReservacion;
     private List<Asiento> asientos;
@@ -23,14 +24,7 @@ public class Reservacion {
     public Reservacion() {
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
+    
     public long getUsuario() {
         return Usuario;
     }
@@ -63,12 +57,17 @@ public class Reservacion {
         this.vuelo = vuelo;
     }
 
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
     @Override
     public String toString() {
         return "Reservacion{" + "id=" + id + ", Usuario=" + Usuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
     }
-    
-    
-    
 
 }

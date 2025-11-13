@@ -3,21 +3,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package Entity;
+package DTOs;
 
-import org.bson.types.ObjectId;
 
 /**
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
-public class Asiento {
-    private ObjectId id;
+public class AsientoDTO {
+    private long id;
     private boolean disponibilidad;
     private int numero;
     private int fila;
 
-    public Asiento() {
+    public AsientoDTO() {
     }
 
     public boolean isDisponibilidad() {
@@ -44,19 +43,21 @@ public class Asiento {
         this.fila = fila;
     }
 
-    public ObjectId getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(ObjectId id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
     public String toString() {
-        return "Asiento{" + "id=" + id + ", disponibilidad=" + disponibilidad + ", numero=" + numero + ", fila=" + fila + '}';
+        return "AsientoDTO{" + "id=" + id + ", disponibilidad=" + disponibilidad + ", numero=" + numero + ", fila=" + fila + '}';
     }
 
+
+   
      
     
 }

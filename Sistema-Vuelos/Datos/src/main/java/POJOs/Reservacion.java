@@ -18,8 +18,7 @@ import org.bson.types.ObjectId;
 public class Reservacion implements ObjetoMongo {
     
     private ObjectId id;
-    
-    private long Usuario;
+    private ObjectId Usuario;
     private LocalDateTime fechaReservacion;
     private List<Asiento> asientos;
     private Vuelo vuelo;
@@ -28,11 +27,11 @@ public class Reservacion implements ObjetoMongo {
     }
 
 
-    public long getUsuario() {
+    public ObjectId getUsuario() {
         return Usuario;
     }
 
-    public void setUsuario(long Usuario) {
+    public void setUsuario(ObjectId Usuario) {
         this.Usuario = Usuario;
     }
 

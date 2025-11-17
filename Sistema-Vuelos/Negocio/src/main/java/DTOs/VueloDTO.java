@@ -7,6 +7,7 @@ package DTOs;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -14,7 +15,7 @@ import java.util.List;
  */
 
 public class VueloDTO {
-    private long id;
+    private ObjectId id;
     private String origen, destino;
     private LocalDateTime fechaSalida;
     private int duracion;
@@ -64,11 +65,11 @@ public class VueloDTO {
         this.listaAsientos = listaAsientos;
     }
 
-    public long getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

@@ -16,7 +16,7 @@ import org.bson.types.ObjectId;
 public class ReservacionDTO {
     
     private ObjectId id;
-    private long Usuario;
+    private ObjectId Usuario;
     private LocalDateTime fechaReservacion;
     private List<AsientoDTO> asientos;
     private VueloDTO vuelo;
@@ -25,11 +25,11 @@ public class ReservacionDTO {
     }
 
     
-    public long getUsuario() {
+    public ObjectId getUsuario() {
         return Usuario;
     }
 
-    public void setUsuario(long Usuario) {
+    public void setUsuario(ObjectId Usuario) {
         this.Usuario = Usuario;
     }
 

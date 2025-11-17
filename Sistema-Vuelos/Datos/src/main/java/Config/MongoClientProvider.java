@@ -17,7 +17,7 @@ public enum MongoClientProvider {
     INTANCE;
 
     private MongoClient client;
-    private String dbName = "UsuariosDB";
+    private String dbName = "PruebasMongoBDA";
     private String uri = "mongodb://localhost:27017/";
 
     public synchronized void init() {

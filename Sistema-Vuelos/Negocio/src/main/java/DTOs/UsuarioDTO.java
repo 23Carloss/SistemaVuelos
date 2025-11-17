@@ -16,7 +16,7 @@ import org.bson.types.ObjectId;
 
 public class UsuarioDTO {
     private ObjectId id;
-    private String nombre, apellidoP, apellidoM;
+        private String nombre, apellidoP, apellidoM, correo, contrasenia;
     private List<ReservacionDTO> reservaciones;
 
     public UsuarioDTO() {
@@ -62,9 +62,27 @@ public class UsuarioDTO {
         this.reservaciones = reservaciones;
     }
 
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getContrasenia() {
+        return contrasenia;
+    }
+
+    public void setContrasenia(String contrasenia) {
+        this.contrasenia = contrasenia;
+    }
+
     @Override
     public String toString() {
-        return "Usuario{" + "id=" + id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", reservaciones=" + reservaciones + '}';
+        return "UsuarioDTO{" + "id=" + id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + ", reservaciones=" + reservaciones + '}';
     }
+
+    
 
 }

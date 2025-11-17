@@ -6,17 +6,10 @@
         <artifactId>Sistema-Vuelos</artifactId>
         <version>0</version>
     </parent>
-    <artifactId>Negocio</artifactId>
+    <artifactId>AdministracionUsuarios</artifactId>
     <packaging>jar</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>Datos</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-    </dependencies>
     <properties>
-        <maven.compiler.release>23</maven.compiler.release>
-        <exec.mainClass>hp.negocio.Negocio</exec.mainClass>
+        <maven.compiler.release>25</maven.compiler.release>
+        <exec.mainClass>hp.administracionusuarios.AdministracionUsuarios_Vuelos</exec.mainClass>
     </properties>
 </project>

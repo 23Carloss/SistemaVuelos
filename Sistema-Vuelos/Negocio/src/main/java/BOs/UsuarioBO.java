@@ -5,8 +5,10 @@
 
 package BOs;
 
-import CRUD.CRUD;
+import CRUD.ObjetoMongo;
+import DAOs.UsuarioDAO;
 import DTOs.UsuarioDTO;
+import Exception.PersistenciaException;
 import Mappers.UsuarioMapper;
 import java.util.List;
 import org.bson.conversions.Bson;
@@ -14,22 +16,26 @@ import org.bson.types.ObjectId;
 import NegocioException.NegocioException;
 import POJOs.Usuario;
 import Interfaces.IUsuarioBO;
+import com.mongodb.MongoException;
+import java.util.Optional;
 
 /**
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
 public class UsuarioBO implements IUsuarioBO{
-    private CRUD collection;
+    private UsuarioDAO dao;
     private UsuarioMapper mapper;
 
     public UsuarioBO() {
-        collection = new CRUD("usuarios", Usuario.class);
+        dao = new UsuarioDAO();
+        mapper = new UsuarioMapper();
     }
 
     @Override
     public UsuarioDTO createObject(UsuarioDTO object) throws NegocioException{
         try {
+            System.out.println("Usuario q entra en BO : " + object.toString());
             if (object == null) {
                 throw new IllegalArgumentException("Usuario no puede ser nulo");
             }
@@ -49,22 +55,26 @@ public class UsuarioBO implements IUsuarioBO{
             if (object.getId() == null) {
                 object.setId(new ObjectId());
             }
-    //
-    //        collection.insertOne(object);
+            Usuario usuario = mapper.convertirAEntity(object);
+            System.out.println(usuario.toString());
+            dao.create(usuario);
+            
+//            collection.create(mapper.convertirAEntity(object));
+            
             return object;
-        } catch (Exception e) {
-            throw new NegocioException("Error al agregar usuario");
+        } catch (MongoException e) {
+            throw new NegocioException("Error al agregar usuario" + e.getMessage());
         }
     }
 
     @Override
     public UsuarioDTO findById(ObjectId _id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return (UsuarioDTO) dao.read(_id).get();
     }
 
     @Override
     public List<UsuarioDTO> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return dao.findEntities();
     }
 
     @Override
@@ -74,6 +84,54 @@ public class UsuarioBO implements IUsuarioBO{
 
     @Override
     public void deleteById(ObjectId _id) {
+        dao.delete(_id);
+    }
+
+    @Override
+    public UsuarioDTO signIn(String correo, String password) throws NegocioException {
+        try {
+            var usuario = dao.autenticar(correo, password);
+            if(usuario == null)
+                throw new NegocioException("Credenciales incorrectas");
+            return (UsuarioDTO) mapper.convertirADTO(usuario);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al iniciar sesion");
+        }
+        
+    }
+
+    @Override
+    public List<UsuarioDTO> findByName(String name) throws NegocioException {
+        return mapper.ConvertirListaADto(dao.findByName(name));
+    }
+
+    @Override
+    public Object create(ObjetoMongo entity) throws MongoException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public Optional read(ObjectId id) throws MongoException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean update(ObjetoMongo entity) throws MongoException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public boolean delete(ObjectId id) throws MongoException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List findEntities() throws MongoException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public List findEntities(int maxResults, int firstResult) throws MongoException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     

@@ -6,6 +6,7 @@
 package POJOs;
 
 import CRUD.ObjetoMongo;
+import com.mongodb.client.model.Updates;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.bson.conversions.Bson;
@@ -17,7 +18,7 @@ import org.bson.types.ObjectId;
  */
 public class Vuelo implements ObjetoMongo{
     
-    private ObjectId id;
+    private ObjectId _id;
     private String origen, destino;
     private LocalDateTime fechaSalida;
     private int duracion;
@@ -70,22 +71,31 @@ public class Vuelo implements ObjetoMongo{
 
     @Override
     public String toString() {
-        return "Vuelo{" + "id=" + id + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + '}';
+        return "Vuelo{" + "id=" + _id + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + 
+                ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + '}';
     }
 
     @Override
     public ObjectId getObjectID() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return _id;
     }
 
     @Override
     public void setObjectID(ObjectId objectID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this._id = objectID;
     }
 
     @Override
     public Bson toUpdateOperations() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Updates.combine(
+            Updates.set("_id", _id),
+            Updates.set("origen", origen),
+            Updates.set("destino", destino),
+            Updates.set("duracion", duracion),
+            Updates.set("fechaSalida", fechaSalida),
+            Updates.set("listaAsientos", listaAsientos)
+
+        );
     }
     
     

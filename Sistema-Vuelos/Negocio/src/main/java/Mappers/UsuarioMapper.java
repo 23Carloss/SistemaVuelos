@@ -7,6 +7,8 @@ package Mappers;
 
 import DTOs.UsuarioDTO;
 import POJOs.Usuario;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -20,7 +22,8 @@ public class UsuarioMapper {
         mapper = new ReservacionMapper();
     }
     
-    public Usuario convertirADTO(UsuarioDTO usuario){
+    public Usuario convertirAEntity(UsuarioDTO usuario){
+        System.out.println("Entra?");
         var entity = new Usuario();
         entity.setObjectID(usuario.getId());
         entity.setNombre(usuario.getNombre());
@@ -33,7 +36,7 @@ public class UsuarioMapper {
     }
     public UsuarioDTO convertirADTO(Usuario usuario){
         var entity = new UsuarioDTO();
-        entity.setId(usuario.getId());
+        entity.setId(usuario.getObjectID());
         entity.setNombre(usuario.getNombre());
         entity.setApellidoP(usuario.getApellidoP());
         entity.setApellidoM(usuario.getApellidoM());
@@ -41,6 +44,16 @@ public class UsuarioMapper {
         entity.setContrasenia(usuario.getContrasenia());
         entity.setReservaciones(mapper.convertirListaADTO(usuario.getReservaciones()));
         return entity;
+    }
+    
+    public List<UsuarioDTO> ConvertirListaADto(List<Usuario> listaEntity){
+        ArrayList<UsuarioDTO> listaUsuarios =  new  ArrayList<>();
+        for(Usuario u :listaEntity){
+            listaUsuarios.add(convertirADTO(u));
+        }
+        return listaUsuarios;
+        
+    
     }
     
 

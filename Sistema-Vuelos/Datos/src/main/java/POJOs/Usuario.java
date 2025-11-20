@@ -7,6 +7,7 @@ package POJOs;
 
 import CRUD.ObjetoMongo;
 import com.mongodb.client.model.Updates;
+import java.util.ArrayList;
 import java.util.List;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -17,17 +18,14 @@ import org.bson.types.ObjectId;
  */
 public class Usuario implements ObjetoMongo {
     
-    private ObjectId id;
-    private String nombre, apellidoP, apellidoM,correo,contrasenia;
-    private List<Reservacion> reservaciones;
+    private ObjectId _id;
+    private String nombre, apellidoP, apellidoM,correo,contrasenia;    
+    private TipoUsuario tipoUsuario;
+    private List<Reservacion> reservaciones = new ArrayList<>();
 
-    public ObjectId getId() {
-        return id;
+    public Usuario() {
     }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
+    
 
     public String getNombre() {
         return nombre;
@@ -76,25 +74,49 @@ public class Usuario implements ObjetoMongo {
     public void setReservaciones(List<Reservacion> reservaciones) {
         this.reservaciones = reservaciones;
     }
+
+
+    public TipoUsuario getTipoU() {
+        return tipoUsuario;
+    }
+
+    public void setTipoU(TipoUsuario tipoU) {
+        this.tipoUsuario = tipoU;
+    }
+    
     
     
     @Override
     public ObjectId getObjectID() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return _id;
     }
 
     @Override
     public void setObjectID(ObjectId objectID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this._id=objectID;
     }
 
     @Override
     public Bson toUpdateOperations() {
         return Updates.combine(
+            Updates.set("_id", _id),
             Updates.set("nombre", nombre),
-            Updates.set("correo", correo)
+            Updates.set("correo", correo),
+            Updates.set("apellidoPaterno", apellidoP),
+            Updates.set("apellidoMaterno", apellidoM),
+            Updates.set("contrasenia", contrasenia), 
+            Updates.set("tipoUsuario", tipoUsuario),
+            Updates.set("reservaciones", reservaciones)
+
         );
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "_id=" + _id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + 
+                ", tipoUsuario=" + tipoUsuario + ", reservaciones=" + reservaciones + '}';
+    }
+    
     
     
 }

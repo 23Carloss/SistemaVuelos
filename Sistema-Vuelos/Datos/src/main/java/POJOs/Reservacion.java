@@ -6,6 +6,8 @@
 package POJOs;
 
 import CRUD.ObjetoMongo;
+import com.mongodb.client.model.Updates;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.bson.conversions.Bson;
@@ -17,11 +19,13 @@ import org.bson.types.ObjectId;
  */
 public class Reservacion implements ObjetoMongo {
     
-    private ObjectId id;
+    private ObjectId _id;
     private ObjectId Usuario;
     private LocalDateTime fechaReservacion;
     private List<Asiento> asientos;
     private Vuelo vuelo;
+    private Instant creadoEn;
+    private Instant editadoEn;
 
     public Reservacion() {
     }
@@ -59,24 +63,55 @@ public class Reservacion implements ObjetoMongo {
         this.vuelo = vuelo;
     }
 
+    public ObjectId getId() {
+        return _id;
+    }
+
+    public void setId(ObjectId _id) {
+        this._id = _id;
+    }
+
+    public Instant getCreadoEn() {
+        return creadoEn;
+    }
+
+    public void setCreadoEn(Instant creadoEn) {
+        this.creadoEn = creadoEn;
+    }
+
+    public Instant getEditadoEn() {
+        return editadoEn;
+    }
+
+    public void setEditadoEn(Instant editadoEn) {
+        this.editadoEn = editadoEn;
+    }
+    
+
     @Override
     public String toString() {
-        return "Reservacion{" + "id=" + id + ", Usuario=" + Usuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
+        return "Reservacion{" + "id=" + _id + ", Usuario=" + Usuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
     }
 
     @Override
     public ObjectId getObjectID() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return _id;
     }
 
     @Override
     public void setObjectID(ObjectId objectID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this._id = objectID;
     }
 
     @Override
     public Bson toUpdateOperations() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Updates.combine(
+            Updates.set("_id", _id),
+            Updates.set("Usuario", Usuario),
+            Updates.set("fechaReservacion", fechaReservacion),
+            Updates.set("asientos", asientos),
+            Updates.set("vuelo", vuelo)
+        );
     }
     
     

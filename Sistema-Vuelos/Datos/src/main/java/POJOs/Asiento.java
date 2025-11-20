@@ -6,6 +6,7 @@
 package POJOs;
 
 import CRUD.ObjetoMongo;
+import com.mongodb.client.model.Updates;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
@@ -16,7 +17,7 @@ import org.bson.types.ObjectId;
 public class Asiento implements ObjetoMongo {
     
     
-    private ObjectId id;
+    private ObjectId _id;
     private boolean disponibilidad;
     private int numero;
     private int fila;
@@ -56,17 +57,23 @@ public class Asiento implements ObjetoMongo {
 
     @Override
     public ObjectId getObjectID() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       return _id;
     }
 
     @Override
     public void setObjectID(ObjectId objectID) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        this._id = objectID;
     }
 
     @Override
     public Bson toUpdateOperations() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Updates.combine(
+            Updates.set("_id", _id),
+            Updates.set("disponibilidad", disponibilidad),
+            Updates.set("numero", numero),
+            Updates.set("fila", fila)
+
+        );
     }
     
 }

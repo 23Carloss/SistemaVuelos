@@ -4,16 +4,19 @@
  */
 package Vistas.Administrador;
 
+import Apliacion.Control;
+
 /**
  *
  * @author HP
  */
-public class PanelAdmistrador extends javax.swing.JPanel {
-
+public class PanelAdministrador extends javax.swing.JPanel {
+private Control control;
     /**
      * Creates new form PanelAdmistrador
      */
-    public PanelAdmistrador() {
+    public PanelAdministrador(Control control) {
+        this.control = control;
         initComponents();
     }
 
@@ -28,6 +31,7 @@ public class PanelAdmistrador extends javax.swing.JPanel {
 
         btnMenuUsuarios = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        btnAgregar = new javax.swing.JButton();
 
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -38,19 +42,33 @@ public class PanelAdmistrador extends javax.swing.JPanel {
                 btnMenuUsuariosMouseClicked(evt);
             }
         });
-        add(btnMenuUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 230, 50));
+        add(btnMenuUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 420, 230, 50));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel1.setText("Menu administrador");
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 10, -1, -1));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
+
+        btnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Vistas/Administrador/agregar-usuario.png"))); // NOI18N
+        btnAgregar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAgregarMouseClicked(evt);
+            }
+        });
+        add(btnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 510, 70, 60));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMenuUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnMenuUsuariosMouseClicked
         // TODO add your handling code here:
+        control.mostrarAdministracionUsuarios();
     }//GEN-LAST:event_btnMenuUsuariosMouseClicked
+
+    private void btnAgregarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAgregarMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregar;
     private javax.swing.JButton btnMenuUsuarios;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables

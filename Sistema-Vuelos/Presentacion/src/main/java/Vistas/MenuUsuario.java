@@ -4,16 +4,19 @@
  */
 package Vistas;
 
+import Apliacion.Control;
+
 /**
  *
  * @author HP
  */
 public class MenuUsuario extends javax.swing.JPanel {
-
+private Control control;
     /**
      * Creates new form MenuPrincipal
      */
-    public MenuUsuario() {
+    public MenuUsuario(Control control) {
+        this.control = control;
         initComponents();
     }
 

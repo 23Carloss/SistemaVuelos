@@ -5,6 +5,7 @@
 
 package DTOs;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.bson.types.ObjectId;
 
@@ -16,8 +17,8 @@ import org.bson.types.ObjectId;
 
 public class UsuarioDTO {
     private ObjectId id;
-        private String nombre, apellidoP, apellidoM, correo, contrasenia;
-    private List<ReservacionDTO> reservaciones;
+    private String nombre, apellidoP, apellidoM, correo, contrasenia, tipoUsuario = "usuario";
+    private List<ReservacionDTO> reservaciones = new ArrayList<>();
 
     public UsuarioDTO() {
     }
@@ -78,11 +79,18 @@ public class UsuarioDTO {
         this.contrasenia = contrasenia;
     }
 
-    @Override
-    public String toString() {
-        return "UsuarioDTO{" + "id=" + id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + ", reservaciones=" + reservaciones + '}';
+    public String getTipoUsuario() {
+        return tipoUsuario;
     }
 
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" + "id=" + id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + ", tipoUsuario=" + tipoUsuario + ", reservaciones=" + reservaciones + '}';
+    }
     
 
 }

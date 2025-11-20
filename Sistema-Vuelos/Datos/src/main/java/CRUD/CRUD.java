@@ -19,6 +19,7 @@ import org.bson.types.ObjectId;
 /**
  *
  * @author Jesus Gammael Soto Escalante 248336
+ * @param <T>
  */
 public class CRUD<T> implements ICRUD {
 

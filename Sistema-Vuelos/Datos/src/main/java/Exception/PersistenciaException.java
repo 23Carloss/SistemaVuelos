@@ -9,12 +9,12 @@ package Exception;
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
-public class PersistenciaExcetion extends Exception{
+public class PersistenciaException extends Exception{
 
-    public PersistenciaExcetion() {
+    public PersistenciaException() {
     }
 
-    public PersistenciaExcetion(String message) {
+    public PersistenciaException(String message) {
         super(message);
     }
     

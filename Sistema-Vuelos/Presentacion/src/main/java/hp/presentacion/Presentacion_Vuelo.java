@@ -4,6 +4,9 @@
 
 package hp.presentacion;
 
+import Apliacion.Control;
+import Config.MongoClientProvider;
+
 /**
  *
  * @author HP
@@ -11,6 +14,8 @@ package hp.presentacion;
 public class Presentacion_Vuelo {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        MongoClientProvider.INTANCE.init();
+        Control control = new Control();
+        control.iniciar();
     }
 }

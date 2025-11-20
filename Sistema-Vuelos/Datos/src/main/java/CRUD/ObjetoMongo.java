@@ -12,7 +12,6 @@ import org.bson.types.ObjectId;
  * @author Jesus Gammael Soto Escalante 248336
  */
 public interface ObjetoMongo {
-    
 
      ObjectId getObjectID();
 

@@ -19,7 +19,7 @@ import org.bson.types.ObjectId;
 public class Vuelo implements ObjetoMongo{
     
     private ObjectId _id;
-    private String idVuelo; //Id del vuelo para hacer gets
+    private String numVuelo; //Id del vuelo para hacer gets
     private String origen, destino; //usar la primera mayuscula (ej. Guadalajara)
     private LocalDateTime fechaSalida; //hora y fecha que sale el avion
     private int duracion; // duración en minutos del vuelo
@@ -38,13 +38,15 @@ public class Vuelo implements ObjetoMongo{
         this._id = _id;
     }
 
-    public String getIdVuelo() {
-        return idVuelo;
+    public String getNumVuelo() {
+        return numVuelo;
     }
 
-    public void setIdVuelo(String idVuelo) {
-        this.idVuelo = idVuelo;
+    public void setNumVuelo(String numVuelo) {
+        this.numVuelo = numVuelo;
     }
+
+    
 
     public String getAerolinea() {
         return aerolinea;

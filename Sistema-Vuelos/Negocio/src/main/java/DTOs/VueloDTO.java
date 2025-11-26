@@ -15,7 +15,7 @@ import org.bson.types.ObjectId;
 public class VueloDTO {
 
     private ObjectId id;
-    private String idVuelo; //Id del vuelo para hacer gets
+    private String numVuelo; //Id del vuelo para hacer gets
     private String origen, destino; //usar la primera mayuscula (ej. Guadalajara)
     private LocalDateTime fechaSalida; //hora y fecha que sale el avion
     private int duracion; // duración en minutos del vuelo
@@ -26,13 +26,22 @@ public class VueloDTO {
     public VueloDTO() {
     }
 
-    public String getIdVuelo() {
-        return idVuelo;
+    public String getNumVuelo() {
+        return numVuelo;
     }
 
-    public void getIdVuelo(String idVuelo) {
-        this.idVuelo = idVuelo;
+    public void setNumVuelo(String numVuelo) {
+        this.numVuelo = numVuelo;
     }
+
+    public String getAerolinea() {
+        return aerolinea;
+    }
+
+    public void setAerolinea(String aerolinea) {
+        this.aerolinea = aerolinea;
+    }
+
 
     public String getOrigen() {
         return origen;

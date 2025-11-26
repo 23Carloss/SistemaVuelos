@@ -8,6 +8,7 @@ import DTOs.AsientoDTO;
 import DTOs.VueloDTO;
 import NegocioException.NegocioException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
 
@@ -17,11 +18,11 @@ import org.bson.types.ObjectId;
  */
 public interface IVueloBO {
 
-    List<AsientoDTO> getAsientosDisponibles() throws NegocioException;
+    List<AsientoDTO> getAsientosDisponibles(String numVuelo) throws NegocioException;
 
-    List<AsientoDTO> getAsientosOcupados() throws NegocioException;
+    List<AsientoDTO> getAsientosOcupados(String numVuelo) throws NegocioException;
 
-    List<VueloDTO> getBuscarVuelos(String origen, String destino, LocalDateTime salida) throws NegocioException;
+    List<VueloDTO> getBuscarVuelos(String origen, String destino, Date salida) throws NegocioException;
 
     VueloDTO getVuelo(ObjectId _id) throws NegocioException;
 

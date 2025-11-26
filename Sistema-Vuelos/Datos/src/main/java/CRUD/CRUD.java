@@ -23,8 +23,10 @@ import org.bson.types.ObjectId;
  */
 public class CRUD<T> implements ICRUD {
 
-    private final MongoCollection<T> col;
-
+    protected final MongoCollection<T> col;
+    
+    
+    
     public CRUD(String colleccion, Class clase) {
         this.col = MongoClientProvider.INTANCE.getCollection(colleccion, clase);
     }

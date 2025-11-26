@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package BOs;
 
 import CRUD.ObjetoMongo;
@@ -23,7 +22,8 @@ import java.util.Optional;
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
-public class UsuarioBO implements IUsuarioBO{
+public class UsuarioBO implements IUsuarioBO {
+
     private UsuarioDAO dao;
     private UsuarioMapper mapper;
 
@@ -33,7 +33,7 @@ public class UsuarioBO implements IUsuarioBO{
     }
 
     @Override
-    public UsuarioDTO createObject(UsuarioDTO object) throws NegocioException{
+    public UsuarioDTO createObject(UsuarioDTO object) throws NegocioException {
         try {
             System.out.println("Usuario q entra en BO : " + object.toString());
             if (object == null) {
@@ -58,9 +58,8 @@ public class UsuarioBO implements IUsuarioBO{
             Usuario usuario = mapper.convertirAEntity(object);
             System.out.println(usuario.toString());
             dao.create(usuario);
-            
+
 //            collection.create(mapper.convertirAEntity(object));
-            
             return object;
         } catch (MongoException e) {
             throw new NegocioException("Error al agregar usuario" + e.getMessage());
@@ -69,7 +68,10 @@ public class UsuarioBO implements IUsuarioBO{
 
     @Override
     public UsuarioDTO findById(ObjectId _id) {
-        return (UsuarioDTO) dao.read(_id).get();
+
+        UsuarioDTO dto = mapper.convertirADTO(dao.read(_id));
+
+        return dto;
     }
 
     @Override
@@ -91,13 +93,14 @@ public class UsuarioBO implements IUsuarioBO{
     public UsuarioDTO signIn(String correo, String password) throws NegocioException {
         try {
             var usuario = dao.autenticar(correo, password);
-            if(usuario == null)
+            if (usuario == null) {
                 throw new NegocioException("Credenciales incorrectas");
+            }
             return (UsuarioDTO) mapper.convertirADTO(usuario);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al iniciar sesion");
         }
-        
+
     }
 
     @Override
@@ -134,9 +137,5 @@ public class UsuarioBO implements IUsuarioBO{
     public List findEntities(int maxResults, int firstResult) throws MongoException {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
-     
-
- 
 
 }

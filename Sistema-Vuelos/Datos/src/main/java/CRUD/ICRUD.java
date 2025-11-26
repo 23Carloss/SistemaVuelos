@@ -19,7 +19,7 @@ public interface ICRUD<T> {
 
     public T create(ObjetoMongo entity) throws MongoException;
 
-    public Optional<T> read(ObjectId id) throws MongoException;
+    public T read(ObjectId id) throws MongoException;
 
     public boolean  update(ObjetoMongo entity) throws MongoException;
 

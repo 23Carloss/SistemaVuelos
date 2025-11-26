@@ -30,7 +30,7 @@ public class CRUD<T> implements ICRUD {
     }
 
     @Override
-    public Object create(ObjetoMongo entity) throws MongoException {
+    public T create(ObjetoMongo entity) throws MongoException {
         try {
             col.insertOne((T) entity);
         } catch (MongoException e) {
@@ -42,9 +42,9 @@ public class CRUD<T> implements ICRUD {
     }
 
     @Override
-    public Optional read(ObjectId _id) throws MongoException {
+    public T read(ObjectId _id) throws MongoException {
         try {
-            return (Optional) col.find(Filters.eq("_id", _id)).first();
+            return col.find(Filters.eq("_id", _id)).first();
         } catch (MongoException e) {
             throw e;
         }

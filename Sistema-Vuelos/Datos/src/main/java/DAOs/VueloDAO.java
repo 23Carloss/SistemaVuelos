@@ -5,16 +5,20 @@
 package DAOs;
 
 import CRUD.CRUD;
+import InterfacesDAO.IVueloDAO;
 import POJOs.Vuelo;
 
 /**
  *
  * @author Jesus Gammael Soto Escalante 248336
  */
-public class VueloDAO  extends CRUD<Vuelo> {
+public class VueloDAO  extends CRUD<Vuelo> implements IVueloDAO{
     
     public VueloDAO() {
         super("Vuelos",Vuelo.class);
     }
+    
+    
+    
     
 }

@@ -19,16 +19,51 @@ import org.bson.types.ObjectId;
 public class Vuelo implements ObjetoMongo{
     
     private ObjectId _id;
-    private String origen, destino;
-    private LocalDateTime fechaSalida;
-    private int duracion;
-    private List<Asiento> listaAsientos;
+    private String idVuelo; //Id del vuelo para hacer gets
+    private String origen, destino; //usar la primera mayuscula (ej. Guadalajara)
+    private LocalDateTime fechaSalida; //hora y fecha que sale el avion
+    private int duracion; // duración en minutos del vuelo
+    private List<Asiento> listaAsientos; //Lista de todos los asientos del vuelo
+    private String aerolinea;
+    private float precio;
 
     public Vuelo() {
     }
 
-    
+    public ObjectId getId() {
+        return _id;
+    }
 
+    public void setId(ObjectId _id) {
+        this._id = _id;
+    }
+
+    public String getIdVuelo() {
+        return idVuelo;
+    }
+
+    public void setIdVuelo(String idVuelo) {
+        this.idVuelo = idVuelo;
+    }
+
+    public String getAerolinea() {
+        return aerolinea;
+    }
+
+    public void setAerolinea(String aerolinea) {
+        this.aerolinea = aerolinea;
+    }
+
+    public float getPrecio() {
+        return precio;
+    }
+
+    public void setPrecio(float precio) {
+        this.precio = precio;
+    }
+
+    
+    
     public String getOrigen() {
         return origen;
     }

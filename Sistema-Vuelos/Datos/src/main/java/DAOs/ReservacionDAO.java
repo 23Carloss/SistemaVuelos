@@ -5,6 +5,7 @@
 package DAOs;
 
 import CRUD.CRUD;
+import Config.MongoClientProvider;
 import POJOs.Reservacion;
 
 /**
@@ -14,7 +15,7 @@ import POJOs.Reservacion;
 public class ReservacionDAO extends CRUD<Reservacion> {
     
     public ReservacionDAO() {
-        super("Reservacion", Reservacion.class);
+        super(MongoClientProvider.INTANCE.database(),"Reservacion", Reservacion.class);
     }
     
 }

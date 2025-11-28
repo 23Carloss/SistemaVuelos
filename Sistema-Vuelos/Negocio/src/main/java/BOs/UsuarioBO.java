@@ -4,27 +4,25 @@
  */
 package BOs;
 
-import CRUD.ObjetoMongo;
 import DAOs.UsuarioDAO;
 import DTOs.UsuarioDTO;
 import Exception.PersistenciaException;
 import Mappers.UsuarioMapper;
 import java.util.List;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import NegocioException.NegocioException;
 import POJOs.Usuario;
 import Interfaces.IUsuarioBO;
+import InterfacesDAO.IUsuarioDAO;
 import com.mongodb.MongoException;
-import java.util.Optional;
 
 /**
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
-public class UsuarioBO implements IUsuarioBO {
 
-    private UsuarioDAO dao;
+public class UsuarioBO implements IUsuarioBO{
+    private IUsuarioDAO dao;
     private UsuarioMapper mapper;
 
     public UsuarioBO() {
@@ -33,9 +31,9 @@ public class UsuarioBO implements IUsuarioBO {
     }
 
     @Override
-    public UsuarioDTO createObject(UsuarioDTO object) throws NegocioException {
+
+    public UsuarioDTO crearObjeto(UsuarioDTO object) throws NegocioException{
         try {
-            System.out.println("Usuario q entra en BO : " + object.toString());
             if (object == null) {
                 throw new IllegalArgumentException("Usuario no puede ser nulo");
             }
@@ -52,41 +50,49 @@ public class UsuarioBO implements IUsuarioBO {
                 throw new IllegalArgumentException("Contraseña debe tener al menos 6 caracteres");
             }
 
-            if (object.getId() == null) {
-                object.setId(new ObjectId());
-            }
             Usuario usuario = mapper.convertirAEntity(object);
-            System.out.println(usuario.toString());
-            dao.create(usuario);
-
-//            collection.create(mapper.convertirAEntity(object));
-            return object;
+            System.out.println("Usuario convertido a Entity BO: " + usuario);
+            Usuario us = (Usuario) dao.create(usuario);
+            return mapper.convertirADTO(us);
         } catch (MongoException e) {
             throw new NegocioException("Error al agregar usuario" + e.getMessage());
         }
     }
 
+
     @Override
-    public UsuarioDTO findById(ObjectId _id) {
+    public UsuarioDTO buscarPorId(ObjectId _id) throws NegocioException{
+        try{
+            return (UsuarioDTO) dao.read(_id);
+        }catch(MongoException ex){
+            throw new NegocioException("Error al buscar usuario" + ex.getMessage());
+        }
+            
+     
+    }
 
-        UsuarioDTO dto = mapper.convertirADTO(dao.read(_id));
 
-        return dto;
+    @Override
+    public List<UsuarioDTO> obtenerTodos() throws NegocioException{
+        try{
+            List<Usuario> usuarios = dao.findEntities();
+            
+            usuarios.forEach(u -> System.out.println("DEBUG Negocio: ID de entidad recibida del DAO: " + u.get_id()));
+
+            return mapper.ConvertirListaADto(usuarios);
+        }catch(MongoException ex){
+            throw new NegocioException("Error al obtener todos los usuario" + ex.getMessage());
+        }
     }
 
     @Override
-    public List<UsuarioDTO> findAll() {
-        return dao.findEntities();
-    }
-
-    @Override
-    public UsuarioDTO update(ObjectId _id, Bson update) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void deleteById(ObjectId _id) {
-        dao.delete(_id);
+    public boolean eliminarPorId(ObjectId _id) throws NegocioException{
+        try{
+            return dao.delete(_id);
+        }catch(MongoException ex){
+            throw new NegocioException("Error al buscar usuario" + ex.getMessage());
+        }
+        
     }
 
     @Override
@@ -104,38 +110,34 @@ public class UsuarioBO implements IUsuarioBO {
     }
 
     @Override
-    public List<UsuarioDTO> findByName(String name) throws NegocioException {
-        return mapper.ConvertirListaADto(dao.findByName(name));
+    public List<UsuarioDTO> buscarPorNombre(String name) throws NegocioException {
+        try {
+            return mapper.ConvertirListaADto(dao.buscarPorNombre(name));
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al buscar por nombre: " + ex.getMessage());
+        }
     }
 
-    @Override
-    public Object create(ObjetoMongo entity) throws MongoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+  
 
     @Override
-    public Optional read(ObjectId id) throws MongoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean update(ObjetoMongo entity) throws MongoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public boolean delete(ObjectId id) throws MongoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List findEntities() throws MongoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public List findEntities(int maxResults, int firstResult) throws MongoException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public UsuarioDTO actualizarObjeto(UsuarioDTO usuario) throws NegocioException {
+        try{
+            System.out.println("UsDTO - Actualizar:  "  + usuario);
+            Usuario us = mapper.convertirAEntity(usuario);
+            System.out.println("UsBO entityMappeada: " + us);
+            if(dao.update(us)){
+                System.out.println("Entro al if");
+                UsuarioDTO usAcualizado = mapper.convertirADTO(us);
+                System.out.println("usDTO : " + usAcualizado);
+                return usAcualizado;
+            }
+            System.out.println("Valio bergaaaas");
+            return null;
+        }catch(MongoException ex){
+            throw new NegocioException("Error al actualizar: " + ex.getMessage());
+        }
+        
     }
 
 }

@@ -6,6 +6,7 @@ package DTOs;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 /**
@@ -13,8 +14,8 @@ import org.bson.types.ObjectId;
  * @author $Luis Carlos Manjarrez Gonzalez & Jesus Gammael Soto Escalante
  */
 public class VueloDTO {
-
-    private ObjectId id;
+    @BsonId
+    private ObjectId _id;
     private String numVuelo; //Id del vuelo para hacer gets
     private String origen, destino; //usar la primera mayuscula (ej. Guadalajara)
     private LocalDateTime fechaSalida; //hora y fecha que sale el avion
@@ -84,11 +85,11 @@ public class VueloDTO {
     }
 
     public ObjectId getId() {
-        return id;
+        return _id;
     }
 
     public void setId(ObjectId id) {
-        this.id = id;
+        this._id = id;
     }
 
     public float getPrecio() {
@@ -101,7 +102,7 @@ public class VueloDTO {
 
     @Override
     public String toString() {
-        return "VueloDTO{" + "id=" + id + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + '}';
+        return "VueloDTO{" + "id=" + _id + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + '}';
     }
 
 }

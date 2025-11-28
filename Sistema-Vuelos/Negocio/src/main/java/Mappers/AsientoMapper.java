@@ -21,7 +21,7 @@ public class AsientoMapper {
     
     public AsientoDTO convertirADto(Asiento asiento){
         AsientoDTO dto = new AsientoDTO();
-        dto.setId(asiento.getObjectID());
+        dto.setId(asiento.get_id());
         dto.setDisponibilidad(asiento.isDisponibilidad());
         dto.setFila(asiento.getFila());
         dto.setNumero(asiento.getNumero());
@@ -30,7 +30,7 @@ public class AsientoMapper {
     }
     public Asiento convertirAEntity(AsientoDTO asiento){
         Asiento entity = new Asiento();
-        entity.setObjectID(asiento.getId());
+        entity.set_id(asiento.getId());
         entity.setDisponibilidad(asiento.isDisponibilidad());
         entity.setFila(asiento.getFila());
         entity.setNumero(asiento.getNumero());

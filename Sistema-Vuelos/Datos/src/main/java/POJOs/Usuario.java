@@ -9,6 +9,7 @@ import CRUD.ObjetoMongo;
 import com.mongodb.client.model.Updates;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
@@ -17,16 +18,23 @@ import org.bson.types.ObjectId;
  * @author $Luis Carlos Manjarrez Gonzalez
  */
 public class Usuario implements ObjetoMongo {
-    
+    @BsonId
     private ObjectId _id;
     private String nombre, apellidoP, apellidoM,correo,contrasenia;    
-    private TipoUsuario tipoUsuario;
+    private String tipoUsuario;
     private List<Reservacion> reservaciones = new ArrayList<>();
 
     public Usuario() {
     }
-    
 
+    public String getTipoUsuario() {
+        return tipoUsuario;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoUsuario = tipoUsuario;
+    }
+    
     public String getNombre() {
         return nombre;
     }
@@ -76,38 +84,36 @@ public class Usuario implements ObjetoMongo {
     }
 
 
-    public TipoUsuario getTipoU() {
+    public String getTipoU() {
         return tipoUsuario;
     }
 
-    public void setTipoU(TipoUsuario tipoU) {
+    public void setTipoU(String tipoU) {
         this.tipoUsuario = tipoU;
     }
     
     
     
     @Override
-    public ObjectId getObjectID() {
+    public ObjectId get_id() {
         return _id;
     }
 
     @Override
-    public void setObjectID(ObjectId objectID) {
-        this._id=objectID;
+    public void set_id(ObjectId _id) {
+        this._id=_id;
     }
 
     @Override
     public Bson toUpdateOperations() {
         return Updates.combine(
-            Updates.set("_id", _id),
             Updates.set("nombre", nombre),
             Updates.set("correo", correo),
-            Updates.set("apellidoPaterno", apellidoP),
-            Updates.set("apellidoMaterno", apellidoM),
+            Updates.set("apellidoP", apellidoP),
+            Updates.set("apellidoM", apellidoM),
             Updates.set("contrasenia", contrasenia), 
             Updates.set("tipoUsuario", tipoUsuario),
             Updates.set("reservaciones", reservaciones)
-
         );
     }
 

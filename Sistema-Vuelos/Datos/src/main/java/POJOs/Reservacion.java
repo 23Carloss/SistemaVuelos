@@ -10,6 +10,7 @@ import com.mongodb.client.model.Updates;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
@@ -18,9 +19,9 @@ import org.bson.types.ObjectId;
  * @author $Luis Carlos Manjarrez Gonzalez
  */
 public class Reservacion implements ObjetoMongo {
-    
+    @BsonId
     private ObjectId _id;
-    private ObjectId Usuario;
+    private ObjectId IdUsuario;
     private LocalDateTime fechaReservacion;
     private List<Asiento> asientos;
     private Vuelo vuelo;
@@ -31,12 +32,12 @@ public class Reservacion implements ObjetoMongo {
     }
 
 
-    public ObjectId getUsuario() {
-        return Usuario;
+    public ObjectId getIdUsuario() {
+        return IdUsuario;
     }
 
-    public void setUsuario(ObjectId Usuario) {
-        this.Usuario = Usuario;
+    public void setIdUsuario(ObjectId IdUsuario) {
+        this.IdUsuario = IdUsuario;
     }
 
     public LocalDateTime getFechaReservacion() {
@@ -90,27 +91,27 @@ public class Reservacion implements ObjetoMongo {
 
     @Override
     public String toString() {
-        return "Reservacion{" + "id=" + _id + ", Usuario=" + Usuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
+        return "Reservacion{" + "id=" + _id + ", Usuario=" + IdUsuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
     }
 
     @Override
-    public ObjectId getObjectID() {
+    public ObjectId get_id() {
         return _id;
     }
 
     @Override
-    public void setObjectID(ObjectId objectID) {
+    public void set_id(ObjectId objectID) {
         this._id = objectID;
     }
 
     @Override
     public Bson toUpdateOperations() {
         return Updates.combine(
-            Updates.set("_id", _id),
-            Updates.set("Usuario", Usuario),
+            Updates.set("Usuario", IdUsuario),
             Updates.set("fechaReservacion", fechaReservacion),
             Updates.set("asientos", asientos),
-            Updates.set("vuelo", vuelo)
+            Updates.set("vuelo", vuelo),
+            Updates.set("editadoEn", editadoEn)
         );
     }
     

@@ -21,7 +21,7 @@ public class VueloMapper {
 
     public Vuelo convertirAEntity(VueloDTO vuelo){
         Vuelo entity =  new Vuelo();
-        entity.setObjectID(vuelo.getId());
+        entity.set_id(vuelo.getId());
         entity.setDestino(vuelo.getDestino());
         entity.setDuracion(vuelo.getDuracion());
         entity.setFechaSalida(vuelo.getFechaSalida());
@@ -32,7 +32,7 @@ public class VueloMapper {
     public VueloDTO convertirADto(Vuelo vuelo){
         System.out.println("Vuelo a converti a DTO: VueloMapper" + vuelo.toString()) ;       
         VueloDTO dto =  new VueloDTO();
-        dto.setId(vuelo.getObjectID());
+        dto.setId(vuelo.get_id());
         dto.setDestino(vuelo.getDestino());
         dto.setDuracion(vuelo.getDuracion());
         dto.setFechaSalida(vuelo.getFechaSalida());

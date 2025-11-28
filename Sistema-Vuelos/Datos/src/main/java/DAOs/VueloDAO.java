@@ -5,19 +5,17 @@
 package DAOs;
 
 import CRUD.CRUD;
+import Config.MongoClientProvider;
 import Exception.PersistenciaException;
 import InterfacesDAO.IVueloDAO;
 import POJOs.Asiento;
 import POJOs.Vuelo;
 import com.mongodb.MongoException;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
@@ -28,7 +26,7 @@ import org.bson.types.ObjectId;
 public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
 
     public VueloDAO() {
-        super("Vuelos", Vuelo.class);
+        super(MongoClientProvider.INTANCE.database(),"Vuelos", Vuelo.class);
     }
 
     @Override

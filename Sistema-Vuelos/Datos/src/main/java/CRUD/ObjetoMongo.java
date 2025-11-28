@@ -13,9 +13,9 @@ import org.bson.types.ObjectId;
  */
 public interface ObjetoMongo {
 
-     ObjectId getObjectID();
+     ObjectId get_id();
 
-     void setObjectID(ObjectId objectID);
+     void set_id(ObjectId objectID);
     
      Bson toUpdateOperations();
     

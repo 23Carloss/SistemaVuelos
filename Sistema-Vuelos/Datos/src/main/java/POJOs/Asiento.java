@@ -7,6 +7,7 @@ package POJOs;
 
 import CRUD.ObjetoMongo;
 import com.mongodb.client.model.Updates;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
@@ -16,7 +17,7 @@ import org.bson.types.ObjectId;
  */
 public class Asiento implements ObjetoMongo {
     
-    
+    @BsonId
     private ObjectId _id;
     private boolean disponibilidad;
     private int numero;
@@ -56,19 +57,19 @@ public class Asiento implements ObjetoMongo {
     }
 
     @Override
-    public ObjectId getObjectID() {
+    public ObjectId get_id() {
        return _id;
     }
 
     @Override
-    public void setObjectID(ObjectId objectID) {
+    public void set_id(ObjectId objectID) {
         this._id = objectID;
     }
 
     @Override
     public Bson toUpdateOperations() {
         return Updates.combine(
-            Updates.set("_id", _id),
+           
             Updates.set("disponibilidad", disponibilidad),
             Updates.set("numero", numero),
             Updates.set("fila", fila)

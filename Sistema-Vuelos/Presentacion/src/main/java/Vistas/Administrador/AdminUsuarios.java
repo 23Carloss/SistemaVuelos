@@ -155,7 +155,7 @@ public class AdminUsuarios extends javax.swing.JPanel {
 
     private void BtnEliminar1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnEliminar1MouseClicked
         // TODO add your handling code here:
-//        if(control.eliminarAlumno(control.getAlumnoTemporal().getId())){
+//        if(control.eliminarAlumno(control.getAlumnoTemporal().get_id())){
 //            JOptionPane.showMessageDialog(
 //                null,
 //                "El alumno fue eliminado correctamente",
@@ -209,7 +209,7 @@ public class AdminUsuarios extends javax.swing.JPanel {
         if(filaSeleccionada != -1){
             int modelRow = tblUsuarios.convertRowIndexToModel(filaSeleccionada);
             UsuarioDTO user = control.buscarUsuariosPorNombre(cmpoBuscr.getText()).get(modelRow);
-            this._id = user.getId();
+            this._id = user.get_id();
         }
     }
         

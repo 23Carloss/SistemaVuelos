@@ -7,6 +7,7 @@ package DTOs;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 /**
@@ -14,8 +15,8 @@ import org.bson.types.ObjectId;
  * @author $Luis Carlos Manjarrez Gonzalez
  */
 public class ReservacionDTO {
-    
-    private ObjectId id;
+    @BsonId
+    private ObjectId _id;
     private ObjectId Usuario;
     private LocalDateTime fechaReservacion;
     private List<AsientoDTO> asientos;
@@ -58,16 +59,16 @@ public class ReservacionDTO {
     }
 
     public ObjectId getId() {
-        return id;
+        return _id;
     }
 
     public void setId(ObjectId id) {
-        this.id = id;
+        this._id = id;
     }
 
     @Override
     public String toString() {
-        return "Reservacion{" + "id=" + id + ", Usuario=" + Usuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
+        return "Reservacion{" + "id=" + _id + ", Usuario=" + Usuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
     }
 
 }

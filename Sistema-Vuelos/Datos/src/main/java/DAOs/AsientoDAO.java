@@ -5,6 +5,7 @@
 package DAOs;
 
 import CRUD.CRUD;
+import Config.MongoClientProvider;
 import POJOs.Asiento;
 
 /**
@@ -14,7 +15,7 @@ import POJOs.Asiento;
 public class AsientoDAO extends CRUD<Asiento> {
     
     public AsientoDAO() {
-        super("Asientos", Asiento.class);
+        super(MongoClientProvider.INTANCE.database(),"Asientos", Asiento.class);
     }
     
 }

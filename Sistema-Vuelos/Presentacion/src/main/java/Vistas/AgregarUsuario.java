@@ -7,12 +7,10 @@ package Vistas;
 
 import Apliacion.Control;
 import DTOs.UsuarioDTO;
+import POJOs.TipoUsuario;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.util.Date;
 import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerDateModel;
 
 /**
  *
@@ -217,7 +215,12 @@ private boolean isAdmin;
         usuario.setApellidoM(campoApellidoM.getText());
         usuario.setCorreo(campoEmail.getText() + boxCorreo.getSelectedItem().toString());
         usuario.setContrasenia(campoContrasenia.getText());
-        if(checkAdmin.isSelected()) usuario.setTipoUsuario("Administrador");
+        if(checkAdmin.isSelected()){
+            usuario.setTipoUsuario(TipoUsuario.administrador);
+        }else{
+            usuario.setTipoUsuario(TipoUsuario.usuario);
+        }
+        
         
         if(control.agregarUsuario(usuario) ==null){
             JOptionPane.showMessageDialog(null,"usuario nulo","Error", JOptionPane.ERROR_MESSAGE);

@@ -9,6 +9,7 @@ import CRUD.ObjetoMongo;
 import com.mongodb.client.model.Updates;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
@@ -18,6 +19,7 @@ import org.bson.types.ObjectId;
  */
 public class Vuelo implements ObjetoMongo{
     
+    @BsonId
     private ObjectId _id;
     private String numVuelo; //Id del vuelo para hacer gets
     private String origen, destino; //usar la primera mayuscula (ej. Guadalajara)
@@ -29,14 +31,14 @@ public class Vuelo implements ObjetoMongo{
 
     public Vuelo() {
     }
-
-    public ObjectId getId() {
-        return _id;
-    }
-
-    public void setId(ObjectId _id) {
-        this._id = _id;
-    }
+//
+//    public ObjectId get_id() {
+//        return _id;
+//    }
+//
+//    public void set_id(ObjectId _id) {
+//        this._id = _id;
+//    }
 
     public String getNumVuelo() {
         return numVuelo;
@@ -113,12 +115,12 @@ public class Vuelo implements ObjetoMongo{
     }
 
     @Override
-    public ObjectId getObjectID() {
+    public ObjectId get_id() {
         return _id;
     }
 
     @Override
-    public void setObjectID(ObjectId objectID) {
+    public void set_id(ObjectId objectID) {
         this._id = objectID;
     }
 

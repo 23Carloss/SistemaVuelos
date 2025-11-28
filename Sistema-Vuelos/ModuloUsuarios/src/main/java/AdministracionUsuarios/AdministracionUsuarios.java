@@ -11,7 +11,6 @@ import Interfaces.IUsuarioBO;
 import NegocioException.NegocioException;
 import java.util.List;
 import javax.swing.JOptionPane;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 /**
@@ -28,7 +27,7 @@ public class AdministracionUsuarios {
     }
     public List<UsuarioDTO> cargarTodos(){
         try {
-            return usuarioBO.findAll();
+            return usuarioBO.obtenerTodos();
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(null,"Error al cargar usuarios","Error", JOptionPane.ERROR_MESSAGE);
             return null;                 
@@ -36,11 +35,8 @@ public class AdministracionUsuarios {
     }
     public UsuarioDTO registrarUsuario(UsuarioDTO u){
         try {
-            System.out.println("Usuario que entra : " + u.toString());
-            var usuario =usuarioBO.createObject(u);
-//            JOptionPane.showConfirmDialog(null, "Registrado con exito", "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
-            System.out.println("Usuario que viene de la dao : " + usuario.toString());
-            setUsuarioDTO((UsuarioDTO)usuario);
+            var usuario =usuarioBO.crearObjeto(u);
+            JOptionPane.showMessageDialog(null, "Registrado con exito", "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
             return usuario;  
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(null,"Error al registrar usuario","Error:  " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
@@ -49,7 +45,7 @@ public class AdministracionUsuarios {
     }
     public void eliminarUsuario(ObjectId _id){
         try {
-            usuarioBO.deleteById(_id);
+            usuarioBO.eliminarPorId(_id);
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(null,"Error al eliminar usuario","Error", JOptionPane.ERROR);
         }
@@ -57,7 +53,7 @@ public class AdministracionUsuarios {
     
     public UsuarioDTO buscarPorId(ObjectId _id){
         try {
-            var usuario =usuarioBO.findById(_id);
+            var usuario =usuarioBO.buscarPorId(_id);
             return usuario;  
             
         } catch (NegocioException ex) {
@@ -67,10 +63,10 @@ public class AdministracionUsuarios {
         }
     }
     
-    public boolean actualizarUsuario(ObjectId _id, Bson cambios){
+    public boolean actualizarUsuario(UsuarioDTO usuario){
         try {
-            var usuario =usuarioBO.update(_id, cambios);
-            return usuario != null; 
+            var usuarioA =usuarioBO.actualizarObjeto(usuario);
+            return usuarioA != null; 
             
         } catch (NegocioException ex) {
             JOptionPane.showConfirmDialog(null, "Error al actualizar", "Error", JOptionPane.ERROR_MESSAGE);
@@ -90,7 +86,7 @@ public class AdministracionUsuarios {
     
     public List<UsuarioDTO> buscarUsuarioPorNombre(String nombre){
         try {
-            return usuarioBO.findByName(nombre);
+            return usuarioBO.buscarPorNombre(nombre);
         } catch (NegocioException ex) {
             JOptionPane.showConfirmDialog(null, "Error al buscar por nombre", "Error", JOptionPane.ERROR_MESSAGE);
             return null;

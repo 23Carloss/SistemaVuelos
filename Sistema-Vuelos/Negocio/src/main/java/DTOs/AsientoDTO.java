@@ -5,6 +5,7 @@
 
 package DTOs;
 
+import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 
@@ -13,7 +14,8 @@ import org.bson.types.ObjectId;
  * @author $Luis Carlos Manjarrez Gonzalez
  */
 public class AsientoDTO {
-    private ObjectId id;
+    @BsonId
+    private ObjectId _id;
     private boolean disponibilidad;
     private int numero;
     private int fila;
@@ -46,16 +48,16 @@ public class AsientoDTO {
     }
 
     public ObjectId getId() {
-        return id;
+        return _id;
     }
 
     public void setId(ObjectId id) {
-        this.id = id;
+        this._id = id;
     }
 
     @Override
     public String toString() {
-        return "AsientoDTO{" + "id=" + id + ", disponibilidad=" + disponibilidad + ", numero=" + numero + ", fila=" + fila + '}';
+        return "AsientoDTO{" + "id=" + _id + ", disponibilidad=" + disponibilidad + ", numero=" + numero + ", fila=" + fila + '}';
     }
 
 

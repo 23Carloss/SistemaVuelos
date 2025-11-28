@@ -26,9 +26,9 @@ public class ReservacionMapper {
     public Reservacion convertirAEntity(ReservacionDTO reservacion){
         var entity = new Reservacion();
         entity.setFechaReservacion(reservacion.getFechaReservacion());
-        entity.setObjectID(reservacion.getId());
+        entity.set_id(reservacion.getId());
         entity.setAsientos(asientoMapper.convertirListaAEntity(reservacion.getAsientos()));
-        entity.setUsuario(reservacion.getUsuario());
+        entity.setIdUsuario(reservacion.getUsuario());
         entity.setVuelo(vueloMapper.convertirAEntity(reservacion.getVuelo()));
         return entity;
 
@@ -36,9 +36,9 @@ public class ReservacionMapper {
     public ReservacionDTO convertirADto(Reservacion reservacion){
         var dto = new ReservacionDTO();
         dto.setFechaReservacion(reservacion.getFechaReservacion());
-        dto.setId(reservacion.getObjectID());
+        dto.setId(reservacion.get_id());
         dto.setAsientos(asientoMapper.convertirListaADto(reservacion.getAsientos()));
-        dto.setUsuario(reservacion.getUsuario());
+        dto.setUsuario(reservacion.getIdUsuario());
         dto.setVuelo(vueloMapper.convertirADto(reservacion.getVuelo()));
         return dto;
 

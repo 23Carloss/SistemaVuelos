@@ -6,9 +6,11 @@
 package Mappers;
 
 import DTOs.UsuarioDTO;
+import POJOs.TipoUsuario;
 import POJOs.Usuario;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -23,27 +25,33 @@ public class UsuarioMapper {
     }
     
     public Usuario convertirAEntity(UsuarioDTO usuario){
-        System.out.println("Entra?");
+       
         var entity = new Usuario();
-        entity.setObjectID(usuario.getId());
+        entity.set_id(usuario.get_id());
         entity.setNombre(usuario.getNombre());
         entity.setApellidoP(usuario.getApellidoP());
         entity.setApellidoM(usuario.getApellidoM());
         entity.setCorreo(usuario.getCorreo());
         entity.setContrasenia(usuario.getContrasenia());
+        entity.setTipoU(usuario.getTipoUsuario().name());
         entity.setReservaciones(mapper.convertirListaAEntity(usuario.getReservaciones()));
+        
         return entity;
     }
     public UsuarioDTO convertirADTO(Usuario usuario){
-        var entity = new UsuarioDTO();
-        entity.setId(usuario.getObjectID());
-        entity.setNombre(usuario.getNombre());
-        entity.setApellidoP(usuario.getApellidoP());
-        entity.setApellidoM(usuario.getApellidoM());
-        entity.setCorreo(usuario.getCorreo());
-        entity.setContrasenia(usuario.getContrasenia());
-        entity.setReservaciones(mapper.convertirListaADTO(usuario.getReservaciones()));
-        return entity;
+       
+        var dto = new UsuarioDTO();
+        dto.set_id(usuario.get_id());
+        dto.setNombre(usuario.getNombre());
+        dto.setApellidoP(usuario.getApellidoP());
+        dto.setApellidoM(usuario.getApellidoM());
+        dto.setCorreo(usuario.getCorreo());
+        TipoUsuario tipoU = TipoUsuario.valueOf(usuario.getTipoU());
+        dto.setTipoUsuario(tipoU);
+        dto.setContrasenia(usuario.getContrasenia());
+        dto.setReservaciones(mapper.convertirListaADTO(usuario.getReservaciones()));
+        
+        return dto;
     }
     
     public List<UsuarioDTO> ConvertirListaADto(List<Usuario> listaEntity){

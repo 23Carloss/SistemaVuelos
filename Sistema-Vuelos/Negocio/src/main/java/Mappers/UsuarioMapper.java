@@ -10,7 +10,6 @@ import POJOs.TipoUsuario;
 import POJOs.Usuario;
 import java.util.ArrayList;
 import java.util.List;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -26,31 +25,29 @@ public class UsuarioMapper {
     
     public Usuario convertirAEntity(UsuarioDTO usuario){
        
-        var entity = new Usuario();
-        entity.set_id(usuario.get_id());
+        Usuario entity = new Usuario();
+        if(usuario.get_id() != null) entity.set_id(usuario.get_id());
         entity.setNombre(usuario.getNombre());
         entity.setApellidoP(usuario.getApellidoP());
         entity.setApellidoM(usuario.getApellidoM());
         entity.setCorreo(usuario.getCorreo());
         entity.setContrasenia(usuario.getContrasenia());
-        entity.setTipoU(usuario.getTipoUsuario().name());
-        entity.setReservaciones(mapper.convertirListaAEntity(usuario.getReservaciones()));
+        entity.setTipoUsuario(usuario.getTipoUsuario().name());
         
         return entity;
     }
     public UsuarioDTO convertirADTO(Usuario usuario){
        
-        var dto = new UsuarioDTO();
+        System.out.println("Entitty q lleg  mpper " + usuario);
+        UsuarioDTO dto = new UsuarioDTO();
         dto.set_id(usuario.get_id());
         dto.setNombre(usuario.getNombre());
         dto.setApellidoP(usuario.getApellidoP());
         dto.setApellidoM(usuario.getApellidoM());
         dto.setCorreo(usuario.getCorreo());
-        TipoUsuario tipoU = TipoUsuario.valueOf(usuario.getTipoU());
+            TipoUsuario tipoU = TipoUsuario.valueOf(usuario.getTipoUsuario());
         dto.setTipoUsuario(tipoU);
         dto.setContrasenia(usuario.getContrasenia());
-        dto.setReservaciones(mapper.convertirListaADTO(usuario.getReservaciones()));
-        
         return dto;
     }
     

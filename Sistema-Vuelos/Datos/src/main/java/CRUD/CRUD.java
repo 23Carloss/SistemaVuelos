@@ -4,7 +4,6 @@
  */
 package CRUD;
 
-import Config.MongoClientProvider;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -22,15 +21,17 @@ public class CRUD<T> implements ICRUD {
 
     protected final MongoCollection<T> col;
 
-    public CRUD(MongoDatabase db, String colleccion, Class clase) {
+    public CRUD(MongoDatabase db, String colleccion, Class<T> clase) {
         this.col = db.getCollection(colleccion, clase);
     }
 
     @Override
     public T create(ObjetoMongo entity) throws MongoException {
         try {
+            System.out.println("Entity q lleg ntes de vlidr id " + entity);
             if(entity.get_id() == null) entity.set_id(new ObjectId());
             col.insertOne((T)entity);  
+            
             return (T) entity;
         } catch (MongoException e) {
 
@@ -66,7 +67,7 @@ public class CRUD<T> implements ICRUD {
     @Override
     public boolean delete(ObjectId _id) throws MongoException {
         try {
-            System.out.println("id q llega a delete: " + _id);
+            
             var result = col.deleteOne(Filters.eq("_id", _id));
 
             return result.getDeletedCount() > 0;

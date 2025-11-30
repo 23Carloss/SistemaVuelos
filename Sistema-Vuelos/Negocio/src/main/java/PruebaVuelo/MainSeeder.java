@@ -1,4 +1,4 @@
-package hp.negocio;
+package PruebaVuelo;
 
 import Config.MongoClientProvider;
 import com.mongodb.client.MongoCollection;
@@ -15,8 +15,8 @@ public class MainSeeder {
 
     public static void main(String[] args) {
         // 1) Inicializar conexión
-        MongoClientProvider.INTANCE.init();
-        MongoDatabase db = MongoClientProvider.INTANCE.database();
+        MongoClientProvider.INSTANCE.init();
+        MongoDatabase db = MongoClientProvider.INSTANCE.database();
         MongoCollection<Document> vuelosCollection = db.getCollection("Vuelos");
 
         // 2) Limpiar colección (opcional, solo para pruebas)
@@ -73,7 +73,7 @@ public class MainSeeder {
                 .append("listaAsientos", Arrays.asList(asientoDisponible, asientoOcupado));
 
         // 6) Insertar en la colección
-        vuelosCollection.insertMany(Arrays.asList(vuelo1, vuelo2, vuelo3));
+//        vuelosCollection.insertMany(Arrays.asList(vuelo1, vuelo2, vuelo3));
 
         System.out.println("✅ Vuelos de prueba insertados en la colección 'Vuelos'.");
         System.out.println("Puedes probar ahora tus métodos con idVuelo = 'ABC123', 'DEF456', 'GHI789'.");

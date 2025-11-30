@@ -22,6 +22,7 @@ import com.mongodb.MongoException;
  */
 
 public class UsuarioBO implements IUsuarioBO{
+    
     private IUsuarioDAO dao;
     private UsuarioMapper mapper;
 
@@ -35,27 +36,35 @@ public class UsuarioBO implements IUsuarioBO{
     public UsuarioDTO crearObjeto(UsuarioDTO object) throws NegocioException{
         try {
             if (object == null) {
-                throw new IllegalArgumentException("Usuario no puede ser nulo");
-            }
-            if (object.getNombre() == null || object.getNombre().isBlank()) {
-                throw new IllegalArgumentException("Nombre es obligatorio");
-            }
-            if (object.getApellidoP() == null || object.getApellidoP().isBlank()) {
-                throw new IllegalArgumentException("Apellido paterno es obligatorio");
-            }
-            if (object.getCorreo() == null || !object.getCorreo().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
-                throw new IllegalArgumentException("Credenciales incorrectas");
-            }
-            if (object.getContrasenia() == null || object.getContrasenia().length() < 6) {
-                throw new IllegalArgumentException("Contraseña debe tener al menos 6 caracteres");
-            }
+                    throw new IllegalArgumentException("Usuario no puede ser nulo");
+                }
+            if(verificarCorreo(object.getCorreo())){
+                throw new NegocioException("Correo ya registrado");
+            }else{
+                if (object.getNombre() == null || object.getNombre().isBlank()) {
+                    throw new IllegalArgumentException("Nombre es obligatorio");
+                }
+                if (object.getApellidoP() == null || object.getApellidoP().isBlank()) {
+                    throw new IllegalArgumentException("Apellido paterno es obligatorio");
+                }
+                if (object.getCorreo() == null || !object.getCorreo().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+                    throw new IllegalArgumentException("Formato de correo incorrecto");
+                }
+                if (object.getContrasenia() == null || object.getContrasenia().length() < 6) {
+                    throw new IllegalArgumentException("Contraseña debe tener al menos 6 caracteres");
+                }
+                if(object.get_id() == null) object.set_id(new ObjectId());
 
-            Usuario usuario = mapper.convertirAEntity(object);
-            System.out.println("Usuario convertido a Entity BO: " + usuario);
-            Usuario us = (Usuario) dao.create(usuario);
-            return mapper.convertirADTO(us);
+                Usuario usuario = mapper.convertirAEntity(object);           
+                Usuario us = (Usuario)dao.create(usuario);
+                return mapper.convertirADTO(us);
+            }
+            
         } catch (MongoException e) {
-            throw new NegocioException("Error al agregar usuario" + e.getMessage());
+            throw new NegocioException("Error al agregar usuario este" + e.getMessage());
+        
+        } catch (IllegalArgumentException ex) {
+            throw new NegocioException("Error al agregar usuario este" + ex.getMessage());
         }
     }
 
@@ -67,8 +76,6 @@ public class UsuarioBO implements IUsuarioBO{
         }catch(MongoException ex){
             throw new NegocioException("Error al buscar usuario" + ex.getMessage());
         }
-            
-     
     }
 
 
@@ -76,9 +83,6 @@ public class UsuarioBO implements IUsuarioBO{
     public List<UsuarioDTO> obtenerTodos() throws NegocioException{
         try{
             List<Usuario> usuarios = dao.findEntities();
-            
-            usuarios.forEach(u -> System.out.println("DEBUG Negocio: ID de entidad recibida del DAO: " + u.get_id()));
-
             return mapper.ConvertirListaADto(usuarios);
         }catch(MongoException ex){
             throw new NegocioException("Error al obtener todos los usuario" + ex.getMessage());
@@ -102,7 +106,7 @@ public class UsuarioBO implements IUsuarioBO{
             if (usuario == null) {
                 throw new NegocioException("Credenciales incorrectas");
             }
-            return (UsuarioDTO) mapper.convertirADTO(usuario);
+            return mapper.convertirADTO(usuario);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al iniciar sesion");
         }
@@ -138,6 +142,31 @@ public class UsuarioBO implements IUsuarioBO{
             throw new NegocioException("Error al actualizar: " + ex.getMessage());
         }
         
+        
+    }
+
+    @Override
+    public boolean verificarCorreo(String correE) throws NegocioException {
+        try{
+            
+        if(correE.trim().isEmpty()){
+            throw new IllegalArgumentException("correo no puede ser nulo");
+        }
+            return dao.verificarCorreo(correE);
+        } catch (IllegalArgumentException ex) {
+            throw new NegocioException("Error al verificar correo" + ex.getMessage());
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al verifciar correo: " + ex.getMessage());
+        }
+    }
+    
+    @Override
+    public UsuarioDTO buscarPorCorreo(String correo)throws NegocioException{
+        try{
+            return mapper.convertirADTO(dao.buscarPorCorreo(correo));
+        }catch(PersistenciaException ex){
+            throw new NegocioException("Error al buscar por correo: " + ex.getMessage());
+        }
     }
 
 }

@@ -6,9 +6,6 @@
 package DTOs;
 
 import POJOs.TipoUsuario;
-import java.util.ArrayList;
-import java.util.List;
-import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 
@@ -18,11 +15,10 @@ import org.bson.types.ObjectId;
  */
 
 public class UsuarioDTO {
-    @BsonId
+    
     private ObjectId _id;
     private String nombre, apellidoP, apellidoM, correo, contrasenia;
     private TipoUsuario tipoUsuario;
-    private List<ReservacionDTO> reservaciones = new ArrayList<>();
 
     public UsuarioDTO() {
     }
@@ -59,14 +55,6 @@ public class UsuarioDTO {
         this.apellidoM = apellidoM;
     }
 
-    public List<ReservacionDTO> getReservaciones() {
-        return reservaciones;
-    }
-
-    public void setReservaciones(List<ReservacionDTO> reservaciones) {
-        this.reservaciones = reservaciones;
-    }
-
     public String getCorreo() {
         return correo;
     }
@@ -93,7 +81,7 @@ public class UsuarioDTO {
 
     @Override
     public String toString() {
-        return "UsuarioDTO{" + "id=" + _id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + ", tipoUsuario=" + tipoUsuario + ", reservaciones=" + reservaciones + '}';
+        return "UsuarioDTO{" + "id=" + _id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + ", tipoUsuario=" + tipoUsuario + '}';
     }
     
 

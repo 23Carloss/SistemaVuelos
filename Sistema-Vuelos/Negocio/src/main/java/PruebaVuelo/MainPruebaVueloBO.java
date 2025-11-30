@@ -1,4 +1,4 @@
-package hp.negocio;
+package PruebaVuelo;
 
 
 import BOs.VueloBO;
@@ -34,7 +34,7 @@ public class MainPruebaVueloBO {
 
     public static void main(String[] args) {
         // 1) Inicializa conexión
-        MongoClientProvider.INTANCE.init();
+        MongoClientProvider.INSTANCE.init();
 
         // 2) Instancia del BO
         VueloBO vueloBO = new VueloBO();

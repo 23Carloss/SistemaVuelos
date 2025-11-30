@@ -26,7 +26,7 @@ import org.bson.types.ObjectId;
 public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
 
     public VueloDAO() {
-        super(MongoClientProvider.INTANCE.database(),"Vuelos", Vuelo.class);
+        super(MongoClientProvider.INSTANCE.database(),"Vuelos", Vuelo.class);
     }
 
     @Override

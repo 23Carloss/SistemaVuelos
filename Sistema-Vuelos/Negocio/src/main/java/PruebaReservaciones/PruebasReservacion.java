@@ -1,0 +1,111 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
+package PruebaReservaciones;
+
+import Config.MongoClientProvider;
+import DAOs.AsientoDAO;
+import DAOs.ReservacionDAO;
+import DAOs.UsuarioDAO;
+import DAOs.VueloDAO;
+import Exception.PersistenciaException;
+import POJOs.Asiento;
+import POJOs.Reservacion;
+import POJOs.Usuario;
+import POJOs.Vuelo;
+import com.mongodb.client.MongoDatabase;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.bson.types.ObjectId;
+
+/**
+ *
+ * @author HP
+ */
+public class PruebasReservacion {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+        MongoClientProvider.INSTANCE.init();
+        MongoDatabase db = MongoClientProvider.INSTANCE.database();
+       
+        AsientoDAO asientoDAO = new AsientoDAO();
+        VueloDAO vueloDao = new VueloDAO();
+        ReservacionDAO reservacionDAO = new ReservacionDAO();
+        UsuarioDAO usDAO  = new UsuarioDAO();
+        
+        Asiento a1 = new Asiento();
+        a1.setDisponibilidad(true);
+        a1.setFila(1);
+        a1.setNumero(1);
+        
+        Asiento a2 = new Asiento();
+        a2.setDisponibilidad(true);
+        a2.setFila(1);
+        a2.setNumero(1);
+        
+//        asientoDAO.create(a1);
+//        asientoDAO.create(a2);
+        
+        List<Asiento> asientosAvion = new ArrayList<>();
+        asientosAvion.add(a1);
+        asientosAvion.add(a2);
+        
+        LocalDateTime salidaVuelo = LocalDateTime.of(2025, 12, 1, 9, 0);
+        Vuelo v1 = new Vuelo();
+        v1.setAerolinea("Carrillo");
+        v1.setDestino("Mexico");
+        v1.setDuracion(200);
+        v1.setFechaSalida(salidaVuelo);
+        v1.setListaAsientos(asientosAvion);
+        v1.setNumVuelo("A131");
+        v1.setOrigen("Europa");
+        v1.setPrecio(300);
+        
+//        vueloDao.create(v1);
+        
+        List<Asiento> asientosReservados = new ArrayList<>();
+        asientosReservados.add(a1);
+        
+        Usuario us2 = new Usuario();
+        us2.set_id(new ObjectId());
+            us2.setNombre("Vuelo");
+                us2.setApellidoP("perez");
+                us2.setApellidoM("g");
+                us2.setCorreo("123123@gmail.com");
+                us2.setContrasenia("carlos23");
+                us2.setTipoUsuario("usuario");
+        us2 = usDAO.create(us2);
+        System.out.println("user credo: " + us2);
+        
+        LocalDateTime reservacion = LocalDateTime.of(2025, 12, 1, 9, 0);
+        Reservacion r1 = new Reservacion();
+        r1.setAsientos(asientosReservados);
+        r1.setCreadoEn(Instant.now());
+        r1.setFechaReservacion(reservacion);
+        r1.setIdUsuario(us2.get_id());
+        r1.setVuelo(v1);
+        reservacionDAO.create(r1);
+        System.out.println(r1);
+        
+                
+            
+            System.out.println(us2);
+
+        
+            for(Reservacion r : reservacionDAO.findEntities()){
+                System.out.println(r);
+            }
+//            reservacionDAO.obtenerReservacionesPorUsuario(us2).forEach(doc -> System.out.println(doc));
+        
+    }
+    
+}

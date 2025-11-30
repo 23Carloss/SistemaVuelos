@@ -15,7 +15,7 @@ import POJOs.Asiento;
 public class AsientoDAO extends CRUD<Asiento> {
     
     public AsientoDAO() {
-        super(MongoClientProvider.INTANCE.database(),"Asientos", Asiento.class);
+        super(MongoClientProvider.INSTANCE.database(),"Asientos", Asiento.class);
     }
     
 }

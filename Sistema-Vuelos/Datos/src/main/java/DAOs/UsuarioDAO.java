@@ -22,7 +22,7 @@ import java.util.List;
 public class UsuarioDAO extends CRUD<Usuario> implements IUsuarioDAO{
     
     public UsuarioDAO() {
-        super(MongoClientProvider.INTANCE.database(),"Usuarios", Usuario.class);
+        super(MongoClientProvider.INSTANCE.database(),"Usuarios", Usuario.class);
         
     }
     
@@ -49,6 +49,27 @@ public class UsuarioDAO extends CRUD<Usuario> implements IUsuarioDAO{
         }catch(MongoException e){
             throw new PersistenciaException("Error en autenticación " + e.getMessage());
         }
+    }
+    
+    //devuelve false si el parametro correoE ya se encuentra registrado
+    //true si no esta registrado
+    @Override
+    public boolean verificarCorreo(String correE)throws PersistenciaException{
+        try{
+            return col.find(Filters.eq("correo", correE)).first() != null;
+        }catch(MongoException ex){
+              throw new PersistenciaException("Error en verificar correo " + ex.getMessage());    
+        }
+        
+    }
+    
+    public Usuario buscarPorCorreo(String correE)throws PersistenciaException{
+        try{
+            return col.find(Filters.eq("correo", correE)).first();
+        }catch(MongoException ex){
+              throw new PersistenciaException("Error al buscar usuario con correo " + ex.getMessage());    
+        }
+        
     }
 
     

@@ -14,7 +14,7 @@ import Config.MongoClientProvider;
 public class Presentacion_Vuelo {
 
     public static void main(String[] args) {
-        MongoClientProvider.INTANCE.init();
+        MongoClientProvider.INSTANCE.init();
         Control control = new Control();
         control.iniciar();
     }

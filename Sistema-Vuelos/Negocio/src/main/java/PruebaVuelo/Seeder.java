@@ -1,4 +1,4 @@
-package hp.negocio;
+package PruebaVuelo;
 
 
 import BOs.VueloBO;
@@ -21,8 +21,8 @@ public class Seeder {
 
     public static void main(String[] args) {
         // 1) Inicializar conexión
-        MongoClientProvider.INTANCE.init();
-        MongoDatabase db = MongoClientProvider.INTANCE.database();
+        MongoClientProvider.INSTANCE.init();
+        MongoDatabase db = MongoClientProvider.INSTANCE.database();
         MongoCollection<Document> vuelosCollection = db.getCollection("Vuelos");
 
         // 2) Insertar un vuelo de prueba si no existe

@@ -22,7 +22,6 @@ public class Usuario implements ObjetoMongo {
     private ObjectId _id;
     private String nombre, apellidoP, apellidoM,correo,contrasenia;    
     private String tipoUsuario;
-    private List<Reservacion> reservaciones = new ArrayList<>();
 
     public Usuario() {
     }
@@ -75,25 +74,6 @@ public class Usuario implements ObjetoMongo {
         this.contrasenia = contrasenia;
     }
 
-    public List<Reservacion> getReservaciones() {
-        return reservaciones;
-    }
-
-    public void setReservaciones(List<Reservacion> reservaciones) {
-        this.reservaciones = reservaciones;
-    }
-
-
-    public String getTipoU() {
-        return tipoUsuario;
-    }
-
-    public void setTipoU(String tipoU) {
-        this.tipoUsuario = tipoU;
-    }
-    
-    
-    
     @Override
     public ObjectId get_id() {
         return _id;
@@ -106,21 +86,21 @@ public class Usuario implements ObjetoMongo {
 
     @Override
     public Bson toUpdateOperations() {
-        return Updates.combine(
-            Updates.set("nombre", nombre),
-            Updates.set("correo", correo),
-            Updates.set("apellidoP", apellidoP),
-            Updates.set("apellidoM", apellidoM),
-            Updates.set("contrasenia", contrasenia), 
-            Updates.set("tipoUsuario", tipoUsuario),
-            Updates.set("reservaciones", reservaciones)
-        );
+        List<Bson> updates = new ArrayList<>();
+        if(this.nombre != null )updates.add(Updates.set("nombre", this.nombre));
+        if (this.apellidoP != null) updates.add(Updates.set("apellidoP", this.apellidoP));
+        if (this.apellidoM != null) updates.add(Updates.set("apellidoM", this.apellidoM));
+        if (this.correo != null) updates.add(Updates.set("correo", this.correo));
+        if (this.contrasenia != null) updates.add(Updates.set("contrasenia", this.contrasenia));
+        if (this.tipoUsuario != null) updates.add(Updates.set("tipoUsuario", this.tipoUsuario));
+
+        return Updates.combine(updates);
     }
 
     @Override
     public String toString() {
         return "Usuario{" + "_id=" + _id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + 
-                ", tipoUsuario=" + tipoUsuario + ", reservaciones=" + reservaciones + '}';
+                ", tipoUsuario=" + tipoUsuario +'}';
     }
     
     

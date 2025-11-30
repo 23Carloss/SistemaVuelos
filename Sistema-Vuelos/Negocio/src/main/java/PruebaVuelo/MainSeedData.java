@@ -1,4 +1,4 @@
-package hp.negocio;
+package PruebaVuelo;
 
 
 import Config.MongoClientProvider;
@@ -16,8 +16,8 @@ public class MainSeedData {
 
     public static void main(String[] args) {
         // 1) Inicializar conexión
-        MongoClientProvider.INTANCE.init();
-        MongoDatabase db = MongoClientProvider.INTANCE.database();
+        MongoClientProvider.INSTANCE.init();
+        MongoDatabase db = MongoClientProvider.INSTANCE.database();
         MongoCollection<Document> vuelosCollection = db.getCollection("Vuelos");
 
         // 2) Limpiar colección (opcional, solo para pruebas)

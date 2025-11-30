@@ -23,7 +23,7 @@ public interface IUsuarioBO{
     public List<UsuarioDTO> buscarPorNombre(String name)throws NegocioException;
     public List<UsuarioDTO> obtenerTodos()throws NegocioException;
     public UsuarioDTO signIn(String correo, String password)throws NegocioException;
-    
-    
+    public boolean verificarCorreo(String correE)throws NegocioException;
+    public UsuarioDTO buscarPorCorreo(String correE)throws NegocioException;
 
 }

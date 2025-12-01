@@ -18,4 +18,6 @@ public interface IUsuarioDAO extends ICRUD {
     public List<Usuario> buscarPorNombre(String nombre) throws PersistenciaException;
     public boolean verificarCorreo(String correE)throws PersistenciaException;
     public Usuario buscarPorCorreo(String correE)throws PersistenciaException;
+    public boolean eliminarPorCorreo(String correoE)throws PersistenciaException;
+    public boolean actualizarPorCorreo(Usuario entity)throws PersistenciaException;
 }

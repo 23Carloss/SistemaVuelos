@@ -63,11 +63,44 @@ public class UsuarioDAO extends CRUD<Usuario> implements IUsuarioDAO{
         
     }
     
+    @Override
     public Usuario buscarPorCorreo(String correE)throws PersistenciaException{
         try{
             return col.find(Filters.eq("correo", correE)).first();
         }catch(MongoException ex){
-              throw new PersistenciaException("Error al buscar usuario con correo " + ex.getMessage());    
+              throw new PersistenciaException("Error al buscar usuario por correo " + ex.getMessage());    
+        }
+    }
+    
+    @Override
+    public boolean eliminarPorCorreo(String correoE)throws PersistenciaException{
+        
+        try {
+            
+            var result = col.deleteOne(Filters.eq("correo", correoE));
+
+            return result.getDeletedCount() > 0;
+
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error al eliminar por correo " + e.getMessage());
+        }
+    }
+    
+    @Override
+    public boolean actualizarPorCorreo(Usuario entity)throws PersistenciaException{
+        try{
+            try {
+          
+                var filter = Filters.eq("correo", entity.getCorreo());
+                var updates = entity.toUpdateOperations(); // método que tú defines en ObjetoMongo
+
+                var result = col.updateOne(filter,updates);
+                return result.getModifiedCount() > 0;
+        } catch (MongoException e) {
+            throw e;
+        }
+        }catch(MongoException ex){
+              throw new PersistenciaException("Error al actualizar por correo " + ex.getMessage());    
         }
         
     }

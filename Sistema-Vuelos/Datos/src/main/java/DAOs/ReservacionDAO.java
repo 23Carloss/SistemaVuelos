@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import org.bson.Document;
 
+
 /**
  *
  * @author Jesus Gammael Soto Escalante 248336
@@ -41,25 +42,58 @@ public class ReservacionDAO extends CRUD<Reservacion> implements IReservacionDAO
     public List<Reservacion> obtenerReservacionesPorUsuario(Usuario us) throws PersistenciaException{
         try{
             Usuario usMongo = colUs.find(Filters.eq("correo", us.getCorreo())).first();
-            System.out.println("Objeto encontrdo : " + usMongo);
-            System.out.println("us q llega a reservacionDAo" + usMongo);
             List<Document> pipeLine = List.of(
-                    new Document("$match", new Document("_id", usMongo.get_id())),
+                    new Document("$match", new Document("correoUsuario", usMongo.getCorreo())),
                     new Document("$lookup", 
                             new Document("from", "Usuarios")
-                            .append("localField", "idUsuario")
-                            .append("foreignField", "_id")
+                            .append("localField", "correoUsuario")
+                            .append("foreignField", "correo")
                             .append("as", "Mis reservaciones")
                     
                     )
             );
             List<Document> docs = colDoc.aggregate(pipeLine).into(new ArrayList<>());
+            List<Reservacion> reservaciones = convertirDocAReservacion(docs);
 
-            List<Reservacion> reservaciones = new ArrayList<>();
             
-            for(Document doc : docs) {
+            
+            return reservaciones;
+        }catch(MongoException ex){
+            throw new PersistenciaException("Error al consultar reservaciones" + ex.getMessage());
+        }
+      
+    }
+    
+    private Vuelo convertirDocAVuelo(Document vueloDoc){
+        
+                Vuelo v1 = new Vuelo();
+                v1.set_id(vueloDoc.getObjectId("_id"));
+                v1.setAerolinea(vueloDoc.getString("aerolinea"));
+                v1.setDestino(vueloDoc.getString("destino"));
+                v1.setDuracion(vueloDoc.getInteger("duracion"));
+                
+                Date fechaSalidaDate = vueloDoc.getDate("fechaSalida");
+                LocalDateTime fechaSalidaLocalDate = null;
+                if (fechaSalidaDate != null) {
+                    fechaSalidaLocalDate = fechaSalidaDate.toInstant()
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime();
+                }
+                v1.setFechaSalida(fechaSalidaLocalDate);
+                v1.setNumVuelo(vueloDoc.getString("numVuelo"));
+                List<Document> listaAsientos = vueloDoc.getList("listaAsientos", Document.class);
+                v1.setListaAsientos(convertirDocAAsientos(listaAsientos));
+                v1.setOrigen(vueloDoc.getString("origen"));
+                v1.setPrecio(vueloDoc.getDouble("precio").floatValue());
+                return v1;
+    }
+    
+    private List<Reservacion> convertirDocAReservacion(List<Document> docs){
+        List<Reservacion> reservaciones = new ArrayList<>();
+        for(Document doc : docs) {
                 Reservacion r1 = new Reservacion();
-                r1.setAsientos(doc.getList("listaAsientos", Asiento.class));
+                List<Document> listaAsientos = doc.getList("asientos", Document.class);
+                r1.setAsientos(convertirDocAAsientos(listaAsientos));
                 Date creado = doc.getDate("creadoEn");
                 if(creado != null){
                      r1.setCreadoEn(creado.toInstant());
@@ -72,14 +106,25 @@ public class ReservacionDAO extends CRUD<Reservacion> implements IReservacionDAO
                     .toLocalDateTime();
                 }
                 r1.setFechaReservacion(reserva);
-                r1.setIdUsuario(doc.getObjectId("idUsuario"));
-                r1.setVuelo(doc.get("vuelo", Vuelo.class));
+                r1.setCorreoUsuario(doc.getString("correoUsuario"));
+                Document vueloDoc = (Document) doc.get("vuelo");
+                Vuelo v2 = convertirDocAVuelo(vueloDoc);
+                r1.setVuelo(v2);
                 reservaciones.add(r1);
             }
-            return reservaciones;
-        }catch(MongoException ex){
-            throw new PersistenciaException("Error al consultar reservaciones");
-        }
-       
+        return reservaciones;
     }
+    
+    private List<Asiento> convertirDocAAsientos(List<Document> listaAsientos){
+        List<Asiento> asientos = new ArrayList<>();
+        for(Document d : listaAsientos){
+            Asiento a1 = new Asiento();
+            a1.set_id(d.getObjectId("_id"));
+            a1.setDisponibilidad(d.getBoolean("disponibilidad"));
+            a1.setFila(d.getInteger("fila"));
+            a1.setNumero(d.getInteger("numero"));
+        }
+        return asientos;
+    }
+    
 }

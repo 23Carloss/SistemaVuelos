@@ -28,7 +28,7 @@ public class ReservacionMapper {
         entity.setFechaReservacion(reservacion.getFechaReservacion());
         entity.set_id(reservacion.getId());
         entity.setAsientos(asientoMapper.convertirListaAEntity(reservacion.getAsientos()));
-        entity.setIdUsuario(reservacion.getUsuario());
+        entity.setCorreoUsuario(reservacion.getCoreoUsuario());
         entity.setVuelo(vueloMapper.convertirAEntity(reservacion.getVuelo()));
         return entity;
 
@@ -38,7 +38,7 @@ public class ReservacionMapper {
         dto.setFechaReservacion(reservacion.getFechaReservacion());
         dto.setId(reservacion.get_id());
         dto.setAsientos(asientoMapper.convertirListaADto(reservacion.getAsientos()));
-        dto.setUsuario(reservacion.getIdUsuario());
+        dto.setCoreoUsuario(reservacion.getCorreoUsuario());
         dto.setVuelo(vueloMapper.convertirADto(reservacion.getVuelo()));
         return dto;
 

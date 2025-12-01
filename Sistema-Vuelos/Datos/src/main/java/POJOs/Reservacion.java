@@ -21,7 +21,8 @@ import org.bson.types.ObjectId;
 public class Reservacion implements ObjetoMongo {
     @BsonId
     private ObjectId _id;
-    private ObjectId IdUsuario;
+    private String numReservacion;
+    private String correoUsuario;
     private LocalDateTime fechaReservacion;
     private List<Asiento> asientos;
     private Vuelo vuelo;
@@ -31,15 +32,22 @@ public class Reservacion implements ObjetoMongo {
     public Reservacion() {
     }
 
-
-    public ObjectId getIdUsuario() {
-        return IdUsuario;
+    public String getNumReservacion() {
+        return numReservacion;
     }
 
-    public void setIdUsuario(ObjectId IdUsuario) {
-        this.IdUsuario = IdUsuario;
+    public void setNumReservacion(String numReservacion) {
+        this.numReservacion = numReservacion;
+    }
+    
+    public String getCorreoUsuario() {
+        return correoUsuario;
     }
 
+    public void setCorreoUsuario(String correoUsuario) {
+        this.correoUsuario = correoUsuario;
+    }
+    
     public LocalDateTime getFechaReservacion() {
         return fechaReservacion;
     }
@@ -87,12 +95,14 @@ public class Reservacion implements ObjetoMongo {
     public void setEditadoEn(Instant editadoEn) {
         this.editadoEn = editadoEn;
     }
-    
 
     @Override
     public String toString() {
-        return "Reservacion{" + "id=" + _id + ", Usuario=" + IdUsuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
+        return "Reservacion{" + "_id=" + _id + ", numReservacion=" + numReservacion + ", correoUsuario=" + correoUsuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + ", creadoEn=" + creadoEn + ", editadoEn=" + editadoEn + '}';
     }
+
+    
+    
 
     @Override
     public ObjectId get_id() {
@@ -107,11 +117,13 @@ public class Reservacion implements ObjetoMongo {
     @Override
     public Bson toUpdateOperations() {
         return Updates.combine(
-            Updates.set("Usuario", IdUsuario),
             Updates.set("fechaReservacion", fechaReservacion),
             Updates.set("asientos", asientos),
             Updates.set("vuelo", vuelo),
-            Updates.set("editadoEn", editadoEn)
+            Updates.set("editadoEn", editadoEn),
+            Updates.set("creadoEn", creadoEn),
+            Updates.set("correoUsuario", correoUsuario),
+            Updates.set("numReservacion", numReservacion)
         );
     }
     

@@ -17,7 +17,8 @@ import org.bson.types.ObjectId;
 public class ReservacionDTO {
     @BsonId
     private ObjectId _id;
-    private ObjectId Usuario;
+    private String coreoUsuario;
+    private String numReservacion;
     private LocalDateTime fechaReservacion;
     private List<AsientoDTO> asientos;
     private VueloDTO vuelo;
@@ -25,13 +26,12 @@ public class ReservacionDTO {
     public ReservacionDTO() {
     }
 
-    
-    public ObjectId getUsuario() {
-        return Usuario;
+    public String getCoreoUsuario() {
+        return coreoUsuario;
     }
 
-    public void setUsuario(ObjectId Usuario) {
-        this.Usuario = Usuario;
+    public void setCoreoUsuario(String coreoUsuario) {
+        this.coreoUsuario = coreoUsuario;
     }
 
     public LocalDateTime getFechaReservacion() {
@@ -66,9 +66,20 @@ public class ReservacionDTO {
         this._id = id;
     }
 
+    public String getNumReservacion() {
+        return numReservacion;
+    }
+
+    public void setNumReservacion(String numReservacion) {
+        this.numReservacion = numReservacion;
+    }
+
     @Override
     public String toString() {
-        return "Reservacion{" + "id=" + _id + ", Usuario=" + Usuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
+        return "ReservacionDTO{" + "_id=" + _id + ", coreoUsuario=" + coreoUsuario + ", numReservacion=" + numReservacion + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
     }
+    
+
+   
 
 }

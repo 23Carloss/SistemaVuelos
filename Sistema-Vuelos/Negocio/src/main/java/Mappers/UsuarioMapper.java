@@ -37,8 +37,7 @@ public class UsuarioMapper {
         return entity;
     }
     public UsuarioDTO convertirADTO(Usuario usuario){
-       
-        System.out.println("Entitty q lleg  mpper " + usuario);
+     
         UsuarioDTO dto = new UsuarioDTO();
         dto.set_id(usuario.get_id());
         dto.setNombre(usuario.getNombre());

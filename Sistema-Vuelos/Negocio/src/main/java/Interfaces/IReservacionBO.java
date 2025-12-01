@@ -5,6 +5,7 @@
 package Interfaces;
 
 import CRUD.ICRUD;
+import DTOs.AsientoDTO;
 import DTOs.ReservacionDTO;
 import NegocioException.NegocioException;
 import java.util.List;
@@ -16,5 +17,5 @@ import java.util.List;
 public interface IReservacionBO extends ICRUD{
     public ReservacionDTO crearObjeto(ReservacionDTO reservacion) throws NegocioException;
     public List<ReservacionDTO> obtenerTodos() throws NegocioException;
-   
+    public Boolean verificarAsientosDisponibles(List<AsientoDTO> listaAscientos) throws NegocioException;
 }

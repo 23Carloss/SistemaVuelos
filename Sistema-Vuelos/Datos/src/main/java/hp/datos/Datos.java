@@ -36,11 +36,13 @@ public class Datos {
                 us2.setContrasenia("carlos23");
                 us2.setTipoUsuario("usuario");
 //               
+
+        //Se crea el usuario en la dao y si tiene un _id 
             System.out.println(dao.create(us2));
            
 //            
 ////            System.out.println("Actualizo: " + dao.update(us));
-//            
+//            Al momento de obtenerTodos nos imprime las entidades(documentos) sin su _id
             dao.findEntities().forEach(System.out::println);
             
             

@@ -28,7 +28,7 @@ public class CRUD<T> implements ICRUD {
     @Override
     public T create(ObjetoMongo entity) throws MongoException {
         try {
-            System.out.println("Entity q lleg ntes de vlidr id " + entity);
+            
             if(entity.get_id() == null) entity.set_id(new ObjectId());
             col.insertOne((T)entity);  
             

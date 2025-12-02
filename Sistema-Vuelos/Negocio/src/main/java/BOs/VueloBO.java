@@ -15,6 +15,8 @@ import Mappers.VueloMapper;
 import NegocioException.NegocioException;
 import POJOs.Asiento;
 import POJOs.Vuelo;
+import com.mongodb.MongoException;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,41 +29,41 @@ import org.bson.types.ObjectId;
  */
 public class VueloBO implements IVueloBO {
 
-    IVueloDAO dao;
-    VueloMapper Mapper;
+    private final String LETRAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final SecureRandom random;
+    private IVueloDAO dao;
+    private VueloMapper Mapper;
 
     public VueloBO() {
+        random = new SecureRandom();
         dao = new VueloDAO();
         Mapper = new VueloMapper();
     }
 
     // Para ciudades (origen/destino)
-private boolean validarCiudad(String valor, String nombreCampo) {
-    if (valor == null || valor.trim().isEmpty()) {
-        throw new IllegalArgumentException("El campo " + nombreCampo + " no puede estar vacío.");
+    private boolean validarCiudad(String valor, String nombreCampo) {
+        if (valor == null || valor.trim().isEmpty()) {
+            throw new IllegalArgumentException("El campo " + nombreCampo + " no puede estar vacío.");
+        }
+        valor = valor.trim();
+
+        // Permitir varias palabras con mayúscula inicial
+        return true;
     }
-    valor = valor.trim();
-
-    // Permitir varias palabras con mayúscula inicial
-    
-
-    return true;
-}
 
 // Para número de vuelo (alfanumérico)
-private boolean validarNumVuelo(String valor) {
-    if (valor == null || valor.trim().isEmpty()) {
-        throw new IllegalArgumentException("El número de vuelo no puede estar vacío.");
+    private boolean validarNumVuelo(String valor) {
+        if (valor == null || valor.trim().isEmpty()) {
+            throw new IllegalArgumentException("El número de vuelo no puede estar vacío.");
+        }
+        valor = valor.trim();
+
+        if (!valor.matches("^[A-Za-z0-9]+$")) {
+            throw new IllegalArgumentException("El número de vuelo solo puede contener letras y números.");
+        }
+
+        return true;
     }
-    valor = valor.trim();
-
-    if (!valor.matches("^[A-Za-z0-9]+$")) {
-        throw new IllegalArgumentException("El número de vuelo solo puede contener letras y números.");
-    }
-
-    return true;
-}
-
 
     @Override
     public List<VueloDTO> getBuscarVuelos(String origen, String destino, Date salida) throws NegocioException {
@@ -233,6 +235,77 @@ private boolean validarNumVuelo(String valor) {
             throw new NegocioException("Error en VueloBO: getAsientosOcupados: " + e.getMessage());
         } catch (IllegalArgumentException ex) {
             throw new NegocioException("Error en VueloBO en los campos: getAsientosOcupados: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Se crea un vuelo con un numero de vuelo generado de forma random
+     *
+     * @param vueloDTO
+     * @return
+     * @throws NegocioException
+     */
+    public VueloDTO crearVuelo(VueloDTO vueloDTO) throws NegocioException {
+        String numVueloNuevo;
+        try {
+            do {
+                char letra1 = LETRAS.charAt(random.nextInt(LETRAS.length()));
+                char letra2 = LETRAS.charAt(random.nextInt(LETRAS.length()));
+                int numeros = random.nextInt(1000); // rango 0–999
+                numVueloNuevo = letra1 + letra2 + String.format("%03d", numeros);
+            } while (getVuelo(numVueloNuevo) != null);
+
+            vueloDTO.setNumVuelo(numVueloNuevo);
+            validarCiudad(vueloDTO.getDestino(), "Destino");
+            validarCiudad(vueloDTO.getOrigen(), "Origen");
+
+            Vuelo vuelo = Mapper.convertirAEntity(vueloDTO);
+
+            dao.create(vuelo);
+
+            return vueloDTO;
+
+        } catch (NegocioException e) {
+
+            throw new NegocioException("Error en VueloBO: crearVuelo: getVuelo: " + e.getMessage());
+
+        } catch (MongoException ex) {
+            throw new NegocioException("Error en VueloBO: crearVuelo: " + ex.getMessage());
+        }
+
+    }
+
+    public boolean ocuparAsiento(String numVuelo, AsientoDTO asientoDTO) throws NegocioException {
+        try {
+            VueloDTO vueloDTO = getVuelo(numVuelo);
+
+            List<AsientoDTO> asientos = vueloDTO.getListaAsientos();
+
+            for (AsientoDTO asiento : asientos) {
+                if (asiento.getFila() == asientoDTO.getFila()) {
+                    if (asiento.getNumero() == asientoDTO.getNumero()) {
+
+                        int indice = asientos.indexOf(asiento);
+                        asientos.set(indice, asientoDTO);
+                        break;
+                    }
+                }
+
+            }
+
+            vueloDTO.setListaAsientos(asientos);
+            Vuelo vuelo = Mapper.convertirAEntity(vueloDTO);
+
+            dao.actualizarAsientosPorVuelo(vuelo);
+
+            return true;
+
+        } catch (NegocioException e) {
+
+            throw new NegocioException("Error en VueloBO: ocuparAsiento: getVuelo: " + e.getMessage());
+
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error en VueloBO: ocuparAsiento: " + ex.getMessage());
         }
     }
 

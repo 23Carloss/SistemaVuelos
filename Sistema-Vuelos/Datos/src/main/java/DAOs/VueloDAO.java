@@ -12,6 +12,8 @@ import POJOs.Vuelo;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -228,6 +230,25 @@ public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
             throw new PersistenciaException("Error en filtrarVuelos: " + e.getMessage());
         }
 
+    }
+
+    @Override
+    public boolean actualizarAsientosPorVuelo(Vuelo vuelo) throws PersistenciaException {
+
+        try {
+            String numeroVuelo = vuelo.getNumVuelo();
+
+            // Filtro por otro campo (numeroVuelo)
+
+            UpdateResult result = col.updateOne(
+                    Filters.eq("idVuelo", numeroVuelo), // filtro por número de vuelo
+                    Updates.set("listaAsientos", vuelo.getListaAsientos()) // reemplaza toda la lista
+            );
+
+            return result.getModifiedCount() > 0;
+        } catch (Exception e) {
+            throw new PersistenciaException("Error en ActualizarAsientosPorVuelo:"+ e.getMessage());
+        }
     }
 
 }

@@ -107,5 +107,7 @@ public interface IVueloDAO extends ICRUD {
      * @throws PersistenciaException exception si falla y que paso
      */
     List<Vuelo> filtrarVuelos(String origen, String destino, float precio) throws PersistenciaException;
-
+    
+    boolean actualizarAsientosPorVuelo(Vuelo vuelo) throws  PersistenciaException;
+    
 }

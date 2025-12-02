@@ -1,0 +1,136 @@
+package cliente;
+
+import DTOs.AsientoDTO;
+import DTOs.VueloDTO;
+import styles.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+
+public class DlgSeleccionarAsientos extends JDialog {
+
+    Style style = new Style();
+    boolean testeoColor = false;
+    VueloDTO vuelo;
+
+    ToggleButton asientos[] = new ToggleButton[style.cantidadAsientos];
+    ArrayList<AsientoDTO> seleccion = new ArrayList<>();
+
+    //Estética
+    ContainerPanel contenedorAsientos = new ContainerPanel(style.frameX, 600, Color.PINK, testeoColor);
+    ContainerPanel botones = new ContainerPanel(style.frameX, 60, Color.PINK, testeoColor);
+    CustomButton btnVolver = new CustomButton("Volver");
+    CustomButton btnComprar = new CustomButton("Proceder al pago", 1, 220, 60);
+
+    public DlgSeleccionarAsientos(VueloDTO vuelo) {
+
+        this.vuelo = vuelo;
+
+        //Setup
+        setLocationRelativeTo(null);
+        Dimension dimension = new Dimension(style.dialogY, style.dialogX);
+        setMaximumSize(dimension);
+        setMinimumSize(dimension);
+        setPreferredSize(dimension);
+        setBackground(style.beigeBase);
+
+        JPanel contenido = new JPanel();
+        contenido.setLayout(new BorderLayout());
+        contenido.setOpaque(false);
+        setContentPane(contenido);
+
+        //Encabezado
+        add(new CustomLabel("Seleccionar asientos - Vuelo " + vuelo.getNombre()), BorderLayout.NORTH);
+
+        // MATRIZ 11×8 (fila 0 = encabezado)
+        contenedorAsientos.setLayout(new GridLayout(11, 8));
+
+        // Encabezados
+        contenedorAsientos.add(new CustomLabel(""));
+        contenedorAsientos.add(new CustomLabel("A"));
+        contenedorAsientos.add(new CustomLabel("B"));
+        contenedorAsientos.add(new CustomLabel("C"));
+        contenedorAsientos.add(new CustomLabel(""));
+        contenedorAsientos.add(new CustomLabel("D"));
+        contenedorAsientos.add(new CustomLabel("E"));
+        contenedorAsientos.add(new CustomLabel("F"));
+
+        // --- GENERAR LA MATRIZ DE ASIENTOS ---
+        // Suponiendo 10 filas (1–10)
+        // Columnas A–F
+
+        String columnas[] = {"A", "B", "C", "D", "E", "F"};
+
+        int indexAsiento = 0;
+
+        for (int fila = 1; fila <= 10; fila++) {
+
+            // Primera celda de cada fila → número de fila
+            contenedorAsientos.add(new CustomLabel("" + fila));
+
+            for (String col : columnas) {
+
+                // Espacio entre C y D
+                if (col.equals("D")) {
+                    contenedorAsientos.add(new CustomLabel(""));
+                }
+
+                AsientoDTO dto = vuelo.getAsiento(indexAsiento);
+
+                ToggleButton btn =
+                        new ToggleButton(dto.isDisponible(), dto.getColumna(), dto.getFila());
+
+                asientos[indexAsiento] = btn;
+                contenedorAsientos.add(btn);
+
+                indexAsiento++;
+            }
+        }
+
+        add(contenedorAsientos, BorderLayout.CENTER);
+
+        //Botones
+        botones.setLayout(new BorderLayout());
+        botones.add(btnVolver, BorderLayout.WEST);
+        botones.add(btnComprar, BorderLayout.EAST);
+        add(botones, BorderLayout.SOUTH);
+
+        btnVolver.addMouseListener(new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) { volver(); }
+        });
+        btnComprar.addMouseListener(new MouseAdapter() {
+            @Override public void mouseClicked(MouseEvent e) { comprar(); }
+        });
+    }
+
+    public void volver() {
+        this.dispose();
+    }
+
+    public void comprar() {
+
+        for (int i = 0; i < asientos.length; i++) {
+            if (asientos[i].isSeleccionado()) {
+                AsientoDTO asiento = new AsientoDTO(
+                        asientos[i].getColumna(),
+                        asientos[i].getFila(),
+                        true
+                );
+                seleccion.add(asiento);
+            }
+        }
+
+        JOptionPane.showMessageDialog(null, "Reservación realizada.");
+
+        //PRINT TEST
+        System.out.println("Asientos seleccionados: ");
+        for (AsientoDTO a : seleccion) {
+            System.out.println(a);
+        }
+
+        this.dispose();
+    }
+}

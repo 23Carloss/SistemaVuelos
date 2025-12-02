@@ -10,6 +10,7 @@
         <module>Datos</module>
         <module>Negocio</module>
         <module>ModuloUsuarios</module>
+        <module>EmberGiza-presentacion-local</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

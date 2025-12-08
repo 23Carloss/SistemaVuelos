@@ -110,4 +110,8 @@ public interface IVueloDAO extends ICRUD {
     
     boolean actualizarAsientosPorVuelo(Vuelo vuelo) throws  PersistenciaException;
     
+    public boolean actualizarPorNumeroVuelo(Vuelo vuelo) throws PersistenciaException;
+    
+    public boolean eliminarPorNumeroVuelo(Vuelo vuelo) throws PersistenciaException;
+    
 }

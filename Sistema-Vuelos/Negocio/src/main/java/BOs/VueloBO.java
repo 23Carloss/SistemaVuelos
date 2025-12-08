@@ -17,10 +17,11 @@ import POJOs.Asiento;
 import POJOs.Vuelo;
 import com.mongodb.MongoException;
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.bson.types.ObjectId;
 
 /**
@@ -245,6 +246,7 @@ public class VueloBO implements IVueloBO {
      * @return
      * @throws NegocioException
      */
+    @Override
     public VueloDTO crearVuelo(VueloDTO vueloDTO) throws NegocioException {
         String numVueloNuevo;
         try {
@@ -306,6 +308,35 @@ public class VueloBO implements IVueloBO {
 
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error en VueloBO: ocuparAsiento: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<VueloDTO> obtenerTodos() throws NegocioException {
+        List<Vuelo> listEntity = dao.findEntities();
+        List<VueloDTO> listaVuelos = Mapper.ConvertirListaADto(listEntity);
+        return listaVuelos;
+    }
+
+    @Override
+    public boolean actualizarVuelo(VueloDTO vuelo) throws NegocioException {
+        try {
+            if(vuelo == null ) throw new NegocioException("Vuelo nulo");
+            Vuelo vueloEntity = Mapper.convertirAEntity(vuelo);
+            return dao.actualizarPorNumeroVuelo(vueloEntity);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error en VueloBO: actualizarVuelo: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public boolean eliminarVuelo(VueloDTO vuelo) throws NegocioException {
+        try {
+            if(vuelo == null) throw new NegocioException("VUelo nulo");
+            Vuelo vueloEntity = Mapper.convertirAEntity(vuelo);
+            return dao.eliminarPorNumeroVuelo(vueloEntity);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error en VueloBO: eliminarVuelo: " + ex.getMessage());
         }
     }
 

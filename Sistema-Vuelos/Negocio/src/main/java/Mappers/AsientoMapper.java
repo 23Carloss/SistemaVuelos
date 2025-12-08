@@ -21,7 +21,7 @@ public class AsientoMapper {
     
     public AsientoDTO convertirADto(Asiento asiento){
         AsientoDTO dto = new AsientoDTO();
-        dto.setId(asiento.get_id());
+//        dto.setId(asiento.get_id());
         dto.setDisponibilidad(asiento.isDisponibilidad());
         dto.setFila(asiento.getFila());
         dto.setColumna(asiento.getColumna());

@@ -1,11 +1,12 @@
 
+import Aplicacion.Control;
 import login.FrmPrincipal;
 
 public class Main {
 
     public static void main(String[] args) {
-
-        FrmPrincipal frame = new FrmPrincipal();
+        Control control = new Control();
+        FrmPrincipal frame = new FrmPrincipal(control);
 
     }
 }

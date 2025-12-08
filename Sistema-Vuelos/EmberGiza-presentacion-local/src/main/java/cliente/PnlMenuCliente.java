@@ -1,5 +1,6 @@
 package cliente;
 
+import Aplicacion.Control;
 import DTOs.UsuarioDTO;
 import login.PnlLogin;
 import styles.*;
@@ -10,7 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class PnlMenuCliente extends JPanel {
-
+    private Control control;
     Style style = new Style();
     boolean testeoColor = false;
 
@@ -53,8 +54,8 @@ public class PnlMenuCliente extends JPanel {
     CustomButton btnCerrarSesion = new CustomButton("Cerrar sesión");
 
 
-    public PnlMenuCliente(PnlLogin login, UsuarioDTO usuario) {
-
+    public PnlMenuCliente(PnlLogin login, UsuarioDTO usuario, Control control) {
+        this.control = control;
         this.usuario = usuario;
         this.login = login;
 
@@ -146,13 +147,13 @@ public class PnlMenuCliente extends JPanel {
 
     public void tabBuscarVuelos() {
         esconderComponentes();
-        pnlBuscarVuelo = new PnlBuscarVuelos(this);
+        pnlBuscarVuelo = new PnlBuscarVuelos(this, control);
         add(pnlBuscarVuelo);
     }
 
     public void tabMisReservaciones() {
         esconderComponentes();
-        pnlMisVuelos = new PnlMisReservaciones(this, usuario);
+        pnlMisVuelos = new PnlMisReservaciones(this, usuario, control);
         add(pnlMisVuelos);
     }
 

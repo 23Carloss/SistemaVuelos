@@ -156,7 +156,7 @@ public class PnlLogin extends JPanel {
                 }
                 add(pnlMenuAdmin);
             } else {
-                pnlMenuCliente = new PnlMenuCliente(this, usuario);
+                pnlMenuCliente = new PnlMenuCliente(this, usuario, control);
                 pnlMenuAdmin = new PnlMenuAdmin(this);
                 if (pnlCrearCuenta != null) {
                     remove(pnlCrearCuenta);

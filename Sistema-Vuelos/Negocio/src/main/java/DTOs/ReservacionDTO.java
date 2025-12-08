@@ -19,7 +19,7 @@ public class ReservacionDTO {
     private String coreoUsuario;
     private String numReservacion;
     private LocalDateTime fechaReservacion;
-    private List<AsientoDTO> asientos;
+    private AsientoDTO asiento;
     private VueloDTO vuelo;
 
     public ReservacionDTO() {
@@ -41,14 +41,14 @@ public class ReservacionDTO {
         this.fechaReservacion = fechaReservacion;
     }
 
-    public List<AsientoDTO> getAsientos() {
-        return asientos;
+    public AsientoDTO getAsiento() {
+        return asiento;
     }
 
-    public void setAsientos(List<AsientoDTO> asientos) {
-        this.asientos = asientos;
+    public void setAsiento(AsientoDTO asiento) {
+        this.asiento = asiento;
     }
-
+    
     public VueloDTO getVuelo() {
         return vuelo;
     }
@@ -75,8 +75,10 @@ public class ReservacionDTO {
 
     @Override
     public String toString() {
-        return "ReservacionDTO{" + "_id=" + _id + ", coreoUsuario=" + coreoUsuario + ", numReservacion=" + numReservacion + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + '}';
+        return "ReservacionDTO{" + "_id=" + _id + ", coreoUsuario=" + coreoUsuario + ", numReservacion=" + numReservacion + ", fechaReservacion=" + fechaReservacion + ", asiento=" + asiento + ", vuelo=" + vuelo + '}';
     }
+
+    
     
 
    

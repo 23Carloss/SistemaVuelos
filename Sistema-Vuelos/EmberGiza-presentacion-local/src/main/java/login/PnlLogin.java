@@ -1,5 +1,8 @@
 package login;
 
+import BOs.UsuarioBO;
+import DTOs.UsuarioDTO;
+import POJOs.TipoUsuario;
 import administrador.PnlMenuAdmin;
 import cliente.PnlMenuCliente;
 import styles.*;
@@ -21,12 +24,16 @@ public class PnlLogin extends JPanel {
         //Variables
     String correoInput;
     String contraInput;
+        //DTO
+    UsuarioDTO usuario;
 
     //-----LÓGICA AQUÍ-----
     //Poner la ruta donde está guardado el logo de EG
     String rutaProyecto = "";
     String rutaLogo = rutaProyecto + "logo.png";
-
+    //-----LOGICA BO-------
+    UsuarioBO bo;
+    
 
     //::::::::::::::::::::::::::::::ESTÉTICA::::::::::::::::::::::::::::::
     //Elementos estéticos, dudo que se ocupe mover
@@ -59,7 +66,7 @@ public class PnlLogin extends JPanel {
 
 
     public PnlLogin() {
-
+        bo= new UsuarioBO();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);
         setSize(style.frameX, style.frameY);
@@ -115,41 +122,44 @@ public class PnlLogin extends JPanel {
     public void iniciarSesion() {
         correoInput = txtFieldCorreo.getText();
         contraInput = pwFieldContra.getText();
-
+        
+        
+        try {
+            usuario = bo.iniciarSesion(correoInput, contraInput);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "No se pudo iniciar sesión");
+        }
+        
+        
+        
+        
         System.out.println("correo " +  correoInput);
 
-        boolean validacion = false;
+        //-----BYPASS Y PLACEHOLDER-----
+        //Cambiar por validación real
+        
+        
+        System.out.println(usuario.toString());
+        
 
-        //-----LÓGICA AQUÍ-----
-        //bypass para testeo, cambiar por validación real
-        validacion = true;
-
-        if (validacion) {
+        if (usuario!=null) {
             esconderComponentes();
-
-            //-----LÓGICA AQUÍ-----
-            //usar el usuario real como argumento para hacer el panel
-
-            //bypass, selección de tipo de usuario
-            boolean esAdmin = true;
-
-            //Desplegar menú
-            esconderComponentes();
-            if (esAdmin) {
+            //Determinación de tipo de menú
+            if (usuario.getTipoUsuario()==TipoUsuario.administrador) {
                 pnlMenuAdmin = new PnlMenuAdmin(this);
                 if (pnlCrearCuenta != null) {
                     remove(pnlCrearCuenta);
                 }
                 add(pnlMenuAdmin);
             } else {
-                pnlMenuCliente = new PnlMenuCliente(this);
+                pnlMenuCliente = new PnlMenuCliente(this, usuario);
                 pnlMenuAdmin = new PnlMenuAdmin(this);
                 if (pnlCrearCuenta != null) {
                     remove(pnlCrearCuenta);
                 }
                 add(pnlMenuCliente);
             }
-
 
         } else {
             JOptionPane.showMessageDialog(null, "Correo o contraseña inválidos.");
@@ -195,6 +205,7 @@ public class PnlLogin extends JPanel {
         contenedorCorreo.setVisible(true);
         contenedorContra.setVisible(true);
         contenedorBotones.setVisible(true);
+        usuario = null;
         revalidate();
         repaint();
     }

@@ -1,3 +1,4 @@
+
 package styles;
 
 import javax.swing.*;
@@ -14,21 +15,31 @@ public class ImageButton extends JPanel {
     JLabel imagen;
     int radius = 60;
 
+    // Tamaño real y fijo del botón
+    Dimension fixedSize;
+
     public ImageButton(String texto, String rutaImagen) {
 
-        this.texto= texto;
+        this.texto = texto;
         this.rutaImagen = rutaImagen;
 
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        //setLayout(new BorderLayout());
-        setOpaque(false);
-        Dimension dimension = new Dimension(style.imageButtonX, style.imageButtonY);
-        setMaximumSize(dimension);
-        setMinimumSize(dimension);
-        setPreferredSize(dimension);
+        fixedSize = new Dimension(style.imageButtonX, style.imageButtonY);
 
-        //Imagen
-            //Esquinas redondas
+        setOpaque(false);
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        // Bloquear tamaño SIEMPRE
+        setPreferredSize(fixedSize);
+        setMinimumSize(fixedSize);
+        setMaximumSize(fixedSize);
+
+        // ---------- PANEL INTERNO QUE CONTIENE TODO ----------
+        JPanel contenido = new JPanel();
+        contenido.setOpaque(false);
+        contenido.setLayout(new BoxLayout(contenido, BoxLayout.Y_AXIS));
+        contenido.setAlignmentX(CENTER_ALIGNMENT);
+
+        // ---------- PANEL DE IMAGEN CON ESQUINAS REDONDAS ----------
         JPanel panelImagen = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -42,53 +53,69 @@ public class ImageButton extends JPanel {
                 super.paintComponent(g);
             }
         };
+
         panelImagen.setOpaque(false);
         panelImagen.setBackground(style.cafeAlt);
         panelImagen.setLayout(new BorderLayout());
-            //Tamaño
+
         int tolerancia = 20;
-        //panelImagen.setSize(style.imageButtonX- tolerancia, style.imageButtonY - tolerancia);
-        Dimension dimensionPanelImagen = new Dimension(style.imageButtonX- tolerancia, style.imageButtonY - tolerancia);
-        panelImagen.setMaximumSize(dimensionPanelImagen);
-        panelImagen.setMinimumSize(dimensionPanelImagen);
-        panelImagen.setPreferredSize(dimensionPanelImagen);
-            //Hover
+        Dimension imgPanelSize = new Dimension(style.imageButtonX - tolerancia, style.imageButtonY - tolerancia - 40);
+
+        panelImagen.setPreferredSize(imgPanelSize);
+        panelImagen.setMaximumSize(imgPanelSize);
+        panelImagen.setMinimumSize(imgPanelSize);
+
+        // Hover
         panelImagen.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
                 panelImagen.setBackground(style.cafeAltHover);
                 repaint();
             }
+
             @Override
             public void mouseExited(MouseEvent e) {
                 panelImagen.setBackground(style.cafeAlt);
                 repaint();
             }
+
+            @Override
             public void mouseClicked(MouseEvent e) {
-                // Reenviar el evento al padre (ImageButton)
                 for (MouseListener ml : ImageButton.this.getMouseListeners()) {
                     ml.mouseClicked(SwingUtilities.convertMouseEvent(panelImagen, e, ImageButton.this));
                 }
             }
         });
 
-        //setteo de la imagen
+        // Imagen interna
         if (rutaImagen != null) {
-            int imageSize = style.imageButtonX-(tolerancia + 10);
+            int imageSize = imgPanelSize.width - 20;
             ImageIcon icon = new ImageIcon(rutaImagen);
             Image img = icon.getImage().getScaledInstance(imageSize, imageSize, Image.SCALE_SMOOTH);
-            icon = new ImageIcon(img);
-            imagen = new JLabel(icon);
-            imagen.setIcon(new ImageIcon(img));
-            imagen.setPreferredSize(new Dimension(imageSize, imageSize));
+            imagen = new JLabel(new ImageIcon(img));
         } else {
             imagen = new JLabel("Placeholder");
         }
 
+        imagen.setHorizontalAlignment(SwingConstants.CENTER);
+        panelImagen.add(imagen, BorderLayout.CENTER);
 
-        panelImagen.add(imagen,BorderLayout.CENTER);
-        add(panelImagen);
-        add(new CustomLabel(texto, 24));
+        contenido.add(panelImagen);
 
+        // Texto
+        JLabel lblTexto = new CustomLabel(texto, 24);
+        lblTexto.setAlignmentX(CENTER_ALIGNMENT);
+        contenido.add(Box.createVerticalStrut(10));
+        contenido.add(lblTexto);
+
+        // Añadir contenido fijo
+        add(Box.createVerticalGlue());
+        add(contenido);
+        add(Box.createVerticalGlue());
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        return fixedSize;
     }
 }

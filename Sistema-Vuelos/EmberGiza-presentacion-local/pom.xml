@@ -21,6 +21,11 @@
             <artifactId>jcalendar</artifactId>
             <version>1.4</version>
         </dependency>
+        <dependency>
+            <groupId>hp</groupId>
+            <artifactId>Negocio</artifactId>
+            <version>0</version>
+        </dependency>
     </dependencies>
 
 </project>

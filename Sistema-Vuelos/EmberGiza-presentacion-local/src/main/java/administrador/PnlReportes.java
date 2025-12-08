@@ -1,103 +1,139 @@
 package administrador;
 
-import DTOs.VueloDTO;
 import styles.ContainerPanel;
 import styles.CustomButton;
 import styles.CustomLabel;
 import styles.Style;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class PnlReportes extends JPanel {
 
     Style style = new Style();
-    boolean testeoColor = true;
     PnlMenuAdmin pnlMenuAdmin;
 
-    //-----LÓGICA AQUÍ-----
-    //Placeholder ?
-    ArrayList<VueloDTO> listaVuelos = new ArrayList<>();
-
-
-    //Ajustes de tamaño
     int logoX = 30;
-    int logoY = logoX;
-    /*
-    int espX = 10;
-    int espY = 10;*/
+    int logoY = 30;
 
+    final int ENCABEZADO_H = 80;
+    final int BOTONES_H = 80;
+    final int ALTURA_TABLA_FIX = 500;
 
-    //-----LÓGICA AQUÍ-----
-    //Poner la ruta donde está guardado el logo de EG
     String rutaProyecto = "";
     String rutaLogo = rutaProyecto + "logo.png";
+    String rutaReportes = "reportes";
 
+    ContainerPanel encabezado = new ContainerPanel(style.frameX, ENCABEZADO_H, style.beigeBase, false);
+    ContainerPanel reportesPanel;
+    ContainerPanel botones = new ContainerPanel(style.frameX, BOTONES_H, style.beigeBase, false);
+    ContainerPanel todo = new ContainerPanel(style.frameX, style.frameY, style.beigeBase, false);
 
-    //::::::::::::::::::::::::::::::ESTÉTICA::::::::::::::::::::::::::::::
-    //Encabezado
-    ContainerPanel encabezado = new ContainerPanel(style.frameX, 80, Color.CYAN, testeoColor);
     JLabel logo;
-    //Contenido
-    ContainerPanel vuelos = new ContainerPanel(800, 400, Color.MAGENTA, testeoColor);
 
-    //Botones
-    ContainerPanel botones = new ContainerPanel(style.frameX, 100, Color.PINK, testeoColor);
     CustomButton btnVolver = new CustomButton("Volver");
-    CustomButton btnGenerarReporte = new CustomButton("Generar nuevo reporte");
-    ContainerPanel todo = new ContainerPanel(style.frameX, style.frameY, Color.GREEN, testeoColor);
+    CustomButton btnGenerarReporte = new CustomButton("Generar reporte");
 
+    JTable tablaReportes;
+    JScrollPane scroll;
+    DefaultTableModel modeloTabla;
 
     public PnlReportes(PnlMenuAdmin pnlMenuAdmin) {
 
-        //Setteo del panel
         this.pnlMenuAdmin = pnlMenuAdmin;
         setOpaque(false);
-        setSize(style.frameX, style.frameY);
-        todo.setLayout(new BorderLayout());
+        setLayout(new BorderLayout());
 
-        //Encabezado
-        encabezado.setLayout(new GridLayout(1,4));
-        //Logo
+        todo.setOpaque(false);
+        todo.setLayout(new BoxLayout(todo, BoxLayout.Y_AXIS));
+
+        // ========== ENCABEZADO ======================================
+        encabezado.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 15));
+        encabezado.setOpaque(false);
+        encabezado.setPreferredSize(new Dimension(style.frameX, ENCABEZADO_H));
+        encabezado.setMaximumSize(new Dimension(style.frameX, ENCABEZADO_H));
+
         ImageIcon icon = new ImageIcon(rutaLogo);
         Image img = icon.getImage().getScaledInstance(logoX, logoY, Image.SCALE_SMOOTH);
         icon = new ImageIcon(img);
+
         logo = new JLabel(icon);
-        logo.setIcon(new ImageIcon(img));
         logo.setPreferredSize(new Dimension(logoX, logoY));
+
         encabezado.add(logo);
-        //Titulo
-        encabezado.add(new CustomLabel(" Reportes", 36));
-        todo.add(encabezado, BorderLayout.NORTH);
+        encabezado.add(new CustomLabel("Reportes", 36));
 
-        //Contenido
-        /*
-        //-----Placeholders de ejemplo -----
-        listaVuelos.add(new VueloDTO(2500, "Vuelo MX101", "Ciudad Obregón", "CDMX", "2025-12-01", "08:30"));
-        listaVuelos.add(new VueloDTO(3100, "Vuelo MX202", "Hermosillo", "Guadalajara", "2025-12-02", "13:50"));
-        listaVuelos.add(new VueloDTO(1800, "Vuelo MX303", "Tijuana", "Monterrey", "2025-12-05", "17:20"));
-        //Tabla
-        mostrarTablaVuelos();
-        todo.add(vuelos, BorderLayout.CENTER);
-        //Add
-        todo.add(vuelos, BorderLayout.CENTER);
+        todo.add(encabezado);
 
-         */
+        // ========== TABLA ============================================
+        reportesPanel = new ContainerPanel(style.frameX, ALTURA_TABLA_FIX, style.beigeBase, false);
+        reportesPanel.setLayout(new BorderLayout());
+        reportesPanel.setOpaque(false);
+        reportesPanel.setPreferredSize(new Dimension(style.frameX, ALTURA_TABLA_FIX));
+        reportesPanel.setMaximumSize(new Dimension(style.frameX, ALTURA_TABLA_FIX));
 
-        //Botones
+        // Inicializamos modelo y tabla ANTES de cargar reportes
+        modeloTabla = new DefaultTableModel(new String[]{"Nombre del reporte"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tablaReportes = new JTable(modeloTabla);
+        tablaReportes.setOpaque(false);
+        tablaReportes.setShowGrid(false);
+        tablaReportes.setBorder(null);
+        tablaReportes.setFillsViewportHeight(true);
+
+        scroll = new JScrollPane(tablaReportes);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+        scroll.setBorder(null);
+        scroll.setPreferredSize(new Dimension(style.frameX, ALTURA_TABLA_FIX - 10));
+        scroll.setMaximumSize(new Dimension(style.frameX, ALTURA_TABLA_FIX - 10));
+
+        reportesPanel.add(scroll, BorderLayout.CENTER);
+        todo.add(reportesPanel);
+
+        // Cargamos los reportes existentes
+        cargarReportes();
+
+        // ========== BOTONES ==========================================
+        botones.setOpaque(false);
         botones.setLayout(new BorderLayout());
-        botones.add(btnVolver, BorderLayout.WEST);
-        botones.add(btnGenerarReporte, BorderLayout.EAST);
-        todo.add(botones, BorderLayout.SOUTH);
+
+        JPanel leftBtns = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        leftBtns.setOpaque(false);
+        leftBtns.add(btnVolver);
+
+        JPanel rightBtns = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
+        rightBtns.setOpaque(false);
+        rightBtns.add(btnGenerarReporte);
+
+        botones.add(leftBtns, BorderLayout.WEST);
+        botones.add(rightBtns, BorderLayout.EAST);
+
+        botones.setPreferredSize(new Dimension(style.frameX, BOTONES_H));
+        botones.setMaximumSize(new Dimension(style.frameX, BOTONES_H));
+
+        todo.add(botones);
+
+        // ========== EVENTOS ===========================================
         btnVolver.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 volver();
             }
         });
+
         btnGenerarReporte.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -105,62 +141,79 @@ public class PnlReportes extends JPanel {
             }
         });
 
-
-        add(todo);
-        repaint();
-        revalidate();
-        setVisible(true);
-    }
-
-    //Métodos de los botones
-    public void volver() {
-        pnlMenuAdmin.remove(this);
-        pnlMenuAdmin.mostrarComponentes();
-    }
-
-    public void generarReporte() {
-        System.out.println("Haz de cuenta que se generó un reporte");
-    }
-
-/*
-    private void mostrarTablaVuelos() {
-
-        String[] columnas = {"Nombre", "Origen", "Destino", "Fecha", "Hora", "Precio"};
-
-        Object[][] datos = new Object[listaVuelos.size()][columnas.length];
-
-        for (int i = 0; i < listaVuelos.size(); i++) {
-            VueloDTO v = listaVuelos.get(i);
-            datos[i][0] = v.getNombre();
-            datos[i][1] = v.getOrigen();
-            datos[i][2] = v.getDestino();
-            datos[i][3] = v.getFechaSalida();
-            datos[i][4] = v.getHora();
-            datos[i][5] = "$" + v.getPrecio();
-        }
-
-        JTable tabla = new JTable(datos, columnas);
-        JScrollPane scroll = new JScrollPane(tabla);
-
-        // Listener para clicks
-        tabla.addMouseListener(new MouseAdapter() {
+        tablaReportes.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                int fila = tabla.getSelectedRow();
+                int fila = tablaReportes.getSelectedRow();
                 if (fila >= 0) {
-                    DlgDetallesVueloCliente dlgDetallesVuelo = new DlgDetallesVueloCliente(listaVuelos.get(fila), 3);
-                    dlgDetallesVuelo.setVisible(true);
+                    abrirArchivo((String) modeloTabla.getValueAt(fila, 0));
                 }
             }
         });
 
-        vuelos.setLayout(new BorderLayout());
-        vuelos.add(scroll, BorderLayout.CENTER);
-        vuelos.setOpaque(false);
-        vuelos.revalidate();
-        vuelos.repaint();
+        add(todo, BorderLayout.CENTER);
+        revalidate();
+        repaint();
     }
 
- */
+    private void cargarReportes() {
+        modeloTabla.setRowCount(0);
+        File carpeta = new File(rutaReportes);
+        if (carpeta.exists() && carpeta.isDirectory()) {
+            File[] archivos = carpeta.listFiles((dir, name) -> name.endsWith(".txt"));
+            if (archivos != null) {
+                for (File archivo : archivos) {
+                    modeloTabla.addRow(new Object[]{archivo.getName()});
+                }
+            }
+        }
+    }
 
+    public void refreshTabla() {
+        scroll.setPreferredSize(new Dimension(style.frameX, ALTURA_TABLA_FIX - 10));
+        scroll.setMaximumSize(new Dimension(style.frameX, ALTURA_TABLA_FIX - 10));
+        revalidate();
+        repaint();
+    }
+
+    public void generarReporte() {
+        try {
+            File carpeta = new File(rutaReportes);
+            if (!carpeta.exists()) carpeta.mkdir();
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+            String fechaHora = LocalDateTime.now().format(formatter);
+            File archivo = new File(carpeta, "reporte-" + fechaHora + ".txt");
+
+            FileWriter writer = new FileWriter(archivo);
+            writer.write("Ejemplo de reporte " + fechaHora);
+            writer.close();
+
+            cargarReportes();
+            refreshTabla();
+            JOptionPane.showMessageDialog(this, "Reporte generado correctamente");
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error al generar el reporte");
+        }
+    }
+
+    private void abrirArchivo(String nombreArchivo) {
+        try {
+            File archivo = new File(rutaReportes, nombreArchivo);
+            if (archivo.exists()) {
+                Desktop.getDesktop().open(archivo);
+            } else {
+                JOptionPane.showMessageDialog(this, "El archivo no existe.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "No se pudo abrir el archivo.");
+        }
+    }
+
+    public void volver() {
+        pnlMenuAdmin.remove(this);
+        pnlMenuAdmin.mostrarComponentes();
+    }
 }

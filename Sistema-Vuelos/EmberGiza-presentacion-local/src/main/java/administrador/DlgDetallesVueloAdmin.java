@@ -40,8 +40,8 @@ public class DlgDetallesVueloAdmin extends JDialog{
 
         //Elementos
         System.out.println("vuelo: " + vuelo.toString());
-        System.out.println(vuelo.getNombre());
-        todo.add(new CustomLabel("Detalles del vuelo " + vuelo.getNombre(), style.letraSize + 10), BorderLayout.NORTH);
+        System.out.println(vuelo.getNumVuelo());
+        todo.add(new CustomLabel("Detalles del vuelo " + vuelo.getNumVuelo(), style.letraSize + 10), BorderLayout.NORTH);
         contenido.add(new CustomLabel("Origen: " + vuelo.getOrigen()));
         contenido.add(new CustomLabel("Destino: " + vuelo.getDestino()));
         contenido.add(new CustomLabel("Fecha y hora: " + vuelo.getFechaSalida()));

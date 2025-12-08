@@ -5,10 +5,13 @@
 
 package Mappers;
 
+import DTOs.AsientoDTO;
 import DTOs.ReservacionDTO;
+import POJOs.Asiento;
 import POJOs.Reservacion;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -27,7 +30,7 @@ public class ReservacionMapper {
         var entity = new Reservacion();
         entity.setFechaReservacion(reservacion.getFechaReservacion());
         entity.set_id(reservacion.getId());
-        entity.setAsientos(asientoMapper.convertirListaAEntity(reservacion.getAsientos()));
+        entity.setAsiento(convertirAEntity(reservacion.getAsiento()));
         entity.setCorreoUsuario(reservacion.getCoreoUsuario());
         entity.setVuelo(vueloMapper.convertirAEntity(reservacion.getVuelo()));
         return entity;
@@ -37,7 +40,7 @@ public class ReservacionMapper {
         var dto = new ReservacionDTO();
         dto.setFechaReservacion(reservacion.getFechaReservacion());
 //        dto.setId(reservacion.get_id());
-        dto.setAsientos(asientoMapper.convertirListaADto(reservacion.getAsientos()));
+        dto.setAsiento(convertirADto(reservacion.getAsiento()));
         dto.setCoreoUsuario(reservacion.getCorreoUsuario());
         dto.setVuelo(vueloMapper.convertirADto(reservacion.getVuelo()));
         return dto;
@@ -59,6 +62,26 @@ public class ReservacionMapper {
         return listaReservaciones;
      }
 
+    public Asiento convertirAEntity(AsientoDTO dto){
+        Asiento asiento= new Asiento();
+        asiento.set_id(new ObjectId());
+        asiento.setColumna(dto.getColumna());
+        asiento.setDisponibilidad(dto.isDisponibilidad());
+        asiento.setFila(dto.getFila());
+        asiento.setNumero(dto.getNumero());
+        return asiento;
+        
+    }
     
+    public AsientoDTO convertirADto(Asiento entity){
+        AsientoDTO asiento= new AsientoDTO();
+        asiento.setId(entity.get_id());
+        asiento.setColumna(entity.getColumna());
+        asiento.setDisponibilidad(entity.isDisponibilidad());
+        asiento.setFila(entity.getFila());
+        asiento.setNumero(entity.getNumero());
+        return asiento;
+        
+    }
 
 }

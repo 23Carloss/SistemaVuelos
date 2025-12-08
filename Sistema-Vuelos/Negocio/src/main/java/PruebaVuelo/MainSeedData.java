@@ -40,7 +40,7 @@ public class MainSeedData {
 
         // 5) Crear vuelo
         Document vuelo = new Document("_id", new ObjectId())
-                .append("idVuelo", "ABC123")
+                .append("numVuelo", "ABC123")
                 .append("origen", "Guadalajara")
                 .append("destino", "Ciudad de México")
                 .append("fechaSalida", fechaSalida)

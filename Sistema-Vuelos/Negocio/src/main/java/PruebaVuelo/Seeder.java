@@ -43,7 +43,7 @@ public class Seeder {
                     .append("fila", 3);
 
             Document vuelo = new Document("_id", new ObjectId())
-                    .append("idVuelo", numVuelo)
+                    .append("numVuelo", numVuelo)
                     .append("origen", "Guadalajara")
                     .append("destino", "Ciudad de México")
                     .append("fechaSalida", fechaSalida)

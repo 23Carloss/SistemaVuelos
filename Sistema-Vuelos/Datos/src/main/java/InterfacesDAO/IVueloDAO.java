@@ -9,6 +9,7 @@ import Exception.PersistenciaException;
 import POJOs.Asiento;
 import POJOs.Vuelo;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -107,6 +108,11 @@ public interface IVueloDAO extends ICRUD {
      * @throws PersistenciaException exception si falla y que paso
      */
     List<Vuelo> filtrarVuelos(String origen, String destino, float precio) throws PersistenciaException;
+        
+    List<Vuelo> filtrarVuelos(String origen, String destino, float precio, Date fecha) throws PersistenciaException;
+
+    List<Vuelo> filtrarVuelos(String origen, String destino, float precio, Date fecha, LocalTime hora) throws PersistenciaException;
+    
     
     boolean actualizarAsientosPorVuelo(Vuelo vuelo) throws  PersistenciaException;
     

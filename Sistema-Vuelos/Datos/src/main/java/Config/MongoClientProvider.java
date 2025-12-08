@@ -48,6 +48,7 @@ public enum MongoClientProvider {
     }
 
     public MongoClient client() {
+        init();
         if (client == null) {
             throw new IllegalStateException("necesitas iniciar una conexión para una base de datos");
         }
@@ -59,6 +60,7 @@ public enum MongoClientProvider {
     }
 
     public <T> MongoCollection<T> getCollection(String collectionName, Class<T> clazz) {
+        
         if (client == null) {
             throw new IllegalStateException("necesitas iniciar una conexión para una base de datos");
         }

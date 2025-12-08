@@ -17,8 +17,10 @@ import POJOs.Asiento;
 import POJOs.Vuelo;
 import com.mongodb.MongoException;
 import java.security.SecureRandom;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -173,7 +175,75 @@ public class VueloBO implements IVueloBO {
                 throw new IllegalArgumentException("el precio tiene que ser mayor que 0");
             }
 
-            List<Vuelo> vuelos = dao.filtrarVuelos(origen, destino);
+            List<Vuelo> vuelos = dao.filtrarVuelos(origen, destino, precio);
+            List<VueloDTO> dtos = new ArrayList<>();
+
+            for (Vuelo vuelo : vuelos) {
+                VueloDTO dto = Mapper.convertirADto(vuelo);
+                dtos.add(dto);
+            }
+
+            return dtos;
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error en VueloBO: filtrarVuelos: " + e.getMessage());
+        } catch (IllegalArgumentException ex) {
+            throw new NegocioException("Error en VueloBO en los campos: filtrarVuelos: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<VueloDTO> filtrarVuelos(String origen, String destino, float precio, Date fecha) throws NegocioException {
+        try {
+            validarCiudad(origen, "origen");
+            validarCiudad(destino, "destino");
+            if (precio < 1f) {
+                throw new IllegalArgumentException("el precio tiene que ser mayor que 0");
+            }
+
+            if (fecha == null) {
+                throw new IllegalArgumentException("La fecha no puede ser nula");
+            }
+            
+            
+            
+            
+            List<Vuelo> vuelos = dao.filtrarVuelos(origen, destino,precio,fecha);
+            List<VueloDTO> dtos = new ArrayList<>();
+
+            for (Vuelo vuelo : vuelos) {
+                VueloDTO dto = Mapper.convertirADto(vuelo);
+                dtos.add(dto);
+            }
+
+            return dtos;
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error en VueloBO: filtrarVuelos: " + e.getMessage());
+        } catch (IllegalArgumentException ex) {
+            throw new NegocioException("Error en VueloBO en los campos: filtrarVuelos: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public List<VueloDTO> filtrarVuelos(String origen, String destino, float precio, Date fecha, LocalTime hora) throws NegocioException {
+        try {
+            validarCiudad(origen, "origen");
+            validarCiudad(destino, "destino");
+            if (precio < 1f) {
+                throw new IllegalArgumentException("el precio tiene que ser mayor que 0");
+            }
+            
+            if (fecha == null) {
+                throw new IllegalArgumentException("La fecha no puede ser nula");
+            }
+            
+            if (hora==null) {
+                throw new IllegalArgumentException("La hora no puede ser nula");
+            }
+            
+
+            List<Vuelo> vuelos = dao.filtrarVuelos(origen, destino,precio,fecha,hora);
             List<VueloDTO> dtos = new ArrayList<>();
 
             for (Vuelo vuelo : vuelos) {
@@ -250,26 +320,23 @@ public class VueloBO implements IVueloBO {
     public VueloDTO crearVuelo(VueloDTO vueloDTO) throws NegocioException {
         String numVueloNuevo;
         try {
-            do {
-                char letra1 = LETRAS.charAt(random.nextInt(LETRAS.length()));
-                char letra2 = LETRAS.charAt(random.nextInt(LETRAS.length()));
-                int numeros = random.nextInt(1000); // rango 0–999
-                numVueloNuevo = letra1 + letra2 + String.format("%03d", numeros);
-            } while (getVuelo(numVueloNuevo) != null);
+
+            char letra1 = LETRAS.charAt(random.nextInt(LETRAS.length()));
+            char letra2 = LETRAS.charAt(random.nextInt(LETRAS.length()));
+            int numeros = random.nextInt(100, 1000); // rango 0–999
+            numVueloNuevo = String.valueOf(letra1) + String.valueOf(letra2) + String.format("%03d", numeros);
 
             vueloDTO.setNumVuelo(numVueloNuevo);
             validarCiudad(vueloDTO.getDestino(), "Destino");
             validarCiudad(vueloDTO.getOrigen(), "Origen");
+
+            vueloDTO.setListaAsientos(new LinkedList<>());
 
             Vuelo vuelo = Mapper.convertirAEntity(vueloDTO);
 
             dao.create(vuelo);
 
             return vueloDTO;
-
-        } catch (NegocioException e) {
-
-            throw new NegocioException("Error en VueloBO: crearVuelo: getVuelo: " + e.getMessage());
 
         } catch (MongoException ex) {
             throw new NegocioException("Error en VueloBO: crearVuelo: " + ex.getMessage());
@@ -321,7 +388,9 @@ public class VueloBO implements IVueloBO {
     @Override
     public boolean actualizarVuelo(VueloDTO vuelo) throws NegocioException {
         try {
-            if(vuelo == null ) throw new NegocioException("Vuelo nulo");
+            if (vuelo == null) {
+                throw new NegocioException("Vuelo nulo");
+            }
             Vuelo vueloEntity = Mapper.convertirAEntity(vuelo);
             return dao.actualizarPorNumeroVuelo(vueloEntity);
         } catch (PersistenciaException ex) {
@@ -332,7 +401,9 @@ public class VueloBO implements IVueloBO {
     @Override
     public boolean eliminarVuelo(VueloDTO vuelo) throws NegocioException {
         try {
-            if(vuelo == null) throw new NegocioException("VUelo nulo");
+            if (vuelo == null) {
+                throw new NegocioException("VUelo nulo");
+            }
             Vuelo vueloEntity = Mapper.convertirAEntity(vuelo);
             return dao.eliminarPorNumeroVuelo(vueloEntity);
         } catch (PersistenciaException ex) {

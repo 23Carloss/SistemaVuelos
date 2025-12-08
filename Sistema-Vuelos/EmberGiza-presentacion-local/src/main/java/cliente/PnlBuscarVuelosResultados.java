@@ -1,5 +1,213 @@
 package cliente;
 
+import BOs.VueloBO;
+import DTOs.VueloDTO;
+ import styles.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+public class PnlBuscarVuelosResultados extends JPanel {
+
+    Style style = new Style();
+    boolean testeoColor = false;
+
+    PnlMenuCliente pnlMenuCliente;
+    PnlBuscarVuelos pnlBuscarVuelos;
+
+    List<VueloDTO> listaVuelos = new ArrayList<>();
+
+
+    int logoX = 30;
+    int logoY = 30;
+
+    final int ENCABEZADO_H = 80;
+    final int BOTONES_H = 80;
+
+    String rutaProyecto = "";
+    String rutaLogo = rutaProyecto + "logo.png";
+
+    ContainerPanel encabezado = new ContainerPanel(style.frameX, ENCABEZADO_H, style.beigeBase, false);
+    ContainerPanel vuelos;
+    ContainerPanel botones = new ContainerPanel(style.frameX, BOTONES_H, style.beigeBase, false);
+    ContainerPanel todo = new ContainerPanel(style.frameX, style.frameY, style.beigeBase, false);
+
+    JLabel logo;
+
+    CustomButton btnVolver = new CustomButton("Volver");
+
+    JTable tabla;
+    JScrollPane scroll;
+    
+    VueloBO bo;
+    
+    String origen, destino;
+    Date salida;
+    
+    public PnlBuscarVuelosResultados(PnlMenuCliente pnlMenuCliente, PnlBuscarVuelos pnlBuscarVuelos, String origen,String destino, Date salida) {
+        this.origen= origen;
+        this.destino= destino;
+        this.salida= salida;
+        
+        bo= new VueloBO();
+                
+        this.pnlMenuCliente = pnlMenuCliente;
+        this.pnlBuscarVuelos = pnlBuscarVuelos;
+
+        setOpaque(false);
+        setLayout(new BorderLayout());
+
+        todo.setOpaque(false);
+        todo.setLayout(new BoxLayout(todo, BoxLayout.Y_AXIS));
+
+        // ========== ENCABEZADO ======================================
+        encabezado.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 15));
+        encabezado.setOpaque(false);
+        encabezado.setPreferredSize(new Dimension(style.frameX, ENCABEZADO_H));
+        encabezado.setMaximumSize(new Dimension(style.frameX, ENCABEZADO_H));
+
+        ImageIcon icon = new ImageIcon(rutaLogo);
+        Image img = icon.getImage().getScaledInstance(logoX, logoY, Image.SCALE_SMOOTH);
+        icon = new ImageIcon(img);
+
+        logo = new JLabel(icon);
+        logo.setPreferredSize(new Dimension(logoX, logoY));
+
+        encabezado.add(logo);
+        encabezado.add(new CustomLabel("Buscar vuelos - Resultados", 36));
+        todo.add(encabezado);
+
+        // ========== TABLA ============================================
+        int ALTURA_TABLA_FIX = 500;
+        vuelos = new ContainerPanel(style.frameX, ALTURA_TABLA_FIX, style.beigeBase, false);
+        vuelos.setLayout(new BorderLayout());
+        vuelos.setOpaque(false);
+        vuelos.setPreferredSize(new Dimension(style.frameX, ALTURA_TABLA_FIX));
+        vuelos.setMaximumSize(new Dimension(style.frameX, ALTURA_TABLA_FIX));
+
+        cargarVuelosDemo();
+        agregarTablaVuelosConAltura(ALTURA_TABLA_FIX);
+
+        todo.add(vuelos);
+
+        // ========== BOTONES ==========================================
+        botones.setOpaque(false);
+        botones.setLayout(new BorderLayout());
+
+        JPanel leftBtns = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        leftBtns.setOpaque(false);
+        leftBtns.add(btnVolver);
+
+        botones.add(leftBtns, BorderLayout.WEST);
+
+        botones.setPreferredSize(new Dimension(style.frameX, BOTONES_H));
+        botones.setMaximumSize(new Dimension(style.frameX, BOTONES_H));
+        todo.add(botones);
+
+        // ========== EVENTOS ==========================================
+        btnVolver.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                volver();
+            }
+        });
+
+        add(todo, BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }
+
+    private void cargarVuelosDemo() {
+        try {
+                    listaVuelos= bo.getBuscarVuelos(origen, destino, salida);
+                    System.out.println(listaVuelos);
+        } catch (Exception e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "No se pudo cargar los vuelos con origen, destino y salida: "+origen+", "+destino+", "+salida);
+        }
+    }
+
+    private void agregarTablaVuelosConAltura(int altura) {
+
+        String[] columnas = {"Nombre", "Aerolínea", "Origen", "Destino",
+                "Salida", "Duración", "Precio"};
+
+        Object[][] datos = new Object[listaVuelos.size()][columnas.length];
+
+        for (int i = 0; i < listaVuelos.size(); i++) {
+            VueloDTO v = listaVuelos.get(i);
+            datos[i][0] = v.getNumVuelo();
+            datos[i][1] = v.getAerolinea();
+            datos[i][2] = v.getOrigen();
+            datos[i][3] = v.getDestino();
+            datos[i][4] = v.getFechaSalida();
+            datos[i][5] = v.getDuracion();
+            datos[i][6] = "$" + v.getPrecio();
+        }
+
+        tabla = new JTable(new javax.swing.table.DefaultTableModel(datos, columnas) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+
+        tabla.setOpaque(false);
+        tabla.setShowGrid(false);
+        tabla.setBorder(null);
+        tabla.setFillsViewportHeight(true);
+
+        scroll = new JScrollPane(tabla);
+        scroll.setOpaque(false);
+        scroll.getViewport().setOpaque(false);
+        scroll.setBorder(null);
+        scroll.setPreferredSize(new Dimension(style.frameX, altura - 10));
+        scroll.setMaximumSize(new Dimension(style.frameX, altura - 10));
+
+        tabla.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int fila = tabla.getSelectedRow();
+                if (fila >= 0) {
+                    DlgDetallesVueloCliente dlgDetallesVuelo =
+                            new DlgDetallesVueloCliente(listaVuelos.get(fila), 1);
+                    dlgDetallesVuelo.setVisible(true);
+                }
+            }
+        });
+
+        vuelos.removeAll();
+        vuelos.add(scroll, BorderLayout.CENTER);
+        vuelos.revalidate();
+        vuelos.repaint();
+    }
+
+    public void refreshTabla() {
+        int ALTURA_TABLA_FIX = 460;
+        vuelos.setPreferredSize(new Dimension(style.frameX, ALTURA_TABLA_FIX));
+        vuelos.setMaximumSize(new Dimension(style.frameX, ALTURA_TABLA_FIX));
+        agregarTablaVuelosConAltura(ALTURA_TABLA_FIX);
+        revalidate();
+        repaint();
+    }
+
+    public void volver() {
+        pnlMenuCliente.remove(this);
+        pnlBuscarVuelos.setVisible(true);
+    }
+}
+
+
+/*
+package cliente;
+
 import DTOs.VueloDTO;
 import styles.*;
 
@@ -10,6 +218,7 @@ import java.awt.event.MouseEvent;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+
 
 public class PnlBuscarVuelosResultados extends JPanel {
 
@@ -26,9 +235,6 @@ public class PnlBuscarVuelosResultados extends JPanel {
     //Ajustes de tamaño
     int logoX = 30;
     int logoY = logoX;
-    /*
-    int espX = 10;
-    int espY = 10;*/
 
 
     //-----LÓGICA AQUÍ-----
@@ -151,3 +357,4 @@ public class PnlBuscarVuelosResultados extends JPanel {
     }
 
 }
+*/

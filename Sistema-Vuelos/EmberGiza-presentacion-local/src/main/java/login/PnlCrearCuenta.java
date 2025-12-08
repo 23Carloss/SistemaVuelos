@@ -1,5 +1,8 @@
 package login;
 
+import BOs.UsuarioBO;
+import DTOs.UsuarioDTO;
+import POJOs.TipoUsuario;
 import styles.*;
 
 import javax.swing.*;
@@ -59,11 +62,6 @@ public class PnlCrearCuenta extends JPanel {
     ContainerPanel contAM = new ContainerPanel(txtFieldSizeX, height, Color.BLUE, testeoColor);
     TxtFieldPh txtAM = new TxtFieldPh("Apellido materno", true, 300, 50, 32);
 
-    //Carrera
-    CustomLabel lblCarrera = new CustomLabel("Carrera", fontSize);
-    ContainerPanel contCarrera = new ContainerPanel(txtFieldSizeX, height, Color.MAGENTA, testeoColor);
-    //CustomCbox<Carrera> cboxCarrera = new CustomCbox<>();
-
     //Botón crear cuenta
     int btnX = 150, btnY = 50;
     ContainerPanel contBotones = new ContainerPanel(btnX, 120, Color.PINK, testeoColor);
@@ -72,11 +70,11 @@ public class PnlCrearCuenta extends JPanel {
     //Inputs
     String sCorreo, sContra, sConfContra;
     String sNombre, sApellidoP, sApellidoM;
-    String sDescripcion, sCarrera;
     String rutaImagen = null, rutaFinalImagen = null;
-
+    UsuarioBO bo;
 
     public PnlCrearCuenta(PnlLogin pnlLogin) {
+        bo = new UsuarioBO();
         this.pnlLogin = pnlLogin;
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -84,7 +82,12 @@ public class PnlCrearCuenta extends JPanel {
         setSize(style.frameX, style.frameY);
 
         contenedorVolver.setLayout(new BorderLayout());
-        btnVolver.addMouseListener(new MouseAdapter(){ @Override public void mouseClicked(MouseEvent e){ volverLogin(); }});
+        btnVolver.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                volverLogin();
+            }
+        });
         contenedorVolver.add(btnVolver, BorderLayout.WEST);
         add(contenedorVolver);
 
@@ -97,21 +100,37 @@ public class PnlCrearCuenta extends JPanel {
 
         //Columnas
         JPanel contColumnas = new JPanel();
-        contColumnas.setLayout(new GridLayout(1,2,40,0));
-        contColumnas.setBorder(BorderFactory.createEmptyBorder(0,20,0,20));
+        contColumnas.setLayout(new GridLayout(1, 2, 40, 0));
+        contColumnas.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 20));
         contColumnas.setOpaque(false);
 
-        JPanel col1 = new JPanel(); col1.setLayout(new BoxLayout(col1, BoxLayout.Y_AXIS)); col1.setOpaque(false);
-        JPanel col2 = new JPanel(); col2.setLayout(new BoxLayout(col2, BoxLayout.Y_AXIS)); col2.setOpaque(false);
+        JPanel col1 = new JPanel();
+        col1.setLayout(new BoxLayout(col1, BoxLayout.Y_AXIS));
+        col1.setOpaque(false);
+        JPanel col2 = new JPanel();
+        col2.setLayout(new BoxLayout(col2, BoxLayout.Y_AXIS));
+        col2.setOpaque(false);
 
         //Conteneores
-        contCorreo.setLayout(new GridLayout(2,1)); contCorreo.add(lblCorreo); contCorreo.add(txtCorreo);
-        contContra.setLayout(new GridLayout(2,1)); contContra.add(lblContra); contContra.add(txtContra);
-        contContra2.setLayout(new GridLayout(2,1)); contContra2.add(lblContra2); contContra2.add(txtContra2);
+        contCorreo.setLayout(new GridLayout(2, 1));
+        contCorreo.add(lblCorreo);
+        contCorreo.add(txtCorreo);
+        contContra.setLayout(new GridLayout(2, 1));
+        contContra.add(lblContra);
+        contContra.add(txtContra);
+        contContra2.setLayout(new GridLayout(2, 1));
+        contContra2.add(lblContra2);
+        contContra2.add(txtContra2);
 
-        contNombre.setLayout(new GridLayout(2,1)); contNombre.add(lblNombre); contNombre.add(txtNombre);
-        contAP.setLayout(new GridLayout(2,1)); contAP.add(lblAP); contAP.add(txtAP);
-        contAM.setLayout(new GridLayout(2,1)); contAM.add(lblAM); contAM.add(txtAM);
+        contNombre.setLayout(new GridLayout(2, 1));
+        contNombre.add(lblNombre);
+        contNombre.add(txtNombre);
+        contAP.setLayout(new GridLayout(2, 1));
+        contAP.add(lblAP);
+        contAP.add(txtAP);
+        contAM.setLayout(new GridLayout(2, 1));
+        contAM.add(lblAM);
+        contAM.add(txtAM);
 
         //Acomodo
         col1.add(contCorreo);
@@ -127,12 +146,16 @@ public class PnlCrearCuenta extends JPanel {
         add(new Espaciador(style.frameX, 30));
 
         //Botón crear cuenta
-        btnCrear.addMouseListener(new MouseAdapter(){ @Override public void mouseClicked(MouseEvent e){ crearCuenta(); }});
+        btnCrear.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                crearCuenta();
+            }
+        });
         contBotones.setLayout(new BorderLayout());
         contBotones.add(btnCrear, BorderLayout.NORTH);
         add(contBotones);
     }
-
 
     //-----LÓGICA AQUÍ-----
     public void crearCuenta() {
@@ -158,35 +181,27 @@ public class PnlCrearCuenta extends JPanel {
             JOptionPane.showMessageDialog(null, "El apellido materno no puede exceder 70 caracteres");
             return;
         }
-        if (sDescripcion.length() > 300) {
-            JOptionPane.showMessageDialog(null, "La descripción no puede exceder 300 caracteres");
-            return;
-        }
+
         if (!sContra.equals(sConfContra)) {
             JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
             return;
         }
-        if (sCorreo.isEmpty() || sContra.isEmpty() || sConfContra.isEmpty() || sNombre.isEmpty() || sApellidoP.isEmpty() || sApellidoM.isEmpty() || sDescripcion.isEmpty() || sCarrera.isEmpty()) {
+        if (sCorreo.isEmpty() || sContra.isEmpty() || sConfContra.isEmpty() || sNombre.isEmpty() || sApellidoP.isEmpty() || sApellidoM.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Por favor rellena todos los campos");
             return;
         }
+        UsuarioDTO dto = new UsuarioDTO(sCorreo, sContra, sNombre, sApellidoP, sApellidoM, TipoUsuario.usuario);
+        try {
+            bo.crearUsuario(dto);
+            if (bo.iniciarSesion(dto.getCorreo(), dto.getContrasenia()) != null) {
+                JOptionPane.showMessageDialog(null, "Usuario Creado correctamente con correo: " + dto.getCorreo());
+            }
 
-
-    }
-
-    public void elegirImagen() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
-                "Imágenes (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif"
-        ));
-
-        int resultado = fileChooser.showOpenDialog(null);
-
-        if (resultado == JFileChooser.APPROVE_OPTION) {
-            File archivo = fileChooser.getSelectedFile();
-            rutaImagen = archivo.getAbsolutePath();
-            JOptionPane.showMessageDialog(null, "Imagen seleccionada:\n" + rutaImagen);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al crear una cuenta nueva");
         }
+
     }
 
     public void volverLogin() {

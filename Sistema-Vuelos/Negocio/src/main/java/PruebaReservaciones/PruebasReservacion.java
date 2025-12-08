@@ -68,7 +68,6 @@ public class PruebasReservacion {
                 v1.setListaAsientos(asientosAvion);
                 v1.setNumVuelo("A131");
                 v1.setOrigen("Europa");
-                v1.setNombre("Vuelo1");
                 v1.setPrecio(300);
 //                        vueloBo(v1); y el create?
 
@@ -89,7 +88,7 @@ public class PruebasReservacion {
                 System.out.println("Vuelo creado : " + v1);
                 LocalDateTime reservacion = LocalDateTime.of(2025, 12, 1, 9, 0);
                 Reservacion r1 = new Reservacion();
-                r1.setAsientos(asientosReservados);
+                r1.setAsiento(asientosReservados.get(0));
                 r1.setCreadoEn(Instant.now());
                 r1.setFechaReservacion(reservacion);
                 r1.setVuelo(v1);

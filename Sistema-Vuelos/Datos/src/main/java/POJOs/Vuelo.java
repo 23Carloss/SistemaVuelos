@@ -21,7 +21,6 @@ public class Vuelo implements ObjetoMongo{
     
     @BsonId
     private ObjectId _id;
-    private String nombre;
     private String numVuelo; //Id del vuelo para hacer gets
     private String origen, destino; //usar la primera mayuscula (ej. Guadalajara)
     private LocalDateTime fechaSalida; //hora y fecha que sale el avion
@@ -33,13 +32,6 @@ public class Vuelo implements ObjetoMongo{
     public Vuelo() {
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
 
     public String getNumVuelo() {
         return numVuelo;
@@ -108,13 +100,13 @@ public class Vuelo implements ObjetoMongo{
     public void setListaAsientos(List<Asiento> listaAsientos) {
         this.listaAsientos = listaAsientos;
     }
-    
 
-    
     @Override
     public String toString() {
-        return "Vuelo{" + "_id=" + _id + ", nombre=" + nombre + ", numVuelo=" + numVuelo + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + ", aerolinea=" + aerolinea + ", precio=" + precio + '}';
+        return "Vuelo{" + "_id=" + _id + ", numVuelo=" + numVuelo + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + ", aerolinea=" + aerolinea + ", precio=" + precio + '}';
     }
+    
+
 
 
 

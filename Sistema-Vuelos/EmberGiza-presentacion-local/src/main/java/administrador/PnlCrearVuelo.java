@@ -1,5 +1,325 @@
 package administrador;
 
+import BOs.VueloBO;
+import DTOs.VueloDTO;
+import NegocioException.NegocioException;
+import styles.*;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+
+public class PnlCrearVuelo extends JPanel {
+
+    Style style = new Style();
+    boolean testeoColor = false;
+
+    // Paneles externos
+    PnlMenuAdmin pnlMenuAdmin;
+    PnlVuelosProgramados pnlVuelosProgramados;
+
+    // Variables de vuelo
+    long precio;
+    String nombre;
+    String origen;
+    String destino;
+    LocalDate fecha;
+    LocalTime hora;
+    LocalDateTime fechaHora;
+    int duracion;
+    String aerolinea;
+
+    ArrayList<VueloDTO> listaVuelos = new ArrayList<>();
+
+    int logoX = 30;
+    int logoY = logoX;
+
+    int txtX = 200;
+    int txtY = 50;
+    int txtFS = 32;
+    int espX = 10;
+    int espY = 10;
+
+    String rutaProyecto = "";
+    String rutaLogo = rutaProyecto + "logo.png";
+
+    // ===== Alturas estándar (idénticas al panel referencia) =====
+    final int ENCABEZADO_H = 80;
+    final int INPUTS_H = 500;
+    final int BOTONES_H = 80;
+
+    // ----- Paneles -----
+    ContainerPanel encabezado = new ContainerPanel(style.frameX, ENCABEZADO_H, Color.RED, testeoColor);
+    JLabel logo;
+
+    ContainerPanel acomodoInputs = new ContainerPanel(style.frameX, INPUTS_H, Color.GREEN, testeoColor);
+    ContainerPanel inputs = new ContainerPanel(style.frameX, INPUTS_H - 40, Color.BLUE, testeoColor);
+
+    // ----- Inputs -----
+    CustomLabel lblPrecio = new CustomLabel("Precio: ");
+    TxtFieldFormat txtPrecio = new TxtFieldFormat(1, "Precio", true, txtX, txtY, txtFS);
+
+
+    CustomLabel lblOrigen = new CustomLabel("Origen: ");
+    TxtFieldPh txtOrigen = new TxtFieldPh("Origen", true, txtX, txtY, txtFS);
+
+    CustomLabel lblDestino = new CustomLabel("Destino: ");
+    TxtFieldPh txtDestino = new TxtFieldPh("Destino", true, txtX, txtY, txtFS);
+
+    CustomLabel lblFecha = new CustomLabel("Fecha: ");
+    CustomDateChooser dateFecha = new CustomDateChooser();
+
+    CustomLabel lblHora = new CustomLabel("Hora: ");
+    TxtFieldFormat txtHora = new TxtFieldFormat(2, "Hora de abordaje", true, txtX, txtY, txtFS);
+
+    CustomLabel lblDuracion = new CustomLabel("Duración: ");
+    TxtFieldFormat txtDuracion = new TxtFieldFormat(1, "Duracion", true, txtX, txtY, txtFS);
+
+    CustomLabel lblAerolinea = new CustomLabel("Aerolínea: ");
+    TxtFieldPh txtAerolinea = new TxtFieldPh("Aerolínea", true, txtX, txtY, txtFS);
+
+    // ----- Botones -----
+    ContainerPanel botones = new ContainerPanel(style.frameX, BOTONES_H, Color.ORANGE, testeoColor);
+    CustomButton btnVolver = new CustomButton("Cancelar");
+    CustomButton btnCrearVuelo = new CustomButton("Crear vuelo");
+
+    ContainerPanel todo = new ContainerPanel(style.frameX, style.frameY, Color.PINK, testeoColor);
+
+    VueloBO bo;
+
+    public PnlCrearVuelo(PnlMenuAdmin pnlMenuAdmin, PnlVuelosProgramados pnlVuelosProgramados) {
+        bo = new VueloBO();
+        this.pnlMenuAdmin = pnlMenuAdmin;
+        this.pnlVuelosProgramados = pnlVuelosProgramados;
+
+        setOpaque(false);
+        setSize(style.frameX, style.frameY);
+
+        // Layout vertical general
+        todo.setLayout(new BoxLayout(todo, BoxLayout.Y_AXIS));
+        todo.setOpaque(false);
+        todo.setPreferredSize(new Dimension(style.frameX, style.frameY));
+
+        // ================== ENCABEZADO ==================
+        encabezado.setOpaque(false);
+        encabezado.setPreferredSize(new Dimension(style.frameX, ENCABEZADO_H));
+        encabezado.setMaximumSize(new Dimension(style.frameX, ENCABEZADO_H));
+        encabezado.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 15));
+
+        ImageIcon icon = new ImageIcon(rutaLogo);
+        Image img = icon.getImage().getScaledInstance(logoX, logoY, Image.SCALE_SMOOTH);
+        icon = new ImageIcon(img);
+
+        logo = new JLabel(icon);
+        logo.setPreferredSize(new Dimension(logoX, logoY));
+
+        encabezado.add(logo);
+        encabezado.add(new CustomLabel("Programar nuevo vuelo", 36));
+
+        todo.add(encabezado);
+
+        // ================== INPUTS ======================
+        inputs.setLayout(new GridLayout(7, 5));
+
+        lblPrecio.setHorizontalAlignment(SwingConstants.RIGHT);
+        inputs.add(lblPrecio);
+        inputs.add(txtPrecio);
+
+
+
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+
+        lblOrigen.setHorizontalAlignment(SwingConstants.RIGHT);
+        inputs.add(lblOrigen);
+        inputs.add(txtOrigen);
+
+        lblDestino.setHorizontalAlignment(SwingConstants.RIGHT);
+        inputs.add(lblDestino);
+        inputs.add(txtDestino);
+
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+
+        lblFecha.setHorizontalAlignment(SwingConstants.RIGHT);
+        inputs.add(lblFecha);
+        inputs.add(dateFecha);
+
+        lblHora.setHorizontalAlignment(SwingConstants.RIGHT);
+        inputs.add(lblHora);
+        inputs.add(txtHora);
+
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+
+        lblDuracion.setHorizontalAlignment(SwingConstants.RIGHT);
+        inputs.add(lblDuracion);
+        inputs.add(txtDuracion);
+
+        lblAerolinea.setHorizontalAlignment(SwingConstants.RIGHT);
+        inputs.add(lblAerolinea);
+        inputs.add(txtAerolinea);
+
+        // Centrado vertical estilo referencia
+        acomodoInputs.setLayout(new GridBagLayout());
+        acomodoInputs.setOpaque(false);
+        acomodoInputs.setPreferredSize(new Dimension(style.frameX, INPUTS_H));
+        acomodoInputs.setMaximumSize(new Dimension(style.frameX, INPUTS_H));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+
+        // espacio arriba
+        gbc.gridy = 0;
+        gbc.weighty = 0.3;
+        acomodoInputs.add(Box.createVerticalStrut(1), gbc);
+
+        // contenido centrado
+        gbc.gridy = 1;
+        gbc.weighty = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        gbc.anchor = GridBagConstraints.CENTER;
+        acomodoInputs.add(inputs, gbc);
+
+        // espacio abajo
+        gbc.gridy = 2;
+        gbc.weighty = 0.7;
+        gbc.fill = GridBagConstraints.BOTH;
+        acomodoInputs.add(Box.createVerticalStrut(1), gbc);
+
+        todo.add(acomodoInputs);
+
+        // ================== BOTONES ======================
+        botones.setOpaque(false);
+        botones.setPreferredSize(new Dimension(style.frameX, BOTONES_H));
+        botones.setMaximumSize(new Dimension(style.frameX, BOTONES_H));
+        botones.setLayout(new BorderLayout());
+
+        JPanel leftBtns = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
+        leftBtns.setOpaque(false);
+        leftBtns.add(btnVolver);
+
+        JPanel rightBtns = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
+        rightBtns.setOpaque(false);
+        rightBtns.add(btnCrearVuelo);
+
+        botones.add(leftBtns, BorderLayout.WEST);
+        botones.add(rightBtns, BorderLayout.EAST);
+
+        todo.add(botones);
+
+        // ================== EVENTOS ======================
+        btnVolver.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                volver();
+            }
+        });
+
+        btnCrearVuelo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                crearVuelo();
+            }
+        });
+
+        add(todo);
+        repaint();
+        revalidate();
+        setVisible(true);
+    }
+
+    // ------------------- Métodos originales -------------------
+    public void volver() {
+        pnlMenuAdmin.remove(this);
+        pnlVuelosProgramados.setVisible(true);
+    }
+
+    public void crearVuelo() {
+        try {
+            precio = Long.parseLong(txtPrecio.getText().trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El precio no es válido.");
+            return;
+        }
+
+        
+        origen = txtOrigen.getText();
+        destino = txtDestino.getText();
+
+        if (dateFecha.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Selecciona una fecha.");
+            return;
+        }
+
+        fecha = dateFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        try {
+            hora = LocalTime.parse(txtHora.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "La hora no es válida.");
+            return;
+        }
+
+        try {
+            duracion = Integer.parseInt(txtDuracion.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Duración no válida.");
+            return;
+        }
+
+        aerolinea = txtAerolinea.getText();
+
+        if (txtPrecio.getText().isEmpty() || origen.isEmpty()
+                || destino.isEmpty() || txtDuracion.getText().isEmpty() || aerolinea.isEmpty()) {
+
+            JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
+            return;
+        }
+
+        fechaHora = LocalDateTime.of(fecha, hora);
+        
+        VueloDTO dto= new VueloDTO(precio, "ERROR", origen, destino, fechaHora, duracion, aerolinea);
+        try {
+            bo.crearVuelo(dto);
+        } catch (NegocioException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Error al crear el vuelo");
+            return;
+        }
+        
+        
+        
+        JOptionPane.showMessageDialog(null, "Se registró exitosamente");
+
+        volver();
+    }
+}
+
+
+/*
+package administrador;
+
 import DTOs.VueloDTO;
 import styles.*;
 
@@ -221,3 +541,5 @@ public class PnlCrearVuelo extends JPanel {
 
 
 }
+
+ */

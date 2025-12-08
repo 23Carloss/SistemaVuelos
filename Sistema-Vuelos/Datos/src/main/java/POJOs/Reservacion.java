@@ -24,7 +24,7 @@ public class Reservacion implements ObjetoMongo {
     private String numReservacion;
     private String correoUsuario;
     private LocalDateTime fechaReservacion;
-    private List<Asiento> asientos;
+    private Asiento asiento;
     private Vuelo vuelo;
     private Instant creadoEn;
     private Instant editadoEn;
@@ -56,13 +56,22 @@ public class Reservacion implements ObjetoMongo {
         this.fechaReservacion = fechaReservacion;
     }
 
-    public List<Asiento> getAsientos() {
-        return asientos;
+    public ObjectId getId() {
+        return _id;
     }
 
-    public void setAsientos(List<Asiento> asientos) {
-        this.asientos = asientos;
+    public void setId(ObjectId _id) {
+        this._id = _id;
     }
+
+    public Asiento getAsiento() {
+        return asiento;
+    }
+
+    public void setAsiento(Asiento asiento) {
+        this.asiento = asiento;
+    }
+
 
     public Vuelo getVuelo() {
         return vuelo;
@@ -90,8 +99,10 @@ public class Reservacion implements ObjetoMongo {
 
     @Override
     public String toString() {
-        return "Reservacion{" + "_id=" + _id + ", numReservacion=" + numReservacion + ", correoUsuario=" + correoUsuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + ", creadoEn=" + creadoEn + ", editadoEn=" + editadoEn + '}';
+        return "Reservacion{" + "_id=" + _id + ", numReservacion=" + numReservacion + ", correoUsuario=" + correoUsuario + ", fechaReservacion=" + fechaReservacion + ", asiento=" + asiento + ", vuelo=" + vuelo + ", creadoEn=" + creadoEn + ", editadoEn=" + editadoEn + '}';
     }
+
+    
 
 
     @Override
@@ -108,7 +119,7 @@ public class Reservacion implements ObjetoMongo {
     public Bson toUpdateOperations() {
         return Updates.combine(
             Updates.set("fechaReservacion", fechaReservacion),
-            Updates.set("asientos", asientos),
+            Updates.set("asiento", asiento),
             Updates.set("vuelo", vuelo),
             Updates.set("editadoEn", editadoEn),
             Updates.set("creadoEn", creadoEn),

@@ -108,7 +108,7 @@ public class DlgEditarVuelo extends JDialog {
         logo.setPreferredSize(new Dimension(logoX, logoY));
         encabezado.add(logo);
         //Titulo
-        encabezado.add(new CustomLabel(" Editar detalles del vuelo " + vuelo.getNombre(), 36));
+        encabezado.add(new CustomLabel(" Editar detalles del vuelo " + vuelo.getNumVuelo(), 36));
         todo.add(encabezado, BorderLayout.NORTH);
 
         //Contenido
@@ -119,7 +119,7 @@ public class DlgEditarVuelo extends JDialog {
         inputs.add(txtPrecio);
         lblCodigo.setHorizontalAlignment(SwingConstants.RIGHT);
         inputs.add(lblCodigo);
-        txtNombre.setText(vuelo.getNombre());
+        txtNombre.setText(vuelo.getNumVuelo());
         inputs.add(txtNombre);
         inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY));
         lblOrigen.setHorizontalAlignment(SwingConstants.RIGHT);

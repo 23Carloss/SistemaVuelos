@@ -43,7 +43,7 @@ public class DlgSeleccionarAsientos extends JDialog {
         setContentPane(contenido);
 
         //Encabezado
-        add(new CustomLabel("Seleccionar asientos - Vuelo " + vuelo.getNombre()), BorderLayout.NORTH);
+        add(new CustomLabel("Seleccionar asientos - Vuelo " + vuelo.getNumVuelo()), BorderLayout.NORTH);
 
         // MATRIZ 11×8 (fila 0 = encabezado)
         contenedorAsientos.setLayout(new GridLayout(11, 8));
@@ -81,7 +81,7 @@ public class DlgSeleccionarAsientos extends JDialog {
                 AsientoDTO dto = vuelo.getAsiento(indexAsiento);
 
                 ToggleButton btn =
-                        new ToggleButton(dto.isDisponible(), dto.getColumna(), dto.getFila());
+                        new ToggleButton(dto.isDisponibilidad(), dto.getColumna(), dto.getFila());
 
                 asientos[indexAsiento] = btn;
                 contenedorAsientos.add(btn);

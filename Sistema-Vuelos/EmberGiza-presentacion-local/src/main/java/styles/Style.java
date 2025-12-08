@@ -8,7 +8,7 @@ public class Style {
     public static final int cantidadAsientos = 60;
 
     //Dimensiones
-    public static final int frameX = 1080;
+    public static final int frameX = 1080+200;
     public static final int frameY = 720;
 
     public static final int dialogX = 720;

@@ -43,7 +43,7 @@ public class MainSeeder {
 
         // 5) Crear vuelos
         Document vuelo1 = new Document("_id", new ObjectId())
-                .append("idVuelo", "ABC123")
+                .append("numVuelo", "ABC123")
                 .append("origen", "Guadalajara")
                 .append("destino", "Ciudad de México")
                 .append("fechaSalida", fecha1)
@@ -53,7 +53,7 @@ public class MainSeeder {
                 .append("listaAsientos", Arrays.asList(asientoDisponible, asientoOcupado));
 
         Document vuelo2 = new Document("_id", new ObjectId())
-                .append("idVuelo", "DEF456")
+                .append("numVuelo", "DEF456")
                 .append("origen", "Monterrey")
                 .append("destino", "Cancún")
                 .append("fechaSalida", fecha2)
@@ -63,7 +63,7 @@ public class MainSeeder {
                 .append("listaAsientos", Arrays.asList(asientoDisponible, asientoOcupado));
 
         Document vuelo3 = new Document("_id", new ObjectId())
-                .append("idVuelo", "GHI789")
+                .append("numVuelo", "GHI789")
                 .append("origen", "Tijuana")
                 .append("destino", "Ciudad de México")
                 .append("fechaSalida", fecha3)

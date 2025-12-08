@@ -7,6 +7,7 @@ package Interfaces;
 import DTOs.AsientoDTO;
 import DTOs.VueloDTO;
 import NegocioException.NegocioException;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -32,6 +33,10 @@ public interface IVueloBO{
     List<VueloDTO> filtrarVuelos(String origen, String destino) throws NegocioException;
 
     List<VueloDTO> filtrarVuelos(String origen, String destino, float precio) throws NegocioException;
+
+    List<VueloDTO> filtrarVuelos(String origen, String destino, float precio, Date fecha) throws NegocioException;
+
+    List<VueloDTO> filtrarVuelos(String origen, String destino, float precio, Date fecha, LocalTime hora) throws NegocioException;
     
     public VueloDTO crearVuelo(VueloDTO vueloDTO) throws NegocioException;
     

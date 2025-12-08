@@ -16,6 +16,11 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -30,7 +35,7 @@ import org.bson.types.ObjectId;
 public class VueloDAO extends CRUD implements IVueloDAO {
 
     public VueloDAO() {
-        super(MongoClientProvider.INSTANCE.database(),"Vuelos", Vuelo.class);
+        super(MongoClientProvider.INSTANCE.database(), "Vuelos", Vuelo.class);
     }
 
     @Override
@@ -90,7 +95,7 @@ public class VueloDAO extends CRUD implements IVueloDAO {
     @Override
     public List<Asiento> getAsientosDisponibles(String numVuelo) throws PersistenciaException {
         try {
-            Vuelo vuelo = (Vuelo) collection.find(new Document("idVuelo", numVuelo)).first(); // <-- corregido
+            Vuelo vuelo = (Vuelo) collection.find(new Document("numVuelo", numVuelo)).first(); // <-- corregido
 
             if (vuelo == null) {
                 throw new PersistenciaException("Error en getAsientosDisponibles: El vuelo con numero de vuelo " + numVuelo + " no existe.");
@@ -117,7 +122,7 @@ public class VueloDAO extends CRUD implements IVueloDAO {
     @Override
     public List<Asiento> getAsientosOcupados(String numVuelo) throws PersistenciaException {
         try {
-            Vuelo vuelo = (Vuelo) collection.find(new Document("idVuelo", numVuelo)).first(); // <-- corregido
+            Vuelo vuelo = (Vuelo) collection.find(new Document("numVuelo", numVuelo)).first(); // <-- corregido
 
             if (vuelo == null) {
                 throw new PersistenciaException("Error en getAsientosOcupados: El vuelo con numero de vuelo " + numVuelo + " no existe.");
@@ -148,7 +153,7 @@ public class VueloDAO extends CRUD implements IVueloDAO {
                     Filters.eq("origen", origen),
                     Filters.eq("destino", destino),
                     Filters.eq("fechaSalida", salida)
-            )).into(new ArrayList<>());
+            )).limit(50).into(new ArrayList<>());
 
             if (vuelos == null || vuelos.isEmpty()) {
                 throw new PersistenciaException("Error en getBuscarVuelos: Error al buscar vuelos con origen,destino y salida");
@@ -169,7 +174,7 @@ public class VueloDAO extends CRUD implements IVueloDAO {
 
     @Override
     public Vuelo getVuelo(String numVuelo) throws PersistenciaException {
-        return (Vuelo) collection.find(new Document("idVuelo", numVuelo)).first();
+        return (Vuelo) collection.find(new Document("numVuelo", numVuelo)).first();
     }
 
     @Override
@@ -177,7 +182,7 @@ public class VueloDAO extends CRUD implements IVueloDAO {
         try {
             List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
                     Filters.eq("origen", origen)
-            )).into(new ArrayList<>());
+            )).limit(50).into(new ArrayList<>());
 
             if (vuelos == null || vuelos.isEmpty()) {
                 throw new PersistenciaException("Error en filtrarVuelos: Error al buscar vuelos con origen");
@@ -197,7 +202,7 @@ public class VueloDAO extends CRUD implements IVueloDAO {
             List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
                     Filters.eq("origen", origen),
                     Filters.eq("destino", destino)
-            )).into(new ArrayList<>());
+            )).limit(50).into(new ArrayList<>());
 
             if (vuelos == null || vuelos.isEmpty()) {
                 throw new PersistenciaException("Error en filtrarVuelos: Error al filtrar vuelos con origen,destino");
@@ -217,8 +222,8 @@ public class VueloDAO extends CRUD implements IVueloDAO {
             List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
                     Filters.eq("origen", origen),
                     Filters.eq("destino", destino),
-                    Filters.eq("precio", precio)
-            )).into(new ArrayList<>());
+                    Filters.lt("precio", precio)
+            )).limit(50).into(new ArrayList<>());
 
             if (vuelos == null || vuelos.isEmpty()) {
                 throw new PersistenciaException("Error en filtrarVuelos: Error al filtrar vuelos con origen,destino y salida");
@@ -233,44 +238,92 @@ public class VueloDAO extends CRUD implements IVueloDAO {
     }
 
     @Override
+    public List<Vuelo> filtrarVuelos(String origen, String destino, float precio, Date fecha) throws PersistenciaException {
+        try {
+
+            List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
+                    Filters.eq("origen", origen),
+                    Filters.eq("destino", destino),
+                    Filters.lt("precio", precio),
+                    Filters.gte("fecha", fecha)
+            )).limit(50).into(new ArrayList<>());
+
+            if (vuelos == null || vuelos.isEmpty()) {
+                throw new PersistenciaException("Error en filtrarVuelos: Error al filtrar vuelos con origen,destino y salida");
+            }
+
+            return vuelos;
+
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error en filtrarVuelos: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public List<Vuelo> filtrarVuelos(String origen, String destino, float precio, Date fecha, LocalTime hora) throws PersistenciaException {
+        try {
+            LocalDate localDate = fecha.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDateTime inicio = LocalDateTime.of(localDate, hora);
+
+            Date fch = Date.from(inicio.atZone(ZoneId.systemDefault()).toInstant());
+
+            List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
+                    Filters.eq("origen", origen),
+                    Filters.eq("destino", destino),
+                    Filters.lt("precio", precio),
+                    Filters.gte("fecha", fch)
+            )).limit(50).into(new ArrayList<>());
+
+            if (vuelos == null || vuelos.isEmpty()) {
+                throw new PersistenciaException("Error en filtrarVuelos: Error al filtrar vuelos con origen,destino y salida");
+            }
+
+            return vuelos;
+
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error en filtrarVuelos: " + e.getMessage());
+        }
+    }
+
+    @Override
     public boolean actualizarAsientosPorVuelo(Vuelo vuelo) throws PersistenciaException {
 
         try {
             String numeroVuelo = vuelo.getNumVuelo();
 
             // Filtro por otro campo (numeroVuelo)
-
             UpdateResult result = collection.updateOne(
-                    Filters.eq("idVuelo", numeroVuelo), // filtro por número de vuelo
+                    Filters.eq("numVuelo", numeroVuelo), // filtro por número de vuelo
                     Updates.set("listaAsientos", vuelo.getListaAsientos()) // reemplaza toda la lista
             );
 
             return result.getModifiedCount() > 0;
         } catch (Exception e) {
-            throw new PersistenciaException("Error en ActualizarAsientosPorVuelo:"+ e.getMessage());
+            throw new PersistenciaException("Error en ActualizarAsientosPorVuelo:" + e.getMessage());
         }
     }
-    
+
     @Override
-    public boolean actualizarPorNumeroVuelo(Vuelo vuelo) throws PersistenciaException{
-        try{
+    public boolean actualizarPorNumeroVuelo(Vuelo vuelo) throws PersistenciaException {
+        try {
             String numVuelo = vuelo.getNumVuelo();
             UpdateResult result = collection.updateOne(Filters.eq("numVuelo", numVuelo), vuelo.toUpdateOperations());
             return result.getModifiedCount() > 0;
-        }catch(MongoException ex){
-            
+        } catch (MongoException ex) {
+
             throw new PersistenciaException("Error al actualizar por numero de vuelo: " + ex.getMessage());
         }
     }
 
-    public boolean eliminarPorNumeroVuelo(Vuelo vuelo) throws PersistenciaException{
-        try{
+    public boolean eliminarPorNumeroVuelo(Vuelo vuelo) throws PersistenciaException {
+        try {
             String numVuelo = vuelo.getNumVuelo();
             DeleteResult result = collection.deleteOne(Filters.eq("numVuelo", numVuelo));
-            return result.getDeletedCount()> 0;
-        }catch(MongoException ex){
-            
+            return result.getDeletedCount() > 0;
+        } catch (MongoException ex) {
+
             throw new PersistenciaException("Error al actualizar por numero de vuelo: " + ex.getMessage());
         }
     }
+
 }

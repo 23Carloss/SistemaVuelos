@@ -26,6 +26,11 @@
             <artifactId>Negocio</artifactId>
             <version>0</version>
         </dependency>
+        <dependency>
+            <groupId>hp</groupId>
+            <artifactId>ModuloUsuarios</artifactId>
+            <version>0</version>
+        </dependency>
     </dependencies>
 
 </project>

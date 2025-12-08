@@ -1,5 +1,6 @@
 package login;
 
+import Aplicacion.Control;
 import BOs.UsuarioBO;
 import DTOs.UsuarioDTO;
 import POJOs.TipoUsuario;
@@ -14,6 +15,7 @@ import java.awt.event.MouseEvent;
 
 public class PnlLogin extends JPanel {
 
+    private Control control;
     //Declaraciones
     Style style = new Style();
     boolean testeoColor = false;
@@ -65,7 +67,8 @@ public class PnlLogin extends JPanel {
     //::::::::::::::::::::::::::::::FIN DE ESTÉTICA::::::::::::::::::::::::::::::
 
 
-    public PnlLogin() {
+    public PnlLogin(Control control) {
+        this.control = control;
         bo= new UsuarioBO();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setOpaque(false);

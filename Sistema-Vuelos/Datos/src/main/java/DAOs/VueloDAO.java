@@ -240,7 +240,7 @@ public class VueloDAO extends CRUD implements IVueloDAO {
 
             // Filtro por otro campo (numeroVuelo)
 
-            UpdateResult result = col.updateOne(
+            UpdateResult result = collection.updateOne(
                     Filters.eq("idVuelo", numeroVuelo), // filtro por número de vuelo
                     Updates.set("listaAsientos", vuelo.getListaAsientos()) // reemplaza toda la lista
             );

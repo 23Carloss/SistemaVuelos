@@ -6,9 +6,7 @@ package hp.datos;
 
 import Config.MongoClientProvider;
 import DAOs.UsuarioDAO;
-import POJOs.TipoUsuario;
 import POJOs.Usuario;
-import java.util.ArrayList;
 
 /**
  *

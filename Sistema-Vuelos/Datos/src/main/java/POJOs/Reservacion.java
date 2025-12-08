@@ -72,14 +72,6 @@ public class Reservacion implements ObjetoMongo {
         this.vuelo = vuelo;
     }
 
-    public ObjectId getId() {
-        return _id;
-    }
-
-    public void setId(ObjectId _id) {
-        this._id = _id;
-    }
-
     public Instant getCreadoEn() {
         return creadoEn;
     }
@@ -101,8 +93,6 @@ public class Reservacion implements ObjetoMongo {
         return "Reservacion{" + "_id=" + _id + ", numReservacion=" + numReservacion + ", correoUsuario=" + correoUsuario + ", fechaReservacion=" + fechaReservacion + ", asientos=" + asientos + ", vuelo=" + vuelo + ", creadoEn=" + creadoEn + ", editadoEn=" + editadoEn + '}';
     }
 
-    
-    
 
     @Override
     public ObjectId get_id() {

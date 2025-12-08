@@ -7,6 +7,7 @@ package CRUD;
 
 import com.mongodb.MongoException;
 import java.util.List;
+import java.util.UUID;
 import org.bson.types.ObjectId;
 
 /**
@@ -16,11 +17,11 @@ import org.bson.types.ObjectId;
  */
 public interface ICRUD<T> {
 
-    public T create(ObjetoMongo entity) throws MongoException;
+    public T create(T entity) throws MongoException;
 
     public T read(ObjectId id) throws MongoException;
 
-    public boolean update(ObjetoMongo entity) throws MongoException;
+    public boolean update(T entity) throws MongoException;
 
     public boolean delete(ObjectId id) throws MongoException;
 

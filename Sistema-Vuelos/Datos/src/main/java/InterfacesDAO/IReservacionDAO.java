@@ -16,4 +16,7 @@ import java.util.List;
  */
 public interface IReservacionDAO extends ICRUD {
     public List<Reservacion> obtenerReservacionesPorUsuario(Usuario us) throws PersistenciaException;
+    public boolean eliminarPorNumReservacion(String numReservacion)throws PersistenciaException;
+    public Reservacion actualizarPorNumReservacion(Reservacion reservacion)throws PersistenciaException;
+    public Reservacion buscarPorNumReservacion(String numReservacion);
 }

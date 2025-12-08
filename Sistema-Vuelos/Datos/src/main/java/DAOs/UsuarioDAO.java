@@ -12,14 +12,17 @@ import InterfacesDAO.IUsuarioDAO;
 import POJOs.Usuario;
 import com.mongodb.MongoException;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import org.bson.conversions.Bson;
 
 /**
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
-public class UsuarioDAO extends CRUD<Usuario> implements IUsuarioDAO{
+public class UsuarioDAO extends CRUD implements IUsuarioDAO{
     
     public UsuarioDAO() {
         super(MongoClientProvider.INSTANCE.database(),"Usuarios", Usuario.class);
@@ -30,33 +33,40 @@ public class UsuarioDAO extends CRUD<Usuario> implements IUsuarioDAO{
     public Usuario autenticar(String correo, String contrasenia) throws PersistenciaException{
         try {
             
-            Usuario user = (Usuario) col.find(Filters.and(
-                    Filters.eq("correo", correo),
-                    Filters.eq("contrasenia", contrasenia)))
-                    .first();            
-            if(user == null)throw new PersistenciaException("Credenciales incorrectas");
-            return user;
             
+            Usuario user1 = buscarPorCorreo(correo);
+            
+            if(user1 == null)throw new PersistenciaException("Credenciales incorrectas");
+            if(user1.getContrasenia().equals(contrasenia)){
+                return user1;
+            }else{
+                return null;
+            }
+
         } catch (MongoException e) {
             throw new PersistenciaException("Error en autenticación " + e.getMessage());
+            
         }
     }
     
     @Override
     public List<Usuario> buscarPorNombre(String nombre)throws PersistenciaException{
-        try{
-            return col.find(Filters.eq("nombre", nombre)).into(new ArrayList<>());
+        try{         
+//            @SuppressWarnings("unchecked")  
+            Collection col = collection.find(Filters.regex("nombre", nombre, "i")).into(new ArrayList<>());
+            List<Usuario> listaUsuarios = (List<Usuario>) col;
+            return listaUsuarios;
         }catch(MongoException e){
             throw new PersistenciaException("Error en autenticación " + e.getMessage());
         }
     }
     
-    //devuelve false si el parametro correoE ya se encuentra registrado
-    //true si no esta registrado
+    //devuelve false si el parametro correoE no se encuentra registrado
+    //true si esta registrado
     @Override
     public boolean verificarCorreo(String correE)throws PersistenciaException{
         try{
-            return col.find(Filters.eq("correo", correE)).first() != null;
+            return collection.find(Filters.eq("correo", correE)).first() != null;
         }catch(MongoException ex){
               throw new PersistenciaException("Error en verificar correo " + ex.getMessage());    
         }
@@ -66,7 +76,7 @@ public class UsuarioDAO extends CRUD<Usuario> implements IUsuarioDAO{
     @Override
     public Usuario buscarPorCorreo(String correE)throws PersistenciaException{
         try{
-            return col.find(Filters.eq("correo", correE)).first();
+            return (Usuario) collection.find(Filters.eq("correo", correE)).first();
         }catch(MongoException ex){
               throw new PersistenciaException("Error al buscar usuario por correo " + ex.getMessage());    
         }
@@ -77,7 +87,7 @@ public class UsuarioDAO extends CRUD<Usuario> implements IUsuarioDAO{
         
         try {
             
-            var result = col.deleteOne(Filters.eq("correo", correoE));
+            var result = collection.deleteOne(Filters.eq("correo", correoE));
 
             return result.getDeletedCount() > 0;
 
@@ -89,20 +99,16 @@ public class UsuarioDAO extends CRUD<Usuario> implements IUsuarioDAO{
     @Override
     public boolean actualizarPorCorreo(Usuario entity)throws PersistenciaException{
         try{
-            try {
-          
-                var filter = Filters.eq("correo", entity.getCorreo());
-                var updates = entity.toUpdateOperations(); // método que tú defines en ObjetoMongo
-
-                var result = col.updateOne(filter,updates);
-                return result.getModifiedCount() > 0;
-        } catch (MongoException e) {
-            throw e;
-        }
+            Bson filter = Filters.eq("correo", entity.getCorreo());  
+            UpdateResult resultado = collection.updateOne(filter, entity.toUpdateOperations());
+            if (resultado.getModifiedCount() == 0) {
+                 System.out.println("no se encontro o modifico ningun documento.");
+            }
+            return resultado.getModifiedCount() > 0;
         }catch(MongoException ex){
               throw new PersistenciaException("Error al actualizar por correo " + ex.getMessage());    
         }
-        
+
     }
 
     

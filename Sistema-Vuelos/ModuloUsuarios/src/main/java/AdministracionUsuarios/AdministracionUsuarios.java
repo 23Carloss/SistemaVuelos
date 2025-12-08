@@ -5,13 +5,17 @@
 
 package AdministracionUsuarios;
 
+import BOs.ReservacionBO;
 import BOs.UsuarioBO;
+import DTOs.ReservacionDTO;
 import DTOs.UsuarioDTO;
+import Interfaces.IReservacionBO;
 import Interfaces.IUsuarioBO;
 import NegocioException.NegocioException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import org.bson.types.ObjectId;
 
 /**
  *
@@ -19,11 +23,23 @@ import org.bson.types.ObjectId;
  */
 public class AdministracionUsuarios {
     private IUsuarioBO usuarioBO;
+    private IReservacionBO reservacionBO;
     private UsuarioDTO usuarioTemporal;
 
     public AdministracionUsuarios() {
         usuarioBO = new UsuarioBO();
+        reservacionBO = new ReservacionBO();
         
+    }
+    public UsuarioDTO registrarUsuario(UsuarioDTO  us){
+        try {
+            var usuario =usuarioBO.crearUsuario(us);
+            JOptionPane.showMessageDialog(null, "Registrado con exito", "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+            return usuario;  
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null,"Error al registrar usuario" + ex.getMessage(),"Error" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            return null;  
+        }
     }
     public List<UsuarioDTO> cargarTodos(){
         try {
@@ -33,31 +49,25 @@ public class AdministracionUsuarios {
             return null;                 
             }
     }
-    public UsuarioDTO registrarUsuario(UsuarioDTO u){
+    
+    public boolean eliminarUsuario(String correo){
         try {
-            var usuario =usuarioBO.crearObjeto(u);
-            JOptionPane.showMessageDialog(null, "Registrado con exito", "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
-            return usuario;  
+            
+            return usuarioBO.eliminarPorCorreo(correo);
         } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(null,"Error al registrar usuario","Error:  " + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
-            return null;  
-        }
-    }
-    public void eliminarUsuario(ObjectId _id){
-        try {
-            usuarioBO.eliminarPorId(_id);
-        } catch (NegocioException ex) {
-            JOptionPane.showMessageDialog(null,"Error al eliminar usuario","Error", JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(null,"Error al eliminar usuario" + ex.getMessage(),"Error", JOptionPane.ERROR);
+            return false;
         }
     }
     
-    public UsuarioDTO buscarPorId(ObjectId _id){
+    public UsuarioDTO buscarPorCorreo(String correo){
         try {
-            var usuario =usuarioBO.buscarPorId(_id);
+
+            var usuario =usuarioBO.buscarPorCorreo(correo);
             return usuario;  
             
         } catch (NegocioException ex) {
-            JOptionPane.showConfirmDialog(null, "Usuario no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Usuario no encontrado:" + ex.getMessage() , "Error", JOptionPane.ERROR_MESSAGE);
             return null;
             
         }
@@ -65,21 +75,21 @@ public class AdministracionUsuarios {
     
     public boolean actualizarUsuario(UsuarioDTO usuario){
         try {
-            var usuarioA =usuarioBO.actualizarObjeto(usuario);
+            var usuarioA =usuarioBO.actualizarUsuario(usuario);
             return usuarioA != null; 
             
         } catch (NegocioException ex) {
-            JOptionPane.showConfirmDialog(null, "Error al actualizar", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al actualizar" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
     
-    public boolean signIn(String correo, String contrasenia){
-        try {
-            setUsuarioDTO(usuarioBO.signIn(correo, correo));
+    public boolean iniciarSesion(String correo, String contrasenia){
+        try {        
+            setUsuarioDTO(usuarioBO.iniciarSesion(correo, contrasenia));
             return true;
         } catch (NegocioException ex) {
-            JOptionPane.showConfirmDialog(null, "Credenciales Incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Credenciales Incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
     }
@@ -88,7 +98,7 @@ public class AdministracionUsuarios {
         try {
             return usuarioBO.buscarPorNombre(nombre);
         } catch (NegocioException ex) {
-            JOptionPane.showConfirmDialog(null, "Error al buscar por nombre", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Error al buscar por nombre", "Error", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
@@ -98,5 +108,25 @@ public class AdministracionUsuarios {
     }
     public void setUsuarioDTO(UsuarioDTO u){
         this.usuarioTemporal = u;
+    }
+    
+    public List<ReservacionDTO> cargarReservacionesPorUsuario(UsuarioDTO usuario){
+        try {
+            return reservacionBO.obtenerReservacionesPorUsuario(usuario);
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al cargar reservaciones : " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+    
+    public boolean eliminarReservacion(ReservacionDTO reservacion){
+        try {
+            boolean resultado  = reservacionBO.eliminarReservacion(reservacion);
+            JOptionPane.showMessageDialog(null, "Reservacion cancelada", "Exito", JOptionPane.ERROR_MESSAGE);
+            return resultado;
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar reservacion : " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 }

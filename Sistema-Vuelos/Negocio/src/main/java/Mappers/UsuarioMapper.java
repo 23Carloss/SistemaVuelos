@@ -39,7 +39,7 @@ public class UsuarioMapper {
     public UsuarioDTO convertirADTO(Usuario usuario){
      
         UsuarioDTO dto = new UsuarioDTO();
-        dto.set_id(usuario.get_id());
+//        dto.set_id(usuario.get_id());
         dto.setNombre(usuario.getNombre());
         dto.setApellidoP(usuario.getApellidoP());
         dto.setApellidoM(usuario.getApellidoM());

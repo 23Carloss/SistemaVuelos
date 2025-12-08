@@ -9,12 +9,12 @@ import DTOs.UsuarioDTO;
 import Exception.PersistenciaException;
 import Mappers.UsuarioMapper;
 import java.util.List;
-import org.bson.types.ObjectId;
 import NegocioException.NegocioException;
 import POJOs.Usuario;
 import Interfaces.IUsuarioBO;
 import InterfacesDAO.IUsuarioDAO;
 import com.mongodb.MongoException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -33,36 +33,33 @@ public class UsuarioBO implements IUsuarioBO{
 
     @Override
 
-    public UsuarioDTO crearObjeto(UsuarioDTO object) throws NegocioException{
+    public UsuarioDTO crearUsuario(UsuarioDTO usuario) throws NegocioException{
         try {
-            if (object == null) {
+            if (usuario == null) {
                     throw new IllegalArgumentException("Usuario no puede ser nulo");
                 }
-            if(verificarCorreo(object.getCorreo())){
+            if(verificarCorreo(usuario.getCorreo())){
                 throw new NegocioException("Correo ya registrado");
-            }else{
-                if (object.getNombre() == null || object.getNombre().isBlank()) {
+            }
+                if (usuario.getNombre() == null || usuario.getNombre().isBlank()) {
                     throw new IllegalArgumentException("Nombre es obligatorio");
                 }
-                if (object.getApellidoP() == null || object.getApellidoP().isBlank()) {
+                if (usuario.getApellidoP() == null || usuario.getApellidoP().isBlank()) {
                     throw new IllegalArgumentException("Apellido paterno es obligatorio");
                 }
-                if (object.getCorreo() == null || !object.getCorreo().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
+                if (usuario.getCorreo() == null || !usuario.getCorreo().matches("^[\\w.-]+@[\\w.-]+\\.[a-zA-Z]{2,}$")) {
                     throw new IllegalArgumentException("Formato de correo incorrecto");
                 }
-                if (object.getContrasenia() == null || object.getContrasenia().length() < 6) {
+                if (usuario.getContrasenia() == null || usuario.getContrasenia().length() < 6) {
                     throw new IllegalArgumentException("Contraseña debe tener al menos 6 caracteres");
                 }
-                if(object.get_id() == null) object.set_id(new ObjectId());
+//                if(usuario.getIdObject()== null) usuario.setIdObject(UUID.randomUUID());
 
-                Usuario usuario = mapper.convertirAEntity(object);           
-                Usuario us = (Usuario)dao.create(usuario);
+                Usuario usuario1 = mapper.convertirAEntity(usuario);           
+                Usuario us = (Usuario)dao.create(usuario1);
                 return mapper.convertirADTO(us);
-            }
             
-        } catch (MongoException e) {
-            throw new NegocioException("Error al agregar usuario este" + e.getMessage());
-        
+            
         } catch (IllegalArgumentException ex) {
             throw new NegocioException("Error al agregar usuario este" + ex.getMessage());
         }
@@ -70,13 +67,25 @@ public class UsuarioBO implements IUsuarioBO{
 
 
     @Override
-    public UsuarioDTO buscarPorId(ObjectId _id) throws NegocioException{
+    public UsuarioDTO buscarPorCorreo(String correo) throws NegocioException{
         try{
-            return (UsuarioDTO) dao.read(_id);
-        }catch(MongoException ex){
+            if(correo.trim() == null)throw new NegocioException("Correo vacio");
+
+            Usuario usuario = dao.buscarPorCorreo(correo);
+            UsuarioDTO usuarioEncontrado = mapper.convertirADTO(usuario);
+            return usuarioEncontrado;
+        } catch (PersistenciaException ex) {
             throw new NegocioException("Error al buscar usuario" + ex.getMessage());
         }
     }
+    
+//    public UsuarioDTO buscarPorId(UUID id) throws NegocioException{
+//        try{
+//            return mapper.convertirADTO((Usuario) dao.read(id));
+//        } catch (MongoException ex) {
+//            throw new NegocioException("Error al buscar usuario" + ex.getMessage());
+//        }
+//    }
 
 
     @Override
@@ -90,22 +99,26 @@ public class UsuarioBO implements IUsuarioBO{
     }
 
     @Override
-    public boolean eliminarPorId(ObjectId _id) throws NegocioException{
+    public boolean eliminarPorCorreo(String correo) throws NegocioException{
         try{
-            return dao.delete(_id);
-        }catch(MongoException ex){
+            if(correo.trim() == null)throw new NegocioException("Correo vacio");
+
+            return dao.eliminarPorCorreo(correo);
+        } catch (PersistenciaException ex) {
             throw new NegocioException("Error al buscar usuario" + ex.getMessage());
         }
         
     }
 
     @Override
-    public UsuarioDTO signIn(String correo, String password) throws NegocioException {
+    public UsuarioDTO iniciarSesion(String correo, String password) throws NegocioException {
         try {
-            var usuario = dao.autenticar(correo, password);
+            if(correo.trim() == null || password.trim() == null)throw new NegocioException("Correo o contrasenia vacios");
+            Usuario usuario = dao.autenticar(correo, password);
             if (usuario == null) {
                 throw new NegocioException("Credenciales incorrectas");
             }
+            
             return mapper.convertirADTO(usuario);
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al iniciar sesion");
@@ -114,9 +127,11 @@ public class UsuarioBO implements IUsuarioBO{
     }
 
     @Override
-    public List<UsuarioDTO> buscarPorNombre(String name) throws NegocioException {
+    public List<UsuarioDTO> buscarPorNombre(String nombre) throws NegocioException {
         try {
-            return mapper.ConvertirListaADto(dao.buscarPorNombre(name));
+            List<Usuario> listaEntity = dao.buscarPorNombre(nombre);
+            List<UsuarioDTO> listaUsuarios = mapper.ConvertirListaADto(listaEntity);
+            return listaUsuarios;
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al buscar por nombre: " + ex.getMessage());
         }
@@ -125,20 +140,15 @@ public class UsuarioBO implements IUsuarioBO{
   
 
     @Override
-    public UsuarioDTO actualizarObjeto(UsuarioDTO usuario) throws NegocioException {
+    public UsuarioDTO actualizarUsuario(UsuarioDTO usuario) throws NegocioException {
         try{
-            System.out.println("UsDTO - Actualizar:  "  + usuario);
             Usuario us = mapper.convertirAEntity(usuario);
-            System.out.println("UsBO entityMappeada: " + us);
-            if(dao.update(us)){
-                System.out.println("Entro al if");
+            if(dao.actualizarPorCorreo(us)){
                 UsuarioDTO usAcualizado = mapper.convertirADTO(us);
-                System.out.println("usDTO : " + usAcualizado);
                 return usAcualizado;
             }
-            System.out.println("Valio bergaaaas");
             return null;
-        }catch(MongoException ex){
+        } catch (PersistenciaException ex) {
             throw new NegocioException("Error al actualizar: " + ex.getMessage());
         }
         
@@ -160,13 +170,6 @@ public class UsuarioBO implements IUsuarioBO{
         }
     }
     
-    @Override
-    public UsuarioDTO buscarPorCorreo(String correo)throws NegocioException{
-        try{
-            return mapper.convertirADTO(dao.buscarPorCorreo(correo));
-        }catch(PersistenciaException ex){
-            throw new NegocioException("Error al buscar por correo: " + ex.getMessage());
-        }
-    }
+
 
 }

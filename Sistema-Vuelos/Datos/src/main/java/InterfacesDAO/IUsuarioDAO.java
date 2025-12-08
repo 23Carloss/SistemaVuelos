@@ -16,6 +16,8 @@ import java.util.List;
 public interface IUsuarioDAO extends ICRUD {
     public Usuario autenticar(String correo, String contrasenia) throws PersistenciaException;
     public List<Usuario> buscarPorNombre(String nombre) throws PersistenciaException;
+    //devuelve false si el parametro correoE ya se encuentra registrado
+    //true si no esta registrado
     public boolean verificarCorreo(String correE)throws PersistenciaException;
     public Usuario buscarPorCorreo(String correE)throws PersistenciaException;
     public boolean eliminarPorCorreo(String correoE)throws PersistenciaException;

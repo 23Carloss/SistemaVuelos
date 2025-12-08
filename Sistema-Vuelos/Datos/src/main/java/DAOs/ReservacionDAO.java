@@ -27,7 +27,7 @@ import org.bson.Document;
  *
  * @author Jesus Gammael Soto Escalante 248336
  */
-public class ReservacionDAO extends CRUD<Reservacion> implements IReservacionDAO {
+public class ReservacionDAO extends CRUD implements IReservacionDAO {
     
     private final MongoCollection<Document> colDoc;
     private final MongoCollection<Usuario> colUs;
@@ -36,6 +36,18 @@ public class ReservacionDAO extends CRUD<Reservacion> implements IReservacionDAO
         super(MongoClientProvider.INSTANCE.database(),"Reservacion", Reservacion.class);
         this.colDoc = MongoClientProvider.INSTANCE.getCollection("Reservacion", Document.class);
         this.colUs = MongoClientProvider.INSTANCE.getCollection("Usuarios", Usuario.class);
+    }
+    
+    @Override
+    public boolean eliminarPorNumReservacion(String numReservacion)throws PersistenciaException{
+        try{     
+            Reservacion reservacionMongo = (Reservacion) collection.find(Filters.eq("numReservacion", numReservacion)).first();
+            var resultado = collection.deleteOne(Filters.eq("numReservacion",reservacionMongo.getNumReservacion()));
+            return resultado.getDeletedCount() > 0;
+            
+        }catch(MongoException ex){
+            throw new PersistenciaException("Error al eliminar reservacion "+ ex.getMessage());
+        }
     }
     
     @Override
@@ -71,6 +83,9 @@ public class ReservacionDAO extends CRUD<Reservacion> implements IReservacionDAO
                 v1.setAerolinea(vueloDoc.getString("aerolinea"));
                 v1.setDestino(vueloDoc.getString("destino"));
                 v1.setDuracion(vueloDoc.getInteger("duracion"));
+                v1.setAerolinea(vueloDoc.getString("aerolinea"));
+                v1.setNombre(vueloDoc.getString("nombre"));
+                
                 
                 Date fechaSalidaDate = vueloDoc.getDate("fechaSalida");
                 LocalDateTime fechaSalidaLocalDate = null;
@@ -89,7 +104,7 @@ public class ReservacionDAO extends CRUD<Reservacion> implements IReservacionDAO
     }
     
     private List<Reservacion> convertirDocAReservacion(List<Document> docs){
-        List<Reservacion> reservaciones = new ArrayList<>();
+        List<Reservacion> Reservacion = new ArrayList<>();
         for(Document doc : docs) {
                 Reservacion r1 = new Reservacion();
                 List<Document> listaAsientos = doc.getList("asientos", Document.class);
@@ -110,9 +125,9 @@ public class ReservacionDAO extends CRUD<Reservacion> implements IReservacionDAO
                 Document vueloDoc = (Document) doc.get("vuelo");
                 Vuelo v2 = convertirDocAVuelo(vueloDoc);
                 r1.setVuelo(v2);
-                reservaciones.add(r1);
+                Reservacion.add(r1);
             }
-        return reservaciones;
+        return Reservacion;
     }
     
     private List<Asiento> convertirDocAAsientos(List<Document> listaAsientos){
@@ -123,8 +138,31 @@ public class ReservacionDAO extends CRUD<Reservacion> implements IReservacionDAO
             a1.setDisponibilidad(d.getBoolean("disponibilidad"));
             a1.setFila(d.getInteger("fila"));
             a1.setNumero(d.getInteger("numero"));
+            a1.setColumna(d.getString("columna"));
         }
         return asientos;
     }
+
+    @Override
+    public Reservacion actualizarPorNumReservacion(Reservacion reservacion) throws PersistenciaException {
+      try{     
+            var filter = Filters.eq("numReservacion", reservacion.getNumReservacion());
+            var updates = reservacion.toUpdateOperations();
+
+            var result = collection.updateOne(filter,updates);
+            reservacion = (Reservacion) collection.find(Filters.eq("numReservacion", reservacion.getNumReservacion()));
+            
+            return reservacion;
+        }catch(MongoException ex){
+            throw new PersistenciaException("Error al eliminar reservacion "+ ex.getMessage());
+        }
+    }
     
+    @Override
+    public Reservacion buscarPorNumReservacion(String numReservacion){
+        Reservacion reservacionEncontrada = (Reservacion) collection.find(Filters.eq("numReservacion", numReservacion));
+        return reservacionEncontrada;
+    }
 }
+    
+

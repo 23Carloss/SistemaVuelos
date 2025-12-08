@@ -6,10 +6,10 @@
     <version>0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>Presentacion</module>
         <module>Datos</module>
         <module>Negocio</module>
         <module>ModuloUsuarios</module>
+        <module>../../../EmberGiza-presentacion-local/PresentacionVuelo1.1</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

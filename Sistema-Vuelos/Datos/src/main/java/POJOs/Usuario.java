@@ -74,15 +74,6 @@ public class Usuario implements ObjetoMongo {
         this.contrasenia = contrasenia;
     }
 
-    @Override
-    public ObjectId get_id() {
-        return _id;
-    }
-
-    @Override
-    public void set_id(ObjectId _id) {
-        this._id=_id;
-    }
 
     @Override
     public Bson toUpdateOperations() {
@@ -96,13 +87,20 @@ public class Usuario implements ObjetoMongo {
 
         return Updates.combine(updates);
     }
+    
+    @Override
+    public ObjectId get_id() {
+        return _id;
+    }
+
+    @Override
+    public void set_id(ObjectId _id) {
+        this._id=_id;
+    }
 
     @Override
     public String toString() {
-        return "Usuario{" + "_id=" + _id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + 
-                ", tipoUsuario=" + tipoUsuario +'}';
+        return "Usuario{" + "_id=" + _id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + ", tipoUsuario=" + tipoUsuario + '}';
     }
-    
-    
-    
+
 }

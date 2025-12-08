@@ -17,9 +17,16 @@ public class AsientoDTO {
     @BsonId
     private ObjectId _id;
     private boolean disponibilidad;
+    private String columna;
     private int numero;
     private int fila;
 
+    public AsientoDTO(String columna, int fila, boolean disponible) {
+        this.columna = columna;
+        this.fila = fila;
+        this.disponibilidad = disponible;
+    }
+    
     public AsientoDTO() {
     }
 
@@ -27,6 +34,14 @@ public class AsientoDTO {
         return disponibilidad;
     }
 
+    public String getColumna() {
+        return columna;
+    }
+
+    public void setColumna(String columna) {
+        this.columna = columna;
+    }
+    
     public void setDisponibilidad(boolean disponibilidad) {
         this.disponibilidad = disponibilidad;
     }

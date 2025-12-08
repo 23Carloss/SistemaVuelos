@@ -4,12 +4,14 @@
  */
 package CRUD;
 
+import POJOs.BaseEntity;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import org.bson.types.ObjectId;
 
 /**
@@ -17,20 +19,20 @@ import org.bson.types.ObjectId;
  * @author Jesus Gammael Soto Escalante 248336
  * @param <T>
  */
-public class CRUD<T> implements ICRUD {
+public class CRUD<T extends ObjetoMongo> implements ICRUD<T> {
 
-    protected final MongoCollection<T> col;
+    protected final MongoCollection<T> collection;
 
     public CRUD(MongoDatabase db, String colleccion, Class<T> clase) {
-        this.col = db.getCollection(colleccion, clase);
+        this.collection = db.getCollection(colleccion, clase);
     }
 
     @Override
-    public T create(ObjetoMongo entity) throws MongoException {
+    public T create(T entity) throws MongoException {
         try {
             
-            if(entity.get_id() == null) entity.set_id(new ObjectId());
-            col.insertOne((T)entity);  
+            // if(entity.get_id() == null) entity.set_id(new ObjectId());
+            collection.insertOne((T)entity);  
             
             return (T) entity;
         } catch (MongoException e) {
@@ -44,20 +46,20 @@ public class CRUD<T> implements ICRUD {
     public T read(ObjectId _id) throws MongoException {
 
         try {
-            return col.find(Filters.eq("_id", _id)).first();
+            return collection.find(Filters.eq("idObjectUUID", _id)).first();
         } catch (MongoException e) {
             throw e;
         }
     }
 
     @Override
-    public boolean update(ObjetoMongo entity) throws MongoException {
+    public boolean update(T entity) throws MongoException {
         try {
           
-            var filter = Filters.eq("_id", entity.get_id());
+            var filter = Filters.eq("id", entity.get_id());
             var updates = entity.toUpdateOperations(); // método que tú defines en ObjetoMongo
 
-            var result = col.updateOne(filter,updates);
+            var result = collection.updateOne(filter,updates);
             return result.getModifiedCount() > 0;
         } catch (MongoException e) {
             throw e;
@@ -68,7 +70,7 @@ public class CRUD<T> implements ICRUD {
     public boolean delete(ObjectId _id) throws MongoException {
         try {
             
-            var result = col.deleteOne(Filters.eq("_id", _id));
+            var result = collection.deleteOne(Filters.eq("idObjectUUID", _id));
 
             return result.getDeletedCount() > 0;
 
@@ -80,8 +82,8 @@ public class CRUD<T> implements ICRUD {
     @Override
     public List<T> findEntities() throws MongoException {
         try {
-//            col.find().limit(100).into(new ArrayList<>()).forEach(Usuario -> System.out.println(Usuario));
-            return col.find().limit(100).into(new ArrayList<>());
+//            collection.find().limit(100).into(new ArrayList<>()).forEach(Usuario -> System.out.println(Usuario));
+            return collection.find().limit(100).into(new ArrayList<>());
         } catch (MongoException e) {
             throw e;
         }
@@ -95,7 +97,7 @@ public class CRUD<T> implements ICRUD {
 
     public List<T> findByName(String name) throws MongoException {
         try {
-            return col.find(Filters.eq("nombre", name)).limit(100).into(new ArrayList<>());
+            return collection.find(Filters.eq("nombre", name)).limit(100).into(new ArrayList<>());
         } catch (MongoException e) {
             throw e;
         }

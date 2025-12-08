@@ -7,7 +7,6 @@ package DTOs;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
 
 /**
@@ -15,7 +14,7 @@ import org.bson.types.ObjectId;
  * @author $Luis Carlos Manjarrez Gonzalez
  */
 public class ReservacionDTO {
-    @BsonId
+    
     private ObjectId _id;
     private String coreoUsuario;
     private String numReservacion;

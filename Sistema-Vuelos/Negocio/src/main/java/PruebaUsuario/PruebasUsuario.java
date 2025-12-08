@@ -11,7 +11,7 @@ import Interfaces.IUsuarioBO;
 import Mappers.UsuarioMapper;
 import NegocioException.NegocioException;
 import POJOs.TipoUsuario;
-import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  *
@@ -31,17 +31,15 @@ public class PruebasUsuario {
             IUsuarioBO bo = new UsuarioBO();
             
             UsuarioDTO us = new UsuarioDTO();
-            us.set_id(null);
-                us.setNombre("carlos");
+            us.setNombre("carlos");
                 us.setApellidoP("Manja");
                 us.setApellidoM("Gonzalez");
-                us.setCorreo("tuculit@o69.com");
+                us.setCorreo("carlos23@o69.com");
                 us.setContrasenia("carlos23");
                 us.setTipoUsuario(TipoUsuario.administrador);
                 
             
-            UsuarioDTO us1 = new UsuarioDTO();
-            us1.set_id(null);
+            UsuarioDTO us1 = new UsuarioDTO();            
                 us1.setNombre("Crlos");
                 us1.setApellidoP("perez");
                 us1.setApellidoM("g");
@@ -50,38 +48,36 @@ public class PruebasUsuario {
                 us1.setTipoUsuario(TipoUsuario.usuario);
                 
             //Insertamos usuario
-//            System.out.println("Pueba de agregar"); 
+            System.out.println("Pueba de agregar"); 
             System.out.println("correo registrdo us : " + bo.verificarCorreo(us.getCorreo()));
-            us = bo.crearObjeto(us);
-            System.out.println(us);
+            us = bo.crearUsuario(us);
+                System.out.println(us);
             System.out.println("correo registrdo us1: " + bo.verificarCorreo(us1.getCorreo()));
-            us1 = bo.crearObjeto(us1); 
-                
+            us1 = bo.crearUsuario(us1); 
                 System.out.println(us1);
-//  
-//            System.out.println("Usuario0: " + us);
-////            System.out.println("Usuario1: " + us1.get_id().toString());
-//           System.out.println("Encontrado:  " + bo.buscarPorId(us.get_id()) );
+  
+            System.out.println("Usuario0: " + us);
+           System.out.println("buscarPorCorreo:  " + bo.buscarPorCorreo(us.getCorreo()) );
 //           
 //            System.out.println("Pueba de obtener todo");
 //            //cosultamos todos los usuarios mediante la BO
-            bo.obtenerTodos().forEach(System.out::println);
+//            bo.obtenerTodos().forEach(System.out::println);
 //            
-//            System.out.println("Pueba de actualizar");^
-//            
-//                us.setNombre("Luis Carlos");
+            System.out.println("Pueba de actualizar, us a act: "+ us1);
+            
+                us1.setNombre("Carlos");
 //                us.setCorreo("luis23@gmail.com");
 //                
-//            System.out.println(bo.actualizarObjeto(us));
+            System.out.println("User Act" + bo.actualizarUsuario(us1));
 //            
 //            System.out.println("Pueba de buscar por nombre");
 //            
-//            bo.buscarPorNombre("Luis Carlos").forEach(System.out::println);
+//            bo.buscarPorNombre("Carlos").forEach(System.out::println);
 //            
-//            System.out.println("Prueba de eliminar por id: " + us1.get_id());
-//            System.out.println( bo.eliminarPorId(us1.get_id()));
-//            bo.obtenerTodos().forEach(System.out::println);
-////            
+////            System.out.println("Prueba de eliminar por correo: " + us1.getCorreo());
+////            System.out.println(bo.eliminarPorCorreo(us1.getCorreo()));
+            bo.obtenerTodos().forEach(System.out::println);
+//            
         } catch (NegocioException ex) {
             System.out.println("mensaje de error : " + ex.getMessage());
         }

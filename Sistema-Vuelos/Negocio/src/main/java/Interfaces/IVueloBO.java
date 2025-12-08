@@ -16,7 +16,7 @@ import org.bson.types.ObjectId;
  *
  * @author Jesus Gammael Soto Escalante 248336
  */
-public interface IVueloBO {
+public interface IVueloBO{
 
     List<AsientoDTO> getAsientosDisponibles(String numVuelo) throws NegocioException;
 

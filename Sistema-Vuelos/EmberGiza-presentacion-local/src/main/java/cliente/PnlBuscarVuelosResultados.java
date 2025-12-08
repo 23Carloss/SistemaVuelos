@@ -1,5 +1,6 @@
 package cliente;
 
+import Aplicacion.Control;
 import BOs.VueloBO;
 import DTOs.VueloDTO;
  import styles.*;
@@ -8,14 +9,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class PnlBuscarVuelosResultados extends JPanel {
-
+    private Control control;
     Style style = new Style();
     boolean testeoColor = false;
 
@@ -51,7 +50,8 @@ public class PnlBuscarVuelosResultados extends JPanel {
     String origen, destino;
     Date salida;
     
-    public PnlBuscarVuelosResultados(PnlMenuCliente pnlMenuCliente, PnlBuscarVuelos pnlBuscarVuelos, String origen,String destino, Date salida) {
+    public PnlBuscarVuelosResultados(PnlMenuCliente pnlMenuCliente, PnlBuscarVuelos pnlBuscarVuelos, String origen,String destino, Date salida, Control control) {
+        this.control = control;
         this.origen= origen;
         this.destino= destino;
         this.salida= salida;
@@ -92,7 +92,7 @@ public class PnlBuscarVuelosResultados extends JPanel {
         vuelos.setPreferredSize(new Dimension(style.frameX, ALTURA_TABLA_FIX));
         vuelos.setMaximumSize(new Dimension(style.frameX, ALTURA_TABLA_FIX));
 
-        cargarVuelosDemo();
+        cargarVuelosFiltro();
         agregarTablaVuelosConAltura(ALTURA_TABLA_FIX);
 
         todo.add(vuelos);
@@ -124,13 +124,22 @@ public class PnlBuscarVuelosResultados extends JPanel {
         repaint();
     }
 
-    private void cargarVuelosDemo() {
+    private void cargarVuelos(){
+        listaVuelos = control.cargarVuelos();
+    }
+    private void cargarVuelosFiltro() {
         try {
-                    listaVuelos= bo.getBuscarVuelos(origen, destino, salida);
-                    System.out.println(listaVuelos);
+            cargarVuelos();
+            if(origen!= null || destino != null || salida != null){
+                listaVuelos= bo.getBuscarVuelos(origen, destino, salida);
+                System.out.println(listaVuelos);
+            }
+             
+            
         } catch (Exception e) {
             System.out.println(e);
             JOptionPane.showMessageDialog(null, "No se pudo cargar los vuelos con origen, destino y salida: "+origen+", "+destino+", "+salida);
+            cargarVuelos();
         }
     }
 
@@ -177,7 +186,7 @@ public class PnlBuscarVuelosResultados extends JPanel {
                 int fila = tabla.getSelectedRow();
                 if (fila >= 0) {
                     DlgDetallesVueloCliente dlgDetallesVuelo =
-                            new DlgDetallesVueloCliente(listaVuelos.get(fila), 1);
+                            new DlgDetallesVueloCliente(listaVuelos.get(fila), 1, control);
                     dlgDetallesVuelo.setVisible(true);
                 }
             }

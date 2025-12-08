@@ -1,5 +1,6 @@
 package cliente;
 
+import Aplicacion.Control;
 import BOs.ReservacionBO;
 import DTOs.ReservacionDTO;
 import DTOs.UsuarioDTO;
@@ -14,9 +15,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PnlMisReservaciones extends JPanel {
-
+    private Control control;
     Style style = new Style();
     boolean testeoColor = false;
 
@@ -46,8 +48,8 @@ public class PnlMisReservaciones extends JPanel {
 
     CustomButton btnVolver = new CustomButton("Volver");
 
-    public PnlMisReservaciones(PnlMenuCliente pnlMenuCliente, UsuarioDTO usuario) {
-
+    public PnlMisReservaciones(PnlMenuCliente pnlMenuCliente, UsuarioDTO usuario, Control control) {
+        this.control = control;
         this.usuario = usuario;
         this.pnlMenuCliente = pnlMenuCliente;
 
@@ -118,9 +120,10 @@ public class PnlMisReservaciones extends JPanel {
     private void cargarReservacionesUsuario() {
         listaReservaciones.clear();
         
-        ReservacionBO reservacionBO= new ReservacionBO();
+//        ReservacionBO reservacionBO= new ReservacionBO();
         try {
-            listaReservaciones.addAll(reservacionBO.obtenerReservacionesPorUsuario(usuario));
+            List<ReservacionDTO> reservacionesUsuario = control.cargarReservacionesPorUsuario(usuario);
+            listaReservaciones.addAll(reservacionesUsuario);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error al obtener las reservaciones del usuario");
         }
@@ -130,7 +133,7 @@ public class PnlMisReservaciones extends JPanel {
     // ---------------------------------------------------------------------
     private void agregarTabla() {
 
-        String[] columnas = {"Asiento", "Nombre del Vuelo", "Aerolínea", "Origen", "Destino", "Salida", "Duración", "Precio"};
+        String[] columnas = {"Asiento", "Numero del Vuelo", "Aerolínea", "Origen", "Destino", "Salida", "Duración", "Precio"};
 
         Object[][] datos = new Object[listaReservaciones.size()][columnas.length];
         DateTimeFormatter f = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -173,7 +176,7 @@ public class PnlMisReservaciones extends JPanel {
                 int fila = tabla.getSelectedRow();
                 if (fila >= 0) {
                     ReservacionDTO seleccion = listaReservaciones.get(fila);
-                    new DlgDetallesVueloCliente(seleccion.getVuelo(), 2).setVisible(true);
+                    new DlgDetallesVueloCliente(seleccion.getVuelo(), 2, seleccion, control).setVisible(true);
                 }
             }
         });

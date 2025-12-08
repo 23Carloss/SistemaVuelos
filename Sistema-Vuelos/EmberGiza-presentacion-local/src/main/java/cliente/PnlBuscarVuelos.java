@@ -1,17 +1,17 @@
 package cliente;
 
+import Aplicacion.Control;
 import styles.*;
 
 import javax.swing.*;
 import java.awt.*;
+import static java.awt.SystemColor.control;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 public class PnlBuscarVuelos extends JPanel {
-
+    private Control control;
     Style style = new Style();
     boolean testeoColor = false;
 
@@ -59,8 +59,8 @@ public class PnlBuscarVuelos extends JPanel {
     CustomButton btnBuscarVuelos = new CustomButton("Buscar vuelos");
 
 
-    public PnlBuscarVuelos(PnlMenuCliente pnlMenuCliente) {
-
+    public PnlBuscarVuelos(PnlMenuCliente pnlMenuCliente, Control control) {
+        this.control = control;
         this.pnlMenuCliente = pnlMenuCliente;
 
         setOpaque(false);
@@ -216,7 +216,7 @@ public class PnlBuscarVuelos extends JPanel {
         fecha = dateFecha.getDate();
 
         setVisible(false);
-        PnlBuscarVuelosResultados pnlBuscarVuelosResultados = new PnlBuscarVuelosResultados(pnlMenuCliente, this, origen, destino, fecha);
+        PnlBuscarVuelosResultados pnlBuscarVuelosResultados = new PnlBuscarVuelosResultados(pnlMenuCliente, this, origen, destino, fecha,control);
         pnlMenuCliente.add(pnlBuscarVuelosResultados);
     }
 }

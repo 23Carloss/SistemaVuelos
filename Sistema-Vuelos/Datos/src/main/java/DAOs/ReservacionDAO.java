@@ -41,7 +41,7 @@ public class ReservacionDAO extends CRUD implements IReservacionDAO {
     public boolean eliminarPorNumReservacion(String numReservacion) throws PersistenciaException {
         try {
             Reservacion reservacionMongo = (Reservacion) collection.find(Filters.eq("numReservacion", numReservacion)).first();
-            var resultado = collection.deleteOne(Filters.eq("numReservacion", reservacionMongo.getNumReservacion()));
+            var resultado = collection.deleteOne(Filters.eq("numReservacion", numReservacion));
             return resultado.getDeletedCount() > 0;
 
         } catch (MongoException ex) {
@@ -84,6 +84,7 @@ public class ReservacionDAO extends CRUD implements IReservacionDAO {
         v1.setDestino(vueloDoc.getString("destino"));
         v1.setDuracion(vueloDoc.getInteger("duracion"));
         v1.setNumVuelo(vueloDoc.getString("numVuelo"));
+
 
         // fechaSalida
         Date fechaSalidaDate = vueloDoc.getDate("fechaSalida");

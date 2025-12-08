@@ -14,8 +14,8 @@ import com.mongodb.MongoException;
 import com.mongodb.client.model.Filters;
 
 import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -240,7 +240,7 @@ public class VueloDAO extends CRUD implements IVueloDAO {
 
             // Filtro por otro campo (numeroVuelo)
 
-            UpdateResult result = col.updateOne(
+            UpdateResult result = collection.updateOne(
                     Filters.eq("idVuelo", numeroVuelo), // filtro por número de vuelo
                     Updates.set("listaAsientos", vuelo.getListaAsientos()) // reemplaza toda la lista
             );
@@ -250,5 +250,27 @@ public class VueloDAO extends CRUD implements IVueloDAO {
             throw new PersistenciaException("Error en ActualizarAsientosPorVuelo:"+ e.getMessage());
         }
     }
+    
+    @Override
+    public boolean actualizarPorNumeroVuelo(Vuelo vuelo) throws PersistenciaException{
+        try{
+            String numVuelo = vuelo.getNumVuelo();
+            UpdateResult result = collection.updateOne(Filters.eq("numVuelo", numVuelo), vuelo.toUpdateOperations());
+            return result.getModifiedCount() > 0;
+        }catch(MongoException ex){
+            
+            throw new PersistenciaException("Error al actualizar por numero de vuelo: " + ex.getMessage());
+        }
+    }
 
+    public boolean eliminarPorNumeroVuelo(Vuelo vuelo) throws PersistenciaException{
+        try{
+            String numVuelo = vuelo.getNumVuelo();
+            DeleteResult result = collection.deleteOne(Filters.eq("numVuelo", numVuelo));
+            return result.getDeletedCount()> 0;
+        }catch(MongoException ex){
+            
+            throw new PersistenciaException("Error al actualizar por numero de vuelo: " + ex.getMessage());
+        }
+    }
 }

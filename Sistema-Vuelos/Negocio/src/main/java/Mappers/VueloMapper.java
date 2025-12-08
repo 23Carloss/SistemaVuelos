@@ -7,6 +7,8 @@ package Mappers;
 
 import DTOs.VueloDTO;
 import POJOs.Vuelo;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -44,5 +46,15 @@ public class VueloMapper {
         dto.setOrigen(vuelo.getOrigen());
         
         return dto;
+    }
+    
+    public List<VueloDTO> ConvertirListaADto(List<Vuelo> listaEntity){
+        ArrayList<VueloDTO> listaVuelos =  new  ArrayList<>();
+        for(Vuelo u :listaEntity){
+            listaVuelos.add(convertirADto(u));
+        }
+        return listaVuelos;
+        
+    
     }
 }

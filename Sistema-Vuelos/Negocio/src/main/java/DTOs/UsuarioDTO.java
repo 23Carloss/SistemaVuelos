@@ -6,6 +6,7 @@
 package DTOs;
 
 import POJOs.TipoUsuario;
+import java.util.ArrayList;
 import org.bson.types.ObjectId;
 
 
@@ -20,9 +21,37 @@ public class UsuarioDTO {
     private String nombre, apellidoP, apellidoM, correo, contrasenia;
     private TipoUsuario tipoUsuario;
 
+    public UsuarioDTO(String correo, String contra, String nombres, String apellidoP, String apellidoM, TipoUsuario admin) {
+        this.correo = correo;
+        this.contrasenia = contra;
+        this.nombre = nombres;
+        this.apellidoP = apellidoP;
+        this.apellidoM = apellidoM;
+        this.tipoUsuario = admin;
+    }
+
+    // Constructor de testeo/demo
+    public UsuarioDTO(TipoUsuario admin) {
+        this.tipoUsuario = admin;
+
+        // Crear vuelos de ejemplo
+        VueloDTO vuelo1 = new VueloDTO(2500, "Vuelo MX101", "Ciudad Obregón", "CDMX",
+                java.time.LocalDateTime.of(2025, 12, 1, 8, 30), 120, "Volaris");
+        VueloDTO vuelo2 = new VueloDTO(3100, "Vuelo MX202", "Hermosillo", "Guadalajara",
+                java.time.LocalDateTime.of(2025, 12, 2, 13, 50), 90, "VivaAerobus");
+        VueloDTO vuelo3 = new VueloDTO(1800, "Vuelo MX303", "Tijuana", "Monterrey",
+                java.time.LocalDateTime.of(2025, 12, 5, 17, 20), 120, "Aeroméxico");
+
+        // Crear reservaciones de ejemplo
+//        reservaciones.add(new ReservacionDTO(117, new AsientoDTO("A", 1), vuelo1));
+//        reservaciones.add(new ReservacionDTO(343, new AsientoDTO("D", 7), vuelo2));
+//        reservaciones.add(new ReservacionDTO(666, new AsientoDTO("F", 5), vuelo3));
+    }
     public UsuarioDTO() {
     }
 
+
+    
     public ObjectId get_id() {
         return _id;
     }
@@ -83,6 +112,11 @@ public class UsuarioDTO {
     public String toString() {
         return "UsuarioDTO{" + "id=" + _id + ", nombre=" + nombre + ", apellidoP=" + apellidoP + ", apellidoM=" + apellidoM + ", correo=" + correo + ", contrasenia=" + contrasenia + ", tipoUsuario=" + tipoUsuario + '}';
     }
+
+
+    
+
+   
     
 
 }

@@ -6,7 +6,6 @@
     <version>0</version>
     <packaging>pom</packaging>
     <modules>
-        <module>Presentacion</module>
         <module>Datos</module>
         <module>Negocio</module>
         <module>ModuloUsuarios</module>

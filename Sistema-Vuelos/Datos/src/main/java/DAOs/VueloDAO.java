@@ -27,7 +27,7 @@ import org.bson.types.ObjectId;
  *
  * @author Jesus Gammael Soto Escalante 248336
  */
-public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
+public class VueloDAO extends CRUD implements IVueloDAO {
 
     public VueloDAO() {
         super(MongoClientProvider.INSTANCE.database(),"Vuelos", Vuelo.class);
@@ -36,7 +36,7 @@ public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
     @Override
     public List<Asiento> getAsientosDisponibles(ObjectId _id) throws PersistenciaException {
         try {
-            Vuelo vuelo = col.find(new Document("_id", _id)).first();
+            Vuelo vuelo = (Vuelo) collection.find(new Document("_id", _id)).first();
 
             if (vuelo == null) {
                 throw new PersistenciaException("Error en getAsientosDisponibles: El vuelo con numero de vuelo " + _id + " no existe.");
@@ -63,7 +63,7 @@ public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
     @Override
     public List<Asiento> getAsientosOcupados(ObjectId _id) throws PersistenciaException {
         try {
-            Vuelo vuelo = col.find(new Document("_id", _id)).first();
+            Vuelo vuelo = (Vuelo) collection.find(new Document("_id", _id)).first();
 
             if (vuelo == null) {
                 throw new PersistenciaException("Error en getAsientosOcupados: El vuelo con numero de vuelo " + _id + " no existe.");
@@ -90,7 +90,7 @@ public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
     @Override
     public List<Asiento> getAsientosDisponibles(String numVuelo) throws PersistenciaException {
         try {
-            Vuelo vuelo = col.find(new Document("idVuelo", numVuelo)).first(); // <-- corregido
+            Vuelo vuelo = (Vuelo) collection.find(new Document("idVuelo", numVuelo)).first(); // <-- corregido
 
             if (vuelo == null) {
                 throw new PersistenciaException("Error en getAsientosDisponibles: El vuelo con numero de vuelo " + numVuelo + " no existe.");
@@ -117,7 +117,7 @@ public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
     @Override
     public List<Asiento> getAsientosOcupados(String numVuelo) throws PersistenciaException {
         try {
-            Vuelo vuelo = col.find(new Document("idVuelo", numVuelo)).first(); // <-- corregido
+            Vuelo vuelo = (Vuelo) collection.find(new Document("idVuelo", numVuelo)).first(); // <-- corregido
 
             if (vuelo == null) {
                 throw new PersistenciaException("Error en getAsientosOcupados: El vuelo con numero de vuelo " + numVuelo + " no existe.");
@@ -144,7 +144,7 @@ public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
     @Override
     public List<Vuelo> getBuscarVuelos(String origen, String destino, Date salida) throws PersistenciaException {
         try {
-            List<Vuelo> vuelos = col.find(Filters.and(
+            List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
                     Filters.eq("origen", origen),
                     Filters.eq("destino", destino),
                     Filters.eq("fechaSalida", salida)
@@ -164,18 +164,18 @@ public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
 
     @Override
     public Vuelo getVuelo(ObjectId _id) throws PersistenciaException {
-        return col.find(new Document("_id", _id)).first();
+        return (Vuelo) collection.find(new Document("_id", _id)).first();
     }
 
     @Override
     public Vuelo getVuelo(String numVuelo) throws PersistenciaException {
-        return col.find(new Document("idVuelo", numVuelo)).first();
+        return (Vuelo) collection.find(new Document("idVuelo", numVuelo)).first();
     }
 
     @Override
     public List<Vuelo> filtrarVuelos(String origen) throws PersistenciaException {
         try {
-            List<Vuelo> vuelos = col.find(Filters.and(
+            List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
                     Filters.eq("origen", origen)
             )).into(new ArrayList<>());
 
@@ -194,7 +194,7 @@ public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
     @Override
     public List<Vuelo> filtrarVuelos(String origen, String destino) throws PersistenciaException {
         try {
-            List<Vuelo> vuelos = col.find(Filters.and(
+            List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
                     Filters.eq("origen", origen),
                     Filters.eq("destino", destino)
             )).into(new ArrayList<>());
@@ -214,7 +214,7 @@ public class VueloDAO extends CRUD<Vuelo> implements IVueloDAO {
     @Override
     public List<Vuelo> filtrarVuelos(String origen, String destino, float precio) throws PersistenciaException {
         try {
-            List<Vuelo> vuelos = col.find(Filters.and(
+            List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
                     Filters.eq("origen", origen),
                     Filters.eq("destino", destino),
                     Filters.eq("precio", precio)

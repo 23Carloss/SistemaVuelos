@@ -20,6 +20,7 @@ public class Asiento implements ObjetoMongo {
     @BsonId
     private ObjectId _id;
     private boolean disponibilidad;
+    private String columna;
     private int numero;
     private int fila;
 
@@ -29,6 +30,15 @@ public class Asiento implements ObjetoMongo {
     public boolean isDisponibilidad() {
         return disponibilidad;
     }
+
+    public String getColumna() {
+        return columna;
+    }
+
+    public void setColumna(String columna) {
+        this.columna = columna;
+    }
+    
 
     public void setDisponibilidad(boolean disponibilidad) {
         this.disponibilidad = disponibilidad;

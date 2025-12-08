@@ -36,7 +36,7 @@ public class ReservacionMapper {
     public ReservacionDTO convertirADto(Reservacion reservacion){
         var dto = new ReservacionDTO();
         dto.setFechaReservacion(reservacion.getFechaReservacion());
-        dto.setId(reservacion.get_id());
+//        dto.setId(reservacion.get_id());
         dto.setAsientos(asientoMapper.convertirListaADto(reservacion.getAsientos()));
         dto.setCoreoUsuario(reservacion.getCorreoUsuario());
         dto.setVuelo(vueloMapper.convertirADto(reservacion.getVuelo()));

@@ -22,24 +22,27 @@ public class VueloMapper {
     public Vuelo convertirAEntity(VueloDTO vuelo){
         Vuelo entity =  new Vuelo();
         entity.set_id(vuelo.getId());
+        entity.setAerolinea(vuelo.getAerolinea());
+        entity.setNombre(vuelo.getNombre());
+        entity.setPrecio(vuelo.getPrecio());
         entity.setDestino(vuelo.getDestino());
         entity.setDuracion(vuelo.getDuracion());
         entity.setFechaSalida(vuelo.getFechaSalida());
         entity.setListaAsientos(mapper.convertirListaAEntity(vuelo.getListaAsientos()));
-        System.out.println("Vuelo antes de devolver entity: VueloMapper");
         return entity;
     }
-    public VueloDTO convertirADto(Vuelo vuelo){
-        System.out.println("Vuelo a converti a DTO: VueloMapper" + vuelo.toString()) ;       
+    public VueloDTO convertirADto(Vuelo vuelo){       
         VueloDTO dto =  new VueloDTO();
         dto.setId(vuelo.get_id());
+        dto.setAerolinea(vuelo.getAerolinea());
+        dto.setNombre(vuelo.getNombre());
+        dto.setPrecio(vuelo.getPrecio());
         dto.setDestino(vuelo.getDestino());
         dto.setDuracion(vuelo.getDuracion());
         dto.setFechaSalida(vuelo.getFechaSalida());
         dto.setListaAsientos(mapper.convertirListaADto(vuelo.getListaAsientos()));
         dto.setOrigen(vuelo.getOrigen());
         
-        System.out.println("VueloDTO: VueloMapper" + dto.toString());
         return dto;
     }
 }

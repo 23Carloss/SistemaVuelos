@@ -2,6 +2,7 @@ package administrador;
 
 import BOs.VueloBO;
 import DTOs.VueloDTO;
+import Interfaces.IVueloBO;
 import NegocioException.NegocioException;
 import styles.*;
 
@@ -82,7 +83,7 @@ public class PnlFiltrarVuelos extends JPanel {
 
     ContainerPanel todo = new ContainerPanel(style.frameX, style.frameY, style.beigeBase, false);
 
-    VueloBO bo;
+    IVueloBO bo;
 
     public PnlFiltrarVuelos(PnlMenuAdmin pnlMenuAdmin, PnlVuelosProgramados pnlVuelosProgramados) {
         bo = new VueloBO();

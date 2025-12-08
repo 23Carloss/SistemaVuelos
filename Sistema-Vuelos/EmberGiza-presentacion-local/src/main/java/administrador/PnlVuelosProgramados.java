@@ -2,6 +2,7 @@ package administrador;
 
 import BOs.VueloBO;
 import DTOs.VueloDTO;
+import Interfaces.IVueloBO;
 import styles.*;
 
 import javax.swing.*;
@@ -46,7 +47,7 @@ public class PnlVuelosProgramados extends JPanel {
     JTable tabla;
     JScrollPane scroll;
 
-    VueloBO bo;
+    IVueloBO bo;
 
     public PnlVuelosProgramados(PnlMenuAdmin pnlMenuAdmin) {
         

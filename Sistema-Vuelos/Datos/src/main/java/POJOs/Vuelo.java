@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package POJOs;
 
 import CRUD.ObjetoMongo;
@@ -17,8 +16,8 @@ import org.bson.types.ObjectId;
  *
  * @author $Luis Carlos Manjarrez Gonzalez
  */
-public class Vuelo implements ObjetoMongo{
-    
+public class Vuelo implements ObjetoMongo {
+
     @BsonId
     private ObjectId _id;
     private String numVuelo; //Id del vuelo para hacer gets
@@ -32,7 +31,6 @@ public class Vuelo implements ObjetoMongo{
     public Vuelo() {
     }
 
-
     public String getNumVuelo() {
         return numVuelo;
     }
@@ -40,8 +38,6 @@ public class Vuelo implements ObjetoMongo{
     public void setNumVuelo(String numVuelo) {
         this.numVuelo = numVuelo;
     }
-
-    
 
     public String getAerolinea() {
         return aerolinea;
@@ -59,8 +55,6 @@ public class Vuelo implements ObjetoMongo{
         this.precio = precio;
     }
 
-    
-    
     public String getOrigen() {
         return origen;
     }
@@ -105,10 +99,6 @@ public class Vuelo implements ObjetoMongo{
     public String toString() {
         return "Vuelo{" + "_id=" + _id + ", numVuelo=" + numVuelo + ", origen=" + origen + ", destino=" + destino + ", fechaSalida=" + fechaSalida + ", duracion=" + duracion + ", listaAsientos=" + listaAsientos + ", aerolinea=" + aerolinea + ", precio=" + precio + '}';
     }
-    
-
-
-
 
     @Override
     public ObjectId get_id() {
@@ -123,16 +113,14 @@ public class Vuelo implements ObjetoMongo{
     @Override
     public Bson toUpdateOperations() {
         return Updates.combine(
-            Updates.set("_id", _id),
-            Updates.set("origen", origen),
-            Updates.set("destino", destino),
-            Updates.set("duracion", duracion),
-            Updates.set("fechaSalida", fechaSalida),
-            Updates.set("listaAsientos", listaAsientos)
-
+                Updates.set("aerolinea", aerolinea),
+                Updates.set("origen", origen),
+                Updates.set("precio", precio),
+                Updates.set("destino", destino),
+                Updates.set("duracion", duracion),
+                Updates.set("fechaSalida", fechaSalida),
+                Updates.set("listaAsientos", listaAsientos)
         );
     }
-    
-    
 
 }

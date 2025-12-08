@@ -1,6 +1,9 @@
 package administrador;
 
+import BOs.VueloBO;
 import DTOs.VueloDTO;
+import Interfaces.IVueloBO;
+import NegocioException.NegocioException;
 import styles.*;
 
 import javax.swing.*;
@@ -23,7 +26,6 @@ public class DlgEditarVuelo extends JDialog {
     //Variables
     VueloDTO vuelo;
     long precio;
-    String nombre;
     String origen;
     String destino;
     LocalDate fecha;
@@ -31,7 +33,7 @@ public class DlgEditarVuelo extends JDialog {
     LocalDateTime fechaHora;
     int duracion;
     String aerolinea;
-
+    IVueloBO bo;
 
     //-----LÓGICA AQUÍ-----
     //Placeholder ?
@@ -40,7 +42,7 @@ public class DlgEditarVuelo extends JDialog {
     //Ajustes de tamaño
     int logoX = 30;
     int logoY = logoX;
-        //Textfields
+    //Textfields
     int txtX = 200;
     int txtY = 50;
     int txtFS = 32;
@@ -51,7 +53,6 @@ public class DlgEditarVuelo extends JDialog {
     //Poner la ruta donde está guardado el logo de EG
     String rutaProyecto = "";
     String rutaLogo = rutaProyecto + "logo.png";
-
 
     //::::::::::::::::::::::::::::::ESTÉTICA::::::::::::::::::::::::::::::
     //Encabezado
@@ -85,8 +86,8 @@ public class DlgEditarVuelo extends JDialog {
     CustomButton btnCrearVuelo = new CustomButton("Crear");
     ContainerPanel todo = new ContainerPanel(style.frameX, style.frameY, Color.GREEN, testeoColor);
 
-
     public DlgEditarVuelo(VueloDTO vuelo) {
+        bo = new VueloBO();
 
         //Setteo del panel
         //this.pnlMenuAdmin = pnlMenuAdmin;
@@ -98,7 +99,7 @@ public class DlgEditarVuelo extends JDialog {
         todo.setLayout(new BorderLayout());
 
         //Encabezado
-        encabezado.setLayout(new GridLayout(1,4));
+        encabezado.setLayout(new GridLayout(1, 4));
         //Logo
         ImageIcon icon = new ImageIcon(rutaLogo);
         Image img = icon.getImage().getScaledInstance(logoX, logoY, Image.SCALE_SMOOTH);
@@ -121,7 +122,12 @@ public class DlgEditarVuelo extends JDialog {
         inputs.add(lblCodigo);
         txtNombre.setText(vuelo.getNumVuelo());
         inputs.add(txtNombre);
-        inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
         lblOrigen.setHorizontalAlignment(SwingConstants.RIGHT);
         inputs.add(lblOrigen);
         txtOrigen.setText(vuelo.getOrigen());
@@ -130,7 +136,12 @@ public class DlgEditarVuelo extends JDialog {
         inputs.add(lblDestino);
         txtDestino.setText(vuelo.getDestino());
         inputs.add(txtDestino);
-        inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
         lblFecha.setHorizontalAlignment(SwingConstants.RIGHT);
         inputs.add(lblFecha);
         dateFecha.setDate(Date.from(vuelo.getFechaSalida().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
@@ -139,7 +150,12 @@ public class DlgEditarVuelo extends JDialog {
         inputs.add(lblHora);
         txtHora.setText(vuelo.getFechaSalida().format(DateTimeFormatter.ofPattern("HH:mm")));
         inputs.add(txtHora);
-        inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY)); inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
+        inputs.add(new Espaciador(espX, espY));
         lblDuracion.setHorizontalAlignment(SwingConstants.RIGHT);
         inputs.add(lblDuracion);
         txtDuracion.setText("" + vuelo.getDuracion());
@@ -193,7 +209,13 @@ public class DlgEditarVuelo extends JDialog {
 
         //-----LÓGICA AQUÍ-----
         //Registrar el vuelo adecuadamente
-        System.out.println("Haz de cuenta que se eliminó el vuelo");
+        try {
+            bo.eliminarVuelo(vuelo);
+        } catch (NegocioException e) {
+            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error en eliminar el vuelo");
+        }
+
         JOptionPane.showMessageDialog(null, "Se eliminó exitosamente");
         volver();
     }
@@ -203,11 +225,10 @@ public class DlgEditarVuelo extends JDialog {
         try {
             precio = Long.parseLong(txtPrecio.getText().trim());
         } catch (NumberFormatException e) {
-            System.out.println("Precio no válido");
+            System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null, "El precio no es válido.");
             return;
         }
-        nombre = txtNombre.getText();
         origen = txtOrigen.getText();
         destino = txtDestino.getText();
         if (dateFecha.getDate() == null) {
@@ -218,19 +239,19 @@ public class DlgEditarVuelo extends JDialog {
         try {
             hora = LocalTime.parse(txtHora.getText());
         } catch (Exception e) {
-            System.out.println("La hora no es válida");
+            System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null, "La hora no es válida.");
             return;
         }
         try {
             duracion = Integer.parseInt(txtDuracion.getText());
         } catch (Exception e) {
-            System.out.println("Duración no válida");
+            System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null, "Duración no válida.");
             return;
         }
         aerolinea = txtAerolinea.getText();
-        if (txtPrecio.getText().isEmpty() || nombre.isEmpty() || origen.isEmpty() || destino.isEmpty() || txtDuracion.getText().isEmpty()|| aerolinea.isEmpty()) {
+        if (txtPrecio.getText().isEmpty()  || origen.isEmpty() || destino.isEmpty() || txtDuracion.getText().isEmpty() || aerolinea.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
             return;
         }
@@ -238,8 +259,18 @@ public class DlgEditarVuelo extends JDialog {
 
         //-----LÓGICA AQUÍ-----
         //Registrar el vuelo adecuadamente
-        System.out.println("Haz de cuenta que se guradó el vuelo");
+        VueloDTO dto= new VueloDTO(precio, vuelo.getNumVuelo(), origen, destino, fechaHora, duracion, aerolinea);
+        
+        try {
+            bo.actualizarVuelo(dto);
+        } catch (NegocioException e) {
+            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "Error al actualizar el vuelo");
+
+        }
+        
         JOptionPane.showMessageDialog(null, "Se guardó exitosamente");
+
         volver();
     }
 

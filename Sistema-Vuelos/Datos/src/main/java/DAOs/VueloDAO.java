@@ -307,7 +307,14 @@ public class VueloDAO extends CRUD implements IVueloDAO {
     public boolean actualizarPorNumeroVuelo(Vuelo vuelo) throws PersistenciaException {
         try {
             String numVuelo = vuelo.getNumVuelo();
+
+            System.out.println("Filtro: numVuelo = " + numVuelo);
+            System.out.println("Operación de actualización: " + vuelo.toUpdateOperations());
+
             UpdateResult result = collection.updateOne(Filters.eq("numVuelo", numVuelo), vuelo.toUpdateOperations());
+            System.out.println("Matched: " + result.getMatchedCount());
+            System.out.println("Modified: " + result.getModifiedCount());
+
             return result.getModifiedCount() > 0;
         } catch (MongoException ex) {
 

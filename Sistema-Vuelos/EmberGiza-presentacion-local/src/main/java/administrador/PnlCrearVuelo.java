@@ -2,6 +2,7 @@ package administrador;
 
 import BOs.VueloBO;
 import DTOs.VueloDTO;
+import Interfaces.IVueloBO;
 import NegocioException.NegocioException;
 import styles.*;
 
@@ -91,7 +92,7 @@ public class PnlCrearVuelo extends JPanel {
 
     ContainerPanel todo = new ContainerPanel(style.frameX, style.frameY, Color.PINK, testeoColor);
 
-    VueloBO bo;
+    IVueloBO bo;
 
     public PnlCrearVuelo(PnlMenuAdmin pnlMenuAdmin, PnlVuelosProgramados pnlVuelosProgramados) {
         bo = new VueloBO();

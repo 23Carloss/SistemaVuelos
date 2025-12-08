@@ -8,6 +8,7 @@ package Mappers;
 import DTOs.AsientoDTO;
 import POJOs.Asiento;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -49,6 +50,9 @@ public class AsientoMapper {
   
     }
      public List<Asiento> convertirListaAEntity(List<AsientoDTO> listaDTO){
+         if (listaDTO==null) {
+             return new LinkedList<Asiento>();
+         }
         ArrayList<Asiento> listAsiento =  new  ArrayList<>();
         for(AsientoDTO dto :listaDTO){
             listAsiento.add(convertirAEntity(dto));

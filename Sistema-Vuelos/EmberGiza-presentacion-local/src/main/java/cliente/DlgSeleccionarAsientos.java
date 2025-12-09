@@ -15,13 +15,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DlgSeleccionarAsientos extends JDialog {
+
     private Control control;
     Style style = new Style();
     boolean testeoColor = false;
     VueloDTO vuelo;
     private UsuarioDTO usuario;
     ReservacionDTO reservacion;
-
+    
+    
+    
     ToggleButton asientos[] = new ToggleButton[style.cantidadAsientos];
     ArrayList<AsientoDTO> seleccion = new ArrayList<>();
 
@@ -30,10 +33,14 @@ public class DlgSeleccionarAsientos extends JDialog {
     ContainerPanel botones = new ContainerPanel(style.frameX, 60, Color.PINK, testeoColor);
     CustomButton btnVolver = new CustomButton("Volver");
     CustomButton btnComprar = new CustomButton("Proceder al pago", 1, 220, 60);
-
-    public DlgSeleccionarAsientos(VueloDTO vuelo,Control control) {
-        this.control =control;
-        this.usuario = control.getUsuario();        this.reservacion = new ReservacionDTO();
+    
+    
+    
+    
+    public DlgSeleccionarAsientos(VueloDTO vuelo, Control control) {
+        this.control = control;
+        this.usuario = control.getUsuario();
+        this.reservacion = new ReservacionDTO();
         this.vuelo = vuelo;
 
         //Setup
@@ -68,7 +75,6 @@ public class DlgSeleccionarAsientos extends JDialog {
         // --- GENERAR LA MATRIZ DE ASIENTOS ---
         // Suponiendo 10 filas (1–10)
         // Columnas A–F
-
         String columnas[] = {"A", "B", "C", "D", "E", "F"};
 
         int indexAsiento = 0;
@@ -87,8 +93,8 @@ public class DlgSeleccionarAsientos extends JDialog {
 
                 AsientoDTO dto = vuelo.getAsiento(indexAsiento);
 
-                ToggleButton btn =
-                        new ToggleButton(dto.isDisponibilidad(), dto.getColumna(), dto.getFila());
+                ToggleButton btn
+                        = new ToggleButton(dto.isDisponibilidad(), dto.getColumna(), dto.getFila());
 
                 asientos[indexAsiento] = btn;
                 contenedorAsientos.add(btn);
@@ -106,17 +112,24 @@ public class DlgSeleccionarAsientos extends JDialog {
         add(botones, BorderLayout.SOUTH);
 
         btnVolver.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { volver(); }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                volver();
+            }
         });
         btnComprar.addMouseListener(new MouseAdapter() {
-            @Override public void mouseClicked(MouseEvent e) { comprar(); }
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                comprar();
+            }
         });
     }
 
     public void volver() {
         this.dispose();
     }
-    public void crearReservacionDTO(List<AsientoDTO> asientos){
+
+    public void crearReservacionDTO(List<AsientoDTO> asientos) {
         for (AsientoDTO asientoDTO : asientos) {
             reservacion.setAsiento(asientoDTO);
             reservacion.setCoreoUsuario(usuario.getCorreo());
@@ -124,13 +137,19 @@ public class DlgSeleccionarAsientos extends JDialog {
             reservacion.setVuelo(vuelo);
             control.crearrReservacion(reservacion);
             System.out.println("Reservacion creada: " + reservacion);
+            System.out.println("Asientos del vuelo: "+ asientos);
+            control.ocuparAsiento(vuelo.getNumVuelo(), asientoDTO);
+            
         }
-        
+
     }
 
-    
     public void comprar() {
-        if(asientos == null)JOptionPane.showMessageDialog(null, "Seleccione asientos.");
+        
+        if (asientos == null) {
+            JOptionPane.showMessageDialog(null, "Seleccione asientos.");
+        }
+        
         
         for (int i = 0; i < asientos.length; i++) {
             if (asientos[i].isSeleccionado()) {
@@ -138,13 +157,15 @@ public class DlgSeleccionarAsientos extends JDialog {
                         asientos[i].getColumna(),
                         asientos[i].getFila(),
                         true
-                );   
+                );
                 seleccion.add(asiento);
+                
             }
         }
         crearReservacionDTO(seleccion);
         JOptionPane.showMessageDialog(null, "Reservación realizada.");
-
+        
+        
         //PRINT TEST
         System.out.println("Asientos seleccionados: ");
         for (AsientoDTO a : seleccion) {

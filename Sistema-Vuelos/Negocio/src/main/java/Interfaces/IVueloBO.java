@@ -40,8 +40,11 @@ public interface IVueloBO{
     
     public VueloDTO crearVuelo(VueloDTO vueloDTO) throws NegocioException;
     
-    public List<VueloDTO> obtenerTodos() throws NegocioException;
+    boolean ocuparAsiento(String numVuelo, AsientoDTO asientoDTO) throws NegocioException;
+    boolean desocuparAsiento(String numVuelo, AsientoDTO asientoDTO) throws NegocioException;
     
+    public List<VueloDTO> obtenerTodos() throws NegocioException;
+        
     public boolean actualizarVuelo(VueloDTO vuelo) throws NegocioException;
     
     public boolean eliminarVuelo(VueloDTO vuelo) throws NegocioException;

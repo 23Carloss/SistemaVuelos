@@ -7,6 +7,7 @@ package Aplicacion;
 
 import AdministracionUsuarios.AdministracionUsuarios;
 import BOs.VueloBO;
+import DTOs.AsientoDTO;
 import DTOs.ReservacionDTO;
 import DTOs.UsuarioDTO;
 import DTOs.VueloDTO;
@@ -40,6 +41,24 @@ public class Control {
     public boolean actualizarUsuarioPorCorreo(UsuarioDTO us){
         return administracionUsuarios.actualizarUsuario(us);
     }
+        
+    public boolean ocuparAsiento(String numVuelo, AsientoDTO asientoDTO){
+        try {
+            return vueloBO.ocuparAsiento(numVuelo, asientoDTO);
+
+        } catch (Exception e) {
+           return false;
+        }
+    }
+    public boolean desocuparAsiento(String numVuelo, AsientoDTO asientoDTO){
+        try {
+            return vueloBO.desocuparAsiento(numVuelo, asientoDTO);
+
+        } catch (Exception e) {
+           return false;
+        }
+    }
+    
     
     public UsuarioDTO buscarPorCorreo(String correo){
         return administracionUsuarios.buscarPorCorreo(correo);

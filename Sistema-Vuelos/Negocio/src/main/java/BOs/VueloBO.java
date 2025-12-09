@@ -204,11 +204,8 @@ public class VueloBO implements IVueloBO {
             if (fecha == null) {
                 throw new IllegalArgumentException("La fecha no puede ser nula");
             }
-            
-            
-            
-            
-            List<Vuelo> vuelos = dao.filtrarVuelos(origen, destino,precio,fecha);
+
+            List<Vuelo> vuelos = dao.filtrarVuelos(origen, destino, precio, fecha);
             List<VueloDTO> dtos = new ArrayList<>();
 
             for (Vuelo vuelo : vuelos) {
@@ -233,17 +230,16 @@ public class VueloBO implements IVueloBO {
             if (precio < 1f) {
                 throw new IllegalArgumentException("el precio tiene que ser mayor que 0");
             }
-            
+
             if (fecha == null) {
                 throw new IllegalArgumentException("La fecha no puede ser nula");
             }
-            
-            if (hora==null) {
+
+            if (hora == null) {
                 throw new IllegalArgumentException("La hora no puede ser nula");
             }
-            
 
-            List<Vuelo> vuelos = dao.filtrarVuelos(origen, destino,precio,fecha,hora);
+            List<Vuelo> vuelos = dao.filtrarVuelos(origen, destino, precio, fecha, hora);
             List<VueloDTO> dtos = new ArrayList<>();
 
             for (Vuelo vuelo : vuelos) {
@@ -331,7 +327,6 @@ public class VueloBO implements IVueloBO {
             validarCiudad(vueloDTO.getOrigen(), "Origen");
 
 //            vueloDTO.setListaAsientos(new LinkedList<>()); utilizaremos el metodo de burgos
-
             Vuelo vuelo = Mapper.convertirAEntity(vueloDTO);
 
             dao.create(vuelo);
@@ -344,19 +339,27 @@ public class VueloBO implements IVueloBO {
 
     }
 
+    @Override
     public boolean ocuparAsiento(String numVuelo, AsientoDTO asientoDTO) throws NegocioException {
         try {
             VueloDTO vueloDTO = getVuelo(numVuelo);
+            asientoDTO.setDisponibilidad(false);
 
             List<AsientoDTO> asientos = vueloDTO.getListaAsientos();
 
             for (AsientoDTO asiento : asientos) {
                 if (asiento.getFila() == asientoDTO.getFila()) {
-                    if (asiento.getNumero() == asientoDTO.getNumero()) {
+                    if (asiento.getColumna().equals(asientoDTO.getColumna())) {
 
-                        int indice = asientos.indexOf(asiento);
+                        int indice = 0;
+                        indice = asientos.indexOf(asiento);
+
                         asientos.set(indice, asientoDTO);
-                        break;
+
+                        System.out.println("INDICE DEL ASIENTO: " + indice);
+                        System.out.println("ASIENTO ACTUALIZADO: " + asientos.get(indice));
+                        System.out.println("LISTA DE ASIENTOS ACTUALIZADA: " + asientos);
+
                     }
                 }
 
@@ -364,10 +367,51 @@ public class VueloBO implements IVueloBO {
 
             vueloDTO.setListaAsientos(asientos);
             Vuelo vuelo = Mapper.convertirAEntity(vueloDTO);
+            System.out.println("Asientos del vuelo actualizada: " + vuelo.getListaAsientos());
+            System.out.println();
 
-            dao.actualizarAsientosPorVuelo(vuelo);
+            return dao.actualizarAsientosPorVuelo(vuelo);
 
-            return true;
+        } catch (NegocioException e) {
+
+            throw new NegocioException("Error en VueloBO: ocuparAsiento: getVuelo: " + e.getMessage());
+
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error en VueloBO: ocuparAsiento: " + ex.getMessage());
+        }
+    }
+    @Override
+    public boolean desocuparAsiento(String numVuelo, AsientoDTO asientoDTO) throws NegocioException {
+        try {
+            VueloDTO vueloDTO = getVuelo(numVuelo);
+            asientoDTO.setDisponibilidad(true);
+
+            List<AsientoDTO> asientos = vueloDTO.getListaAsientos();
+
+            for (AsientoDTO asiento : asientos) {
+                if (asiento.getFila() == asientoDTO.getFila()) {
+                    if (asiento.getColumna().equals(asientoDTO.getColumna())) {
+
+                        int indice = 0;
+                        indice = asientos.indexOf(asiento);
+
+                        asientos.set(indice, asientoDTO);
+
+                        System.out.println("INDICE DEL ASIENTO: " + indice);
+                        System.out.println("ASIENTO ACTUALIZADO: " + asientos.get(indice));
+                        System.out.println("LISTA DE ASIENTOS ACTUALIZADA: " + asientos);
+
+                    }
+                }
+
+            }
+
+            vueloDTO.setListaAsientos(asientos);
+            Vuelo vuelo = Mapper.convertirAEntity(vueloDTO);
+            System.out.println("Asientos del vuelo actualizada: " + vuelo.getListaAsientos());
+            System.out.println();
+
+            return dao.actualizarAsientosPorVuelo(vuelo);
 
         } catch (NegocioException e) {
 

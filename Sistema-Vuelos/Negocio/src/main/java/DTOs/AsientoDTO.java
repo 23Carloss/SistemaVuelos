@@ -18,7 +18,6 @@ public class AsientoDTO {
     private ObjectId _id;
     private boolean disponibilidad;
     private String columna;
-    private int numero;
     private int fila;
 
     public AsientoDTO(String columna, int fila, boolean disponible) {
@@ -46,13 +45,7 @@ public class AsientoDTO {
         this.disponibilidad = disponibilidad;
     }
 
-    public int getNumero() {
-        return numero;
-    }
 
-    public void setNumero(int numero) {
-        this.numero = numero;
-    }
 
     public int getFila() {
         return fila;
@@ -72,8 +65,12 @@ public class AsientoDTO {
 
     @Override
     public String toString() {
-        return "AsientoDTO{" + "id=" + _id + ", disponibilidad=" + disponibilidad + ", numero=" + numero + ", fila=" + fila + '}';
+        return "AsientoDTO{" + "disponibilidad=" + disponibilidad + ", columna=" + columna + ", fila=" + fila + '}';
     }
+
+    
+
+    
 
 
    

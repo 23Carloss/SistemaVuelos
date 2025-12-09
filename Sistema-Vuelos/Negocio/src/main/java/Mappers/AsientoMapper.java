@@ -26,7 +26,6 @@ public class AsientoMapper {
         dto.setDisponibilidad(asiento.isDisponibilidad());
         dto.setFila(asiento.getFila());
         dto.setColumna(asiento.getColumna());
-        dto.setNumero(asiento.getNumero());
         return dto;
         
     }
@@ -36,7 +35,6 @@ public class AsientoMapper {
         entity.setColumna(asiento.getColumna());
         entity.setDisponibilidad(asiento.isDisponibilidad());
         entity.setFila(asiento.getFila());
-        entity.setNumero(asiento.getNumero());
         return entity;
         
     }

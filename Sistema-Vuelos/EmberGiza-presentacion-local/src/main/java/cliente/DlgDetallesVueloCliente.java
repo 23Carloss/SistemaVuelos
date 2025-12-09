@@ -1,6 +1,7 @@
 package cliente;
 
 import Aplicacion.Control;
+import DTOs.AsientoDTO;
 import DTOs.ReservacionDTO;
 import DTOs.VueloDTO;
 import styles.CustomButton;
@@ -176,6 +177,12 @@ public class DlgDetallesVueloCliente extends JDialog {
         //aplicar cancelación del vuelo
         System.out.println("Reservacion en digDetallesCliente: " + reservacion);
         control.eliminarReservacion(reservacion);
+        
+        
+        
+        
+        control.desocuparAsiento(reservacion.getVuelo().getNumVuelo(), reservacion.getAsiento());
+        
         this.dispose();
     }
 }

@@ -70,7 +70,6 @@ public class ReservacionMapper {
         asiento.setColumna(dto.getColumna());
         asiento.setDisponibilidad(dto.isDisponibilidad());
         asiento.setFila(dto.getFila());
-        asiento.setNumero(dto.getNumero());
         return asiento;
         
     }
@@ -81,7 +80,6 @@ public class ReservacionMapper {
         asiento.setColumna(entity.getColumna());
         asiento.setDisponibilidad(entity.isDisponibilidad());
         asiento.setFila(entity.getFila());
-        asiento.setNumero(entity.getNumero());
         return asiento;
         
     }

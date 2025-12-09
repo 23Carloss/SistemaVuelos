@@ -85,8 +85,11 @@ public class AdministracionUsuarios {
     }
     
     public boolean iniciarSesion(String correo, String contrasenia){
-        try {        
-            setUsuarioDTO(usuarioBO.iniciarSesion(correo, contrasenia));
+        try {
+            UsuarioDTO usuarioEncontrado = usuarioBO.iniciarSesion(correo, contrasenia);
+            System.out.println("usuarioEncontrado " + usuarioEncontrado);
+            setUsuarioDTO(usuarioEncontrado);
+            System.out.println("usuarioTemporal " + usuarioTemporal);
             return true;
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(null, "Credenciales Incorrectas", "Error", JOptionPane.ERROR_MESSAGE);
@@ -127,6 +130,16 @@ public class AdministracionUsuarios {
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(null, "Error al eliminar reservacion : " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             return false;
+        }
+    }
+    public ReservacionDTO registrarReservacion(ReservacionDTO reservacion){
+        try {
+            ReservacionDTO reservacionDTO =reservacionBO.crearReservacion(reservacion);
+            JOptionPane.showMessageDialog(null, "Reservacion realizada con exito", "Registro exitoso", JOptionPane.INFORMATION_MESSAGE);
+            return reservacionDTO;  
+        } catch (NegocioException ex) {
+            JOptionPane.showMessageDialog(null,"Error al registrar reservacion" + ex.getMessage(),"Error" + ex.getMessage(), JOptionPane.ERROR_MESSAGE);
+            return null;  
         }
     }
 }

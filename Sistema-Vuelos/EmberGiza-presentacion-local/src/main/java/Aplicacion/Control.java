@@ -1,4 +1,4 @@
-/*
+ /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -71,6 +71,9 @@ public class Control {
     public boolean eliminarReservacion(ReservacionDTO reservacion){
         return administracionUsuarios.eliminarReservacion(reservacion);
     }
+    public ReservacionDTO crearrReservacion(ReservacionDTO reservacion){
+        return administracionUsuarios.registrarReservacion(reservacion);
+    }
     
     public List<VueloDTO> cargarVuelos(){
         try {
@@ -88,4 +91,6 @@ public class Control {
             Logger.getLogger(Control.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+   
 }

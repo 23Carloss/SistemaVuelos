@@ -35,7 +35,7 @@ public class UsuarioDAO extends CRUD implements IUsuarioDAO{
             
             
             Usuario user1 = buscarPorCorreo(correo);
-            
+            System.out.println("Usuario encontrado por correo: " + user1);
             if(user1 == null)throw new PersistenciaException("Credenciales incorrectas");
             if(user1.getContrasenia().equals(contrasenia)){
                 return user1;

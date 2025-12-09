@@ -25,6 +25,7 @@ public class VueloMapper {
     public Vuelo convertirAEntity(VueloDTO vuelo) {
         Vuelo entity = new Vuelo();
 
+        System.out.println("Vuelo en mapper: " + vuelo.getListaAsientos().toString());
         entity.setNumVuelo(vuelo.getNumVuelo());
         entity.setOrigen(vuelo.getOrigen());
 

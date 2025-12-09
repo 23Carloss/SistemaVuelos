@@ -138,8 +138,9 @@ public class PnlBuscarVuelosResultados extends JPanel {
             
         } catch (Exception e) {
             System.out.println(e);
-            JOptionPane.showMessageDialog(null, "No se pudo cargar los vuelos con origen, destino y salida: "+origen+", "+destino+", "+salida);
-            cargarVuelos();
+//            JOptionPane.showMessageDialog(null, "No se pudo cargar los vuelos con origen, destino y salida: "+origen+", "+destino+", "+salida);
+            cargarVuelos();//Si tira la exception significa que no hau vuelos con esos atributos entonces cargamos todos o podiras buscar por destino
+//            listaVuelos = bo.filtrarVuelos(destino);
         }
     }
 

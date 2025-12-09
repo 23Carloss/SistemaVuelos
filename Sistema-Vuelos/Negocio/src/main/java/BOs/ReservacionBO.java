@@ -18,6 +18,7 @@ import NegocioException.NegocioException;
 import POJOs.Reservacion;
 import POJOs.Usuario;
 import com.mongodb.MongoException;
+import java.security.SecureRandom;
 import java.util.List;
 
 /**
@@ -25,12 +26,15 @@ import java.util.List;
  * @author $Luis Carlos Manjarrez Gonzalez
  */
 public class ReservacionBO implements IReservacionBO{
+    private final String LETRAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private final SecureRandom random;
     private IReservacionDAO reservacionDAO;
     private ReservacionMapper mapper;
     private UsuarioMapper usuarioMapper;
     
     public ReservacionBO() {
         reservacionDAO = new ReservacionDAO();
+        random = new SecureRandom();
         mapper = new ReservacionMapper();
         usuarioMapper = new  UsuarioMapper();
     }
@@ -40,8 +44,14 @@ public class ReservacionBO implements IReservacionBO{
     @Override
     public ReservacionDTO crearReservacion(ReservacionDTO reservacion) throws NegocioException {
         try{
+            String numReservacion;
+            char letra1 = LETRAS.charAt(random.nextInt(LETRAS.length()));
+            char letra2 = LETRAS.charAt(random.nextInt(LETRAS.length()));
+            int numeros = random.nextInt(100, 1000); // rango 0–999
+            numReservacion = String.valueOf(letra1) + String.valueOf(letra2) + String.format("%03d", numeros);
+
+            reservacion.setNumReservacion(numReservacion);
             Reservacion reservacionCreada = (Reservacion) reservacionDAO.create(reservacion);
-            //verificar los asientos antes de creear la reservacion
             return mapper.convertirADto(reservacionCreada);
             
         }catch(MongoException ex){

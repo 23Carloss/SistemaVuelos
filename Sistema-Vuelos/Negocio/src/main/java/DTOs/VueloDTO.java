@@ -5,7 +5,8 @@
 package DTOs;
 
 import java.time.LocalDateTime;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
@@ -22,11 +23,13 @@ public class VueloDTO {
     private String origen, destino; //usar la primera mayuscula (ej. Guadalajara)
     private LocalDateTime fechaSalida; //hora y fecha que sale el avion
     private int duracion; // duración en minutos del vuelo
-    private List<AsientoDTO> listaAsientos; //Lista de todos los asientos del vuelo
+    private List<AsientoDTO> listaAsientos = new ArrayList<>();; //Lista de todos los asientos del vuelo
     private String aerolinea;
     private float precio;
 
     public VueloDTO() {
+       testeoAsignacionASientos();
+
     }
 
     public VueloDTO(long precio, String nombre, String origen, String destino, LocalDateTime fechaSalida, int duracion, String aerolinea) {
@@ -37,7 +40,7 @@ public class VueloDTO {
         this.fechaSalida = fechaSalida;
         this.duracion = duracion;
         this.aerolinea = aerolinea;
-        this.listaAsientos = new LinkedList<>();
+        this.listaAsientos = new ArrayList<>();
         testeoAsignacionASientos();
     }
 
@@ -126,12 +129,12 @@ public class VueloDTO {
             throw new IndexOutOfBoundsException("Índice fuera de rango: " + index);
         }
 
-        return listaAsientos.get(index);
+        return listaAsientos.get(index);    
     }
 
     private void testeoAsignacionASientos() {
-        //ajustar para que funcione con la lista
-        var asientos = new AsientoDTO[]{
+        System.out.println("Entra?");
+        var asientos = Arrays.asList(
             new AsientoDTO("A", 1, true),
             new AsientoDTO("B", 1, true),
             new AsientoDTO("C", 1, false),
@@ -192,7 +195,8 @@ public class VueloDTO {
             new AsientoDTO("D", 10, true),
             new AsientoDTO("E", 10, true),
             new AsientoDTO("F", 10, true)
-        };
-//        listaAsientos.addAll(asientos);
+        );
+        listaAsientos.addAll(asientos);
+        System.out.println(listaAsientos.size());
     }
 }

@@ -330,7 +330,7 @@ public class VueloBO implements IVueloBO {
             validarCiudad(vueloDTO.getDestino(), "Destino");
             validarCiudad(vueloDTO.getOrigen(), "Origen");
 
-            vueloDTO.setListaAsientos(new LinkedList<>());
+//            vueloDTO.setListaAsientos(new LinkedList<>()); utilizaremos el metodo de burgos
 
             Vuelo vuelo = Mapper.convertirAEntity(vueloDTO);
 

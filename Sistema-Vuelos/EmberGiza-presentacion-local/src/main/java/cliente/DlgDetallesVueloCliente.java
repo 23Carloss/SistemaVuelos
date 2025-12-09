@@ -165,7 +165,7 @@ public class DlgDetallesVueloCliente extends JDialog {
     }
 
     public void seleccionarAsientos() {
-        DlgSeleccionarAsientos dlgSeleccionarAsientos = new DlgSeleccionarAsientos(vuelo);
+        DlgSeleccionarAsientos dlgSeleccionarAsientos = new DlgSeleccionarAsientos(vuelo, control);
         dlgSeleccionarAsientos.setVisible(true);
         this.dispose();
     }

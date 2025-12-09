@@ -80,7 +80,8 @@ public class SEEDERS_1 {
         dto.setDuracion(duracion);
         dto.setAerolinea(aerolinea);
         dto.setPrecio(precio);
-        dto.setListaAsientos(new LinkedList<>()); // inicializar lista vacía
+//        dto.setListaAsientos(new LinkedList<>()); // inicializar lista vacía
+// utilizare la test del burgos
         return dto;
     }
 }

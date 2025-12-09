@@ -133,8 +133,7 @@ public class VueloDTO {
     }
 
     private void testeoAsignacionASientos() {
-        System.out.println("Entra?");
-        var asientos = Arrays.asList(
+       var asientos = Arrays.asList(
             new AsientoDTO("A", 1, true),
             new AsientoDTO("B", 1, true),
             new AsientoDTO("C", 1, false),
@@ -197,6 +196,5 @@ public class VueloDTO {
             new AsientoDTO("F", 10, true)
         );
         listaAsientos.addAll(asientos);
-        System.out.println(listaAsientos.size());
     }
 }

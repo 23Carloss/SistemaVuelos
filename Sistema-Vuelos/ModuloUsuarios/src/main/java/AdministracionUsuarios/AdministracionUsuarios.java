@@ -87,9 +87,7 @@ public class AdministracionUsuarios {
     public boolean iniciarSesion(String correo, String contrasenia){
         try {
             UsuarioDTO usuarioEncontrado = usuarioBO.iniciarSesion(correo, contrasenia);
-            System.out.println("usuarioEncontrado " + usuarioEncontrado);
             setUsuarioDTO(usuarioEncontrado);
-            System.out.println("usuarioTemporal " + usuarioTemporal);
             return true;
         } catch (NegocioException ex) {
             JOptionPane.showMessageDialog(null, "Credenciales Incorrectas", "Error", JOptionPane.ERROR_MESSAGE);

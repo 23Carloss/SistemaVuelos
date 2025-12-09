@@ -174,7 +174,7 @@ public class DlgDetallesVueloCliente extends JDialog {
         System.out.println("Haz de cuenta que se canceló");
         //-----LÓGICA AQUÍ-----
         //aplicar cancelación del vuelo
-        
+        System.out.println("Reservacion en digDetallesCliente: " + reservacion);
         control.eliminarReservacion(reservacion);
         this.dispose();
     }

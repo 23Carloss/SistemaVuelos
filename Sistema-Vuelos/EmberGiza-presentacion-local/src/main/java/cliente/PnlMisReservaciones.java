@@ -176,6 +176,7 @@ public class PnlMisReservaciones extends JPanel {
                 int fila = tabla.getSelectedRow();
                 if (fila >= 0) {
                     ReservacionDTO seleccion = listaReservaciones.get(fila);
+                    System.out.println("Reservacion Seleccionada:"  + seleccion);
                     new DlgDetallesVueloCliente(seleccion.getVuelo(), 2, seleccion, control).setVisible(true);
                 }
             }

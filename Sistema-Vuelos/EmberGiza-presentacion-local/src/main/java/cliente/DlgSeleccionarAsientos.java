@@ -33,9 +33,7 @@ public class DlgSeleccionarAsientos extends JDialog {
 
     public DlgSeleccionarAsientos(VueloDTO vuelo,Control control) {
         this.control =control;
-        this.usuario = control.getUsuario();
-        System.out.println("Usuario de control.getUsuario:  " + usuario);
-        this.reservacion = new ReservacionDTO();
+        this.usuario = control.getUsuario();        this.reservacion = new ReservacionDTO();
         this.vuelo = vuelo;
 
         //Setup

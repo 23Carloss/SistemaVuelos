@@ -51,8 +51,10 @@ public class ReservacionBO implements IReservacionBO{
             numReservacion = String.valueOf(letra1) + String.valueOf(letra2) + String.format("%03d", numeros);
 
             reservacion.setNumReservacion(numReservacion);
-            Reservacion reservacionCreada = (Reservacion) reservacionDAO.create(reservacion);
-            return mapper.convertirADto(reservacionCreada);
+            Reservacion reservacionentity = mapper.convertirAEntity(reservacion);
+            Reservacion reservacionCreada = (Reservacion) reservacionDAO.create(reservacionentity);
+            ReservacionDTO reservacionDto = mapper.convertirADto(reservacionCreada);
+            return reservacionDto;
             
         }catch(MongoException ex){
             throw new NegocioException("Error al crear la reservacion " + ex.getMessage());
@@ -98,6 +100,7 @@ public class ReservacionBO implements IReservacionBO{
                 throw new NegocioException("reservacion o numReservacion null");
                 
             }
+            System.out.println("numReservcion en BO " +reservacion.getNumReservacion() );
             return reservacionDAO.eliminarPorNumReservacion(reservacion.getNumReservacion());
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al eliminar la reservacion" + ex.getMessage());

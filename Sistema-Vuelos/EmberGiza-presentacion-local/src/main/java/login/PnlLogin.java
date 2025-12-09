@@ -128,16 +128,8 @@ public class PnlLogin extends JPanel {
         
         
         try {
-            usuario = bo.iniciarSesion(correoInput, contraInput);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            JOptionPane.showMessageDialog(null, "No se pudo iniciar sesión");
-        }
-        
-        
-        
-        
-        System.out.println("correo " +  correoInput);
+            boolean verificacion = control.iniciarSesion(correoInput, contraInput);
+            usuario = control.getUsuario();
 
         //-----BYPASS Y PLACEHOLDER-----
         //Cambiar por validación real
@@ -167,7 +159,11 @@ public class PnlLogin extends JPanel {
         } else {
             JOptionPane.showMessageDialog(null, "Correo o contraseña inválidos.");
         }
-
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, "No se pudo iniciar sesión");
+        }
+        
     }
 
     public void crearCuenta() {

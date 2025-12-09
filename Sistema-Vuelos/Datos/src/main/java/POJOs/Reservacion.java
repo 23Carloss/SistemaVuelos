@@ -56,14 +56,6 @@ public class Reservacion implements ObjetoMongo {
         this.fechaReservacion = fechaReservacion;
     }
 
-    public ObjectId getId() {
-        return _id;
-    }
-
-    public void setId(ObjectId _id) {
-        this._id = _id;
-    }
-
     public Asiento getAsiento() {
         return asiento;
     }

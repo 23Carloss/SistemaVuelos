@@ -17,8 +17,10 @@ import POJOs.Reservacion;
 import POJOs.Usuario;
 import POJOs.Vuelo;
 import com.mongodb.client.MongoDatabase;
+import java.time.Clock;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -59,7 +61,7 @@ public class PruebasReservacion {
                 List<Asiento> asientosAvion = new ArrayList<>();
                 asientosAvion.add(a1);
                 asientosAvion.add(a2);
-                LocalDateTime salidaVuelo = LocalDateTime.of(2025, 12, 1, 9, 0);
+                Instant salidaVuelo = Instant.now();
                 Vuelo v1 = new Vuelo();
                 v1.setAerolinea("Carrillo");
                 v1.setDestino("Mexico");
@@ -86,7 +88,7 @@ public class PruebasReservacion {
 //                us2 = mapper.convertirAEntity(usDAO.create(us2));
                 System.out.println("user credo: " + us2);
                 System.out.println("Vuelo creado : " + v1);
-                LocalDateTime reservacion = LocalDateTime.of(2025, 12, 1, 9, 0);
+                Instant reservacion = LocalDateTime.of(2025, 12, 1, 9, 0).toInstant(ZoneOffset.UTC);
                 Reservacion r1 = new Reservacion();
                 r1.setAsiento(asientosReservados.get(0));
                 r1.setCreadoEn(Instant.now());

@@ -152,7 +152,7 @@ public class VueloDAO extends CRUD implements IVueloDAO {
             List<Vuelo> vuelos = (List<Vuelo>) collection.find(Filters.and(
                     Filters.eq("origen", origen),
                     Filters.eq("destino", destino),
-                    Filters.eq("fechaSalida", salida)
+                    Filters.gte("fechaSalida", salida)
             )).limit(50).into(new ArrayList<>());
 
             if (vuelos == null || vuelos.isEmpty()) {
@@ -287,7 +287,6 @@ public class VueloDAO extends CRUD implements IVueloDAO {
 
     @Override
     public boolean actualizarAsientosPorVuelo(Vuelo vuelo) throws PersistenciaException {
-
         try {
             String numeroVuelo = vuelo.getNumVuelo();
 

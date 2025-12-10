@@ -145,7 +145,7 @@ public class PnlMisReservaciones extends JPanel {
             datos[i][2] = r.getVuelo().getAerolinea();
             datos[i][3] = r.getVuelo().getOrigen();
             datos[i][4] = r.getVuelo().getDestino();
-            datos[i][5] = r.getVuelo().getFechaSalida().format(f);
+            datos[i][5] = r.getVuelo().getFechaSalida();
             datos[i][6] = r.getVuelo().getDuracion();
             datos[i][7] = "$" + r.getVuelo().getPrecio();
         }

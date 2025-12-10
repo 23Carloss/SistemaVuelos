@@ -5,6 +5,7 @@
 
 package DTOs;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.bson.types.ObjectId;
@@ -18,7 +19,7 @@ public class ReservacionDTO {
     private ObjectId _id;
     private String coreoUsuario;
     private String numReservacion;
-    private LocalDateTime fechaReservacion;
+    private Instant fechaReservacion;
     private AsientoDTO asiento;
     private VueloDTO vuelo;
 
@@ -33,11 +34,11 @@ public class ReservacionDTO {
         this.coreoUsuario = coreoUsuario;
     }
 
-    public LocalDateTime getFechaReservacion() {
+    public Instant getFechaReservacion() {
         return fechaReservacion;
     }
 
-    public void setFechaReservacion(LocalDateTime fechaReservacion) {
+    public void setFechaReservacion(Instant fechaReservacion) {
         this.fechaReservacion = fechaReservacion;
     }
 

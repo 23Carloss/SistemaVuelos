@@ -15,6 +15,7 @@ import POJOs.Vuelo;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -89,9 +90,7 @@ public class ReservacionDAO extends CRUD implements IReservacionDAO {
         // fechaSalida
         Date fechaSalidaDate = vueloDoc.getDate("fechaSalida");
         if (fechaSalidaDate != null) {
-            LocalDateTime fechaSalidaLocalDate = fechaSalidaDate.toInstant()
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDateTime();
+            Instant fechaSalidaLocalDate = Instant.now();
             v1.setFechaSalida(fechaSalidaLocalDate);
         }
 
@@ -135,9 +134,7 @@ public class ReservacionDAO extends CRUD implements IReservacionDAO {
             // fechaReservacion
             Date fecha = doc.getDate("fechaReservacion");
             if (fecha != null) {
-                LocalDateTime reserva = fecha.toInstant()
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDateTime();
+                Instant reserva = fecha.toInstant();
                 r1.setFechaReservacion(reserva);
             }
 

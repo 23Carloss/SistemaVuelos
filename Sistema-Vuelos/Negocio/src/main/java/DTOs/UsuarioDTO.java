@@ -35,13 +35,7 @@ public class UsuarioDTO {
         this.tipoUsuario = admin;
 
         // Crear vuelos de ejemplo
-        VueloDTO vuelo1 = new VueloDTO(2500, "Vuelo MX101", "Ciudad Obregón", "CDMX",
-                java.time.LocalDateTime.of(2025, 12, 1, 8, 30), 120, "Volaris");
-        VueloDTO vuelo2 = new VueloDTO(3100, "Vuelo MX202", "Hermosillo", "Guadalajara",
-                java.time.LocalDateTime.of(2025, 12, 2, 13, 50), 90, "VivaAerobus");
-        VueloDTO vuelo3 = new VueloDTO(1800, "Vuelo MX303", "Tijuana", "Monterrey",
-                java.time.LocalDateTime.of(2025, 12, 5, 17, 20), 120, "Aeroméxico");
-
+        
         // Crear reservaciones de ejemplo
 //        reservaciones.add(new ReservacionDTO(117, new AsientoDTO("A", 1), vuelo1));
 //        reservaciones.add(new ReservacionDTO(343, new AsientoDTO("D", 7), vuelo2));

@@ -23,7 +23,7 @@ public class Reservacion implements ObjetoMongo {
     private ObjectId _id;
     private String numReservacion;
     private String correoUsuario;
-    private LocalDateTime fechaReservacion;
+    private Instant fechaReservacion;
     private Asiento asiento;
     private Vuelo vuelo;
     private Instant creadoEn;
@@ -48,11 +48,11 @@ public class Reservacion implements ObjetoMongo {
         this.correoUsuario = correoUsuario;
     }
     
-    public LocalDateTime getFechaReservacion() {
+    public Instant getFechaReservacion() {
         return fechaReservacion;
     }
 
-    public void setFechaReservacion(LocalDateTime fechaReservacion) {
+    public void setFechaReservacion(Instant fechaReservacion) {
         this.fechaReservacion = fechaReservacion;
     }
 

@@ -20,6 +20,7 @@ public class Asiento implements ObjetoMongo {
     @BsonId
     private ObjectId _id;
     private boolean disponibilidad;
+    private String nombrePasajero;
     private String columna;
     private int numero;
     private int fila;
@@ -44,6 +45,19 @@ public class Asiento implements ObjetoMongo {
         this.disponibilidad = disponibilidad;
     }
 
+    
+
+    public String getNombrePasajero() {
+        return nombrePasajero;
+    }
+
+    public void setNombrePasajero(String nombrePasajero) {
+        this.nombrePasajero = nombrePasajero;
+    }
+
+    
+    
+    
     public int getNumero() {
         return numero;
     }

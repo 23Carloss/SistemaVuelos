@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -30,9 +31,9 @@ public class PnlCrearVuelo extends JPanel {
     String nombre;
     String origen;
     String destino;
-    LocalDate fecha;
+    Instant fecha;
     LocalTime hora;
-    LocalDateTime fechaHora;
+    Instant fechaHora;
     int duracion;
     String aerolinea;
 
@@ -65,7 +66,6 @@ public class PnlCrearVuelo extends JPanel {
     // ----- Inputs -----
     CustomLabel lblPrecio = new CustomLabel("Precio: ");
     TxtFieldFormat txtPrecio = new TxtFieldFormat(1, "Precio", true, txtX, txtY, txtFS);
-
 
     CustomLabel lblOrigen = new CustomLabel("Origen: ");
     TxtFieldPh txtOrigen = new TxtFieldPh("Origen", true, txtX, txtY, txtFS);
@@ -131,8 +131,6 @@ public class PnlCrearVuelo extends JPanel {
         lblPrecio.setHorizontalAlignment(SwingConstants.RIGHT);
         inputs.add(lblPrecio);
         inputs.add(txtPrecio);
-
-
 
         inputs.add(new Espaciador(espX, espY));
         inputs.add(new Espaciador(espX, espY));
@@ -264,7 +262,6 @@ public class PnlCrearVuelo extends JPanel {
             return;
         }
 
-        
         origen = txtOrigen.getText();
         destino = txtDestino.getText();
 
@@ -273,7 +270,7 @@ public class PnlCrearVuelo extends JPanel {
             return;
         }
 
-        fecha = dateFecha.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        fecha = dateFecha.getDate().toInstant();
 
         try {
             hora = LocalTime.parse(txtHora.getText());
@@ -298,9 +295,16 @@ public class PnlCrearVuelo extends JPanel {
             return;
         }
 
-        fechaHora = LocalDateTime.of(fecha, hora);
+// Convertir el Instant a LocalDate
+        LocalDate localDate = fecha.atZone(ZoneId.systemDefault()).toLocalDate();
+
+// Combinar fecha y hora
+        LocalDateTime fechaHora = LocalDateTime.of(localDate, hora);
         
-        VueloDTO dto= new VueloDTO(precio, "ERROR", origen, destino, fechaHora, duracion, aerolinea);
+        Instant salida = fechaHora.atZone(ZoneId.systemDefault()).toInstant();
+
+        
+        VueloDTO dto = new VueloDTO(precio, "ERROR", origen, destino, salida, duracion, aerolinea);
         try {
             bo.crearVuelo(dto);
         } catch (NegocioException e) {
@@ -308,9 +312,7 @@ public class PnlCrearVuelo extends JPanel {
             JOptionPane.showMessageDialog(null, "Error al crear el vuelo");
             return;
         }
-        
-        
-        
+
         JOptionPane.showMessageDialog(null, "Se registró exitosamente");
 
         volver();

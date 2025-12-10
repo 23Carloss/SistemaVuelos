@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -30,7 +31,7 @@ public class DlgEditarVuelo extends JDialog {
     String destino;
     LocalDate fecha;
     LocalTime hora;
-    LocalDateTime fechaHora;
+    Instant fechaHora;
     int duracion;
     String aerolinea;
     IVueloBO bo;
@@ -144,11 +145,11 @@ public class DlgEditarVuelo extends JDialog {
         inputs.add(new Espaciador(espX, espY));
         lblFecha.setHorizontalAlignment(SwingConstants.RIGHT);
         inputs.add(lblFecha);
-        dateFecha.setDate(Date.from(vuelo.getFechaSalida().toLocalDate().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        dateFecha.setDate(Date.from(vuelo.getFechaSalida()));
         inputs.add(dateFecha);
         lblHora.setHorizontalAlignment(SwingConstants.RIGHT);
         inputs.add(lblHora);
-        txtHora.setText(vuelo.getFechaSalida().format(DateTimeFormatter.ofPattern("HH:mm")));
+        txtHora.setText(vuelo.getFechaSalida().toString());
         inputs.add(txtHora);
         inputs.add(new Espaciador(espX, espY));
         inputs.add(new Espaciador(espX, espY));
@@ -255,7 +256,7 @@ public class DlgEditarVuelo extends JDialog {
             JOptionPane.showMessageDialog(null, "Todos los campos deben estar llenos.");
             return;
         }
-        fechaHora = LocalDateTime.of(fecha, hora);
+        fechaHora = LocalDateTime.of(fecha, hora).atZone(ZoneId.systemDefault()).toInstant();
 
         //-----LÓGICA AQUÍ-----
         //Registrar el vuelo adecuadamente

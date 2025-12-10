@@ -6,7 +6,9 @@ package POJOs;
 
 import CRUD.ObjetoMongo;
 import com.mongodb.client.model.Updates;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.conversions.Bson;
@@ -22,7 +24,7 @@ public class Vuelo implements ObjetoMongo {
     private ObjectId _id;
     private String numVuelo; //Id del vuelo para hacer gets
     private String origen, destino; //usar la primera mayuscula (ej. Guadalajara)
-    private LocalDateTime fechaSalida; //hora y fecha que sale el avion
+    private Instant fechaSalida; //hora y fecha que sale el avion
     private int duracion; // duración en minutos del vuelo
     private List<Asiento> listaAsientos; //Lista de todos los asientos del vuelo
     private String aerolinea;
@@ -71,11 +73,11 @@ public class Vuelo implements ObjetoMongo {
         this.destino = destino;
     }
 
-    public LocalDateTime getFechaSalida() {
+    public Instant getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(LocalDateTime fechaSalida) {
+    public void setFechaSalida(Instant fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 

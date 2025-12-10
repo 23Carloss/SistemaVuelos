@@ -4,9 +4,11 @@
  */
 package DTOs;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import org.bson.codecs.pojo.annotations.BsonId;
 import org.bson.types.ObjectId;
@@ -21,7 +23,7 @@ public class VueloDTO {
     private ObjectId _id;
     private String numVuelo; //Id del vuelo para hacer gets
     private String origen, destino; //usar la primera mayuscula (ej. Guadalajara)
-    private LocalDateTime fechaSalida; //hora y fecha que sale el avion
+    private Instant fechaSalida; //hora y fecha que sale el avion
     private int duracion; // duración en minutos del vuelo
     private List<AsientoDTO> listaAsientos = new ArrayList<>();; //Lista de todos los asientos del vuelo
     private String aerolinea;
@@ -32,7 +34,7 @@ public class VueloDTO {
 
     }
 
-    public VueloDTO(long precio, String nombre, String origen, String destino, LocalDateTime fechaSalida, int duracion, String aerolinea) {
+    public VueloDTO(long precio, String nombre, String origen, String destino, Instant fechaSalida, int duracion, String aerolinea) {
         this.precio = precio;
 
         this.origen = origen;
@@ -76,11 +78,11 @@ public class VueloDTO {
         this.destino = destino;
     }
 
-    public LocalDateTime getFechaSalida() {
+    public Instant getFechaSalida() {
         return fechaSalida;
     }
 
-    public void setFechaSalida(LocalDateTime fechaSalida) {
+    public void setFechaSalida(Instant fechaSalida) {
         this.fechaSalida = fechaSalida;
     }
 
